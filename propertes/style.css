@@ -1,0 +1,85 @@
+.PropSp18Content{
+    float: left;
+    border: dotted 1px lightgrey;
+    padding: 10px;
+}
+.PropSp18Content h3{
+    margin: 0 0 5px 5px;
+    font-weight: 700;
+}
+
+.PropSp18GroupOne{
+    margin: 5px;
+    width: 200px;
+}
+.PropSp18GroupOne h4{
+    background-color: #f5f8f9;
+    border: solid 1px #88bfe9;
+    padding: 2px;
+    padding-bottom: 6px;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0;
+}
+.PropSp18GroupOne i:hover{
+    background-color: lightblue;
+}
+.PropSp18GroupOne h4 span{
+
+}
+.PropSp18GroupOne h4 i[Type=BtnUP]{
+    float: left;
+    margin-right: 10px;
+}
+.PropSp18GroupOne h4 i[Type=BtnAdd], .PropSp18GroupOne h4 i[Type=BtnRemove]{
+    float: right;
+    margin-right: 5px;
+}
+.PropSp18GroupOne div{
+    margin-top: 0;
+    border: solid 1px #88bfe9;
+}
+.PropSp18GroupOne div ul{
+    margin-left: 0;
+    width: 150px;
+
+}
+.PropSp18GroupOne div li{
+    list-style-type: none;
+    margin-bottom: 9px;
+}
+.PropSp18GroupOne div ul li i{
+    float: right;
+}
+
+.PropSp18Group1c, .PropSp18Group1c ul{
+    border-left: solid 1px lightgrey;
+    padding: 0; /* Убираем поля */
+    margin-left: 20px; /* Отступ слева */
+}
+.PropSp18Group1c li{
+    list-style-type: none;
+    margin: 5px 5px 5px 0;
+}
+.PropSp18Group1c span[select]{
+    background-color: lightgreen;
+}
+.PropSp18Group1c span{
+    min-width: 300px;
+    padding: 4px 20px 4px 8px;
+}
+.PropSp18Group1c span:hover{
+    background-color:  #88bfe9;
+    cursor: pointer;
+}
+
+.PropSp18ConstructTable{
+    width:500px;
+    border: solid 1px lightgrey;
+}
+.PropSp18ConstructTable thead{
+    background-color: #f5f8f9;
+}
+.PropSp18ConstructTable tbody{
+    border: solid 1px #88bfe9;
+}

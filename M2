@@ -1,0 +1,4 @@
+ALTER TABLE `ent`.`payrollconstruct` 
+ADD COLUMN `M2` BIT(1) NULL AFTER `StiffenerSum`,
+ADD COLUMN `M2Sum` DECIMAL(7,2) NULL AFTER `M2`;
+

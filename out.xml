@@ -1,0 +1,845 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Notes>
+  <db>
+    <Table name="customers">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="INN" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="logins">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Login" Type="varchar(50)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Pass" Type="varchar(50)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="FIO" Type="varchar(200)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Type" Type="int(2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="manualdolgnost">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Dolgnost" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NalogPercent" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Algorithm" Type="varchar(1)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="manualdovoddoor">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="manualmaterialgroup">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(50)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="BlockDelete" Type="bit(1)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="manualnalichnikdoor">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(20)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="manualopendoor">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(20)" Null="NO" Key="UNI" Default="" Extra="" />
+    </Table>
+    <Table name="manualschedulecost">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idDolgnost" Type="int(11)" Null="YES" Key="UNI" Default="" Extra="" />
+      <Column Field="Cost" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="manualtypedoors">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(50)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="ValueNull" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="materialsmanual">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(100)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idGroup" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="SI" Type="varchar(10)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="nalogcalc">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="DoorType" Type="varchar(50)" Null="NO" Key="UNI" Default="" Extra="" />
+      <Column Field="Material" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Unit" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CalcType" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Price" Type="decimal(19,2)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="naryad">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idDoors" Type="int(11)" Null="YES" Key="MUL" Default="" Extra="" />
+      <Column Field="NumInOrder" Type="int(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Num" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NumPP" Type="int(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="LaserWork" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="LaserDate" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="LaserSum" Type="decimal(7,2)" Null="YES" Key="" Default="0.00" Extra="" />
+      <Column Field="SgibkaWork" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SgibkaDate" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SgibkaSum" Type="decimal(7,2)" Null="YES" Key="" Default="0.00" Extra="" />
+      <Column Field="SvarkaEdit" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SvarkaCompliteWork" Type="varchar(200)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SvarkaComplite" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SvarkaSum" Type="decimal(7,2)" Null="YES" Key="" Default="0.00" Extra="" />
+      <Column Field="FrameCompliteWork" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FrameComplite" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FrameSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SborkaCompliteWork" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SborkaComplite" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SborkaSum" Type="decimal(7,2)" Null="YES" Key="" Default="0.00" Extra="" />
+      <Column Field="ColorCompliteWork" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ColorComplite" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ColorSum" Type="decimal(7,2)" Null="YES" Key="" Default="0.00" Extra="" />
+      <Column Field="UpakCompliteWork" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="UpakComplite" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="UpakSum" Type="decimal(7,2)" Null="YES" Key="" Default="0.00" Extra="" />
+      <Column Field="ShptAllowDate" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ShptAllowWork" Type="varchar(150)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ShptCompliteWork" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ShptComplite" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ShptSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Shpt" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Master" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="AlertStatus" Type="bit(1)" Null="YES" Key="" Default="b'0'" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="LaserCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SgibkaCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SvarkaCompliteFlag" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FrameCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="MdfCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SborkaCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SborkaMdfCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ColorCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="UpakCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ShptCompliteFlag" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="naryadcomplite">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idNaryad" Type="int(11)" Null="NO" Key="MUL" Default="" Extra="" />
+      <Column Field="Step" Type="tinyint(1)" Null="NO" Key="MUL" Default="" Extra="" />
+      <Column Field="idWorker" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Cost" Type="decimal(7,2)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DateAppointment" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="DateComplite" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="ordercontragents">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Alias" Type="varchar(150)" Null="NO" Key="UNI" Default="" Extra="" />
+      <Column Field="Name" Type="varchar(250)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="AdressUrid" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="AdressFact" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="AdressShpt" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="INN" Type="varchar(12)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="KPP" Type="varchar(9)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="OKPO" Type="varchar(10)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="OGRN" Type="varchar(15)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="ordercontragentscontacts">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idContragent" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="FIO" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Post" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Phone1" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Phone2" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="eMail" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Agent" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="orderdoors">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idOrder" Type="int(11)" Null="YES" Key="MUL" Default="" Extra="" />
+      <Column Field="NumPP" Type="int(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="name" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="H" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="W" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="S" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SEqual" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Open" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Nalichnik" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Dovod" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="RAL" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Markirovka" Type="varchar(150)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Shtild" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Petlya" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaCount" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Zamok" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Cilindr" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Hand" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Window" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkPetlya" Type="int(2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowCh" Type="bit(1)" Null="YES" Key="" Default="b'0'" Extra="" />
+      <Column Field="WorkWindowNoFrame" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowH" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowW" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGain" Type="bit(1)" Null="YES" Key="" Default="b'0'" Extra="" />
+      <Column Field="WorkWindowGlass" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGlassType" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGrid" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkUpGridCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkDownGridCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaPetlya" Type="int(2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowNoFrame" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowH" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowW" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGain" Type="bit(1)" Null="YES" Key="" Default="b'0'" Extra="" />
+      <Column Field="StvorkaWindowGlass" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGlassType" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGrid" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaUpGridCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaDownGridCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaH" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowNoFrame" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowH" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowW" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowGain" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowGlass" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowGlassType" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowGrid" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaUpGridCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaDownGridCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostLaser" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostSgibka" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostFrame" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostMdf" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostSvarka" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostSborka" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostSborkaMdf" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostColor" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostUpak" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CostShpt" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowCh1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowNoFrame1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowH1" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowW1" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGain1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGlass1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGlassType1" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGrid1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowCh2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowNoFrame2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowH2" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowW2" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGain2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGlass2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGlassType2" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGrid2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowCh1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowNoFrame1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowH1" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowW1" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGain1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGlass1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGlassType1" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGrid1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowCh2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowNoFrame2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowH2" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowW2" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGain2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGlass2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGlassType2" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGrid2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Antipanik" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Otboynik" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Wicket" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="BoxLock" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Otvetka" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Isolation" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="oreders">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Blank" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="BlankDate" Type="date" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Shet" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ShetDate" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Dostavka" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Montag" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Srok" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Zakaz" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Contact" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Manager" Type="varchar(150)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="status" Type="int(11)" Null="YES" Key="" Default="0" Extra="" />
+      <Column Field="UserBlock" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="paymentssumnullhistory">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Date" Type="date" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Manager" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="paymentssumnullhistorylist">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idHistory" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idNaryad" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Step" Type="varchar(50)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Summ" Type="decimal(9,2)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Complite" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="paymentsworkers">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idWorker" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DatePayment" Type="date" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(9,2)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Accountant" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="payrollconstant">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="DoorType" Type="varchar(100)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Step" Type="varchar(20)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Name" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(7,2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="payrollconstruct">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="DoorType" Type="varchar(100)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Step" Type="varchar(20)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Frame" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FrameCount" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FrameSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Dovod" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="DovodPreparation" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="DovodSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Nalichnik" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NalichnikSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Window" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WindowCount" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WindowMore" Type="int(2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WindowSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Framuga" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Petlya" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaCount" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaMore" Type="int(2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Stiffener" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StiffenerW" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StiffenerSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="M2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="M2Sum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Antipanik" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="AntipanikSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Otboynik" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="OtboynikSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Wicket" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WicketSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="BoxLock" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="BoxLockSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Otvetka" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="OtvetkaSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Isolation" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="IsolationSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaWork" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaWorkCount" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaWorkMore" Type="smallint(6)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaWorkSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaStvorka" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaStvorkaCount" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaStvorkaMore" Type="smallint(6)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaStvorkaSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Grid" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="GridCount" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="GridSum" Type="decimal(7,2)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="payrolldoorsize">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="DoorType" Type="varchar(100)" Null="NO" Key="MUL" Default="" Extra="" />
+      <Column Field="Step" Type="varchar(20)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="HSign" Type="int(1)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="HVal" Type="int(6)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WSign" Type="int(1)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="WVal" Type="int(6)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="S" Type="int(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SSign" Type="int(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SVal" Type="int(6)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Open" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Framug" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(7,2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="payrolltasks">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Note" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Ch1" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Ch1Inp" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Ch2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Ch3" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Ch4" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Ch4Inp" Type="date" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="payrolltasksworkers">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idTask" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idDolgnost" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idWorker" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Cost" Type="decimal(7,2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="spe_common">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idDoor" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idGroup" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="spe_constructgroups">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idTypeDoor" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idGroup" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="TypeCalc" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="DependConstruct" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Petlya" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="spe_constructtypedoors">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="TypeDoor" Type="varchar(45)" Null="NO" Key="UNI" Default="" Extra="" />
+    </Table>
+    <Table name="spe_detail">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idCommon" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idGood" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="specificconstruct">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idTypeDoor" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idGroup" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idMaterial" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CountEd" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Step" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="specificlist">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idDoor" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idMaterial" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actinent">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="DateCreate" Type="date" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idLogin" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idWorker" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actinentgoods">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idAct" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idGood" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actissueworker">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idLogin" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idWorker" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idDoor" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idNaryad" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DateCreate" Type="date" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actissueworker_tr1">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idActGoods" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idMain" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idEnt" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actissueworkergoods">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idAct" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idGood" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="CountIssue" Type="float" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actshpt">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idOrder" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DateCreate" Type="date" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idManager" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DateShpt" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idStockManager" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actshpt_tr1">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idAct" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idMain" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idEnt" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actshpt_tr2">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idAct" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idEnt" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idNC" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_actshptnaryads">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idAct" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idNaryad" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_arrival">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idSupplier" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DateArrival" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NumArrival" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_arrivalgoods">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idArrival" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="TextGood" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idGood" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Price" Type="decimal(9,2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_goodgroups">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="GroupName" Type="varchar(45)" Null="NO" Key="UNI" Default="" Extra="" />
+      <Column Field="Step" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="AutoUnset" Type="bit(1)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_goods">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idGroup" Type="int(11)" Null="NO" Key="MUL" Default="" Extra="" />
+      <Column Field="Article" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="GoodName" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="BarCode" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Unit" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_naryadcomplite">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idDoor" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idDetail" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idGood" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idEnt" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Price" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_norollback">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idDetail" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idGood" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_stockent">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idStock" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idGood" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Price" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CountOld" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idWorker" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idLogin" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idInEnt" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_stockmain">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idArrival" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idArrivalGood" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idGood" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Price" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CountOld" Type="float" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="st_suppliers">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="SupplierName" Type="varchar(45)" Null="NO" Key="MUL" Default="" Extra="" />
+      <Column Field="INN" Type="varchar(45)" Null="NO" Key="MUL" Default="" Extra="" />
+      <Column Field="Adress" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Phone" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stock">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idMaterial" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Price" Type="decimal(19,2)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stockmaterial">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idGroup" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Name" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Unit" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="smallint(6)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Attn" Type="tinyint(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Del" Type="tinyint(4)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stockmaterialgroup">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(150)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Del" Type="tinyint(1)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stocknewmanualgood">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idGroup" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Name" Type="varchar(100)" Null="NO" Key="UNI" Default="" Extra="" />
+      <Column Field="Unit" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stocknewmanualgroups">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(45)" Null="NO" Key="UNI" Default="" Extra="" />
+      <Column Field="Step" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NotRemove" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stocknewsupplier">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(250)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="INN" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stockreciept">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Num" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Date" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idSupplier" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Resposible" Type="varchar(150)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stockrecieptmaterials">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="" />
+      <Column Field="idReciept" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idMaterial" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idNaryad" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="CountEnd" Type="float" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Price" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stocksuppliers">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="LegalForm" Type="varchar(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FullName" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="inn" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="kpp" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="okpo" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="BankName" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="BankRS" Type="varchar(25)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="BankKS" Type="varchar(25)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="BankBik" Type="varchar(20)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="AdressFact" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="AdressUrid" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Phone" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Fax" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="stocksupplierscontacts">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="" />
+      <Column Field="idSupplier" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FIO" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Post" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Phone" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Phone1" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Mail" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="tempcalcdoorsize">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="TypeDoor" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="HWith" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="HBy" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WWith" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WBy" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SEqual" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Framug" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="M2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(9,2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="tempcalcdovod">
+      <Column Field="DovodNo" Type="decimal(9,2)" Null="NO" Key="PRI" Default="" Extra="" />
+      <Column Field="DovodPodgotovka" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="DovodYes" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="tempcalcfurnitura">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Currency" Type="varchar(5)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(9,2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="tempcalcglass">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="M2" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(9,2)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="SumPlus" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="tempcalcnaves">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="HWith" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="HBy" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WWith" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WBy" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SEqual" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="tempcalcother">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="tempcalcral">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Name" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Percent" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="temporderdoorcalc">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idDoor" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Type" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Name" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Sum" Type="decimal(9,2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="temporderdoors">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idOrder" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="NumPP" Type="int(4)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="TypeDoor" Type="varchar(45)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="H" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="W" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="S" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SEqual" Type="bit(2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Open" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Nalichnik" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Dovod" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Ral" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Markirovka" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NavesWork" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NavesStvorka" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WindowWork" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WindowStvorka" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="GridWork" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="GridStvorka" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Framug" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugH" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="temporderpayments">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idOrder" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DatePayment" Type="datetime" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="TypePayment" Type="tinyint(4)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="SumPayment" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="temporders">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="DateCreate" Type="datetime" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Shet" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ShetDate" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idCustomer" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Status" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idManager" Type="varchar(45)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="idNewOrder" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="temppayrolls">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="DateCreate" Type="date" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Status" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="temppayrollslist">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idAct" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idWorker" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="SumWith" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Cost" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SumPlus" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NalogPercent" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SumMinus" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SumItog" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="temppayrollspayments">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idAct" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="idWorker" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DateCreate" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SumPlus" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="SumMinus" Type="decimal(9,2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Manager" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="trashorderdoors">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idOrder" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="NumPP" Type="int(4)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="name" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="H" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="W" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="S" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Open" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Nalichnik" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Dovod" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="RAL" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="varchar(200)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Markirovka" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Count" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Shtild" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Petlya" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="PetlyaCount" Type="int(11)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Zamok" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Cilindr" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Hand" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Window" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkPetlya" Type="int(2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowCh" Type="bit(1)" Null="YES" Key="" Default="b'0'" Extra="" />
+      <Column Field="WorkWindowH" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowW" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGrid" Type="bit(1)" Null="YES" Key="" Default="b'0'" Extra="" />
+      <Column Field="WorkWindowGlass" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="WorkWindowGlassType" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaPetlya" Type="int(2)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowH" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowW" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGrid" Type="bit(1)" Null="YES" Key="" Default="b'0'" Extra="" />
+      <Column Field="StvorkaWindowGlass" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="StvorkaWindowGlassType" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowCh" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowH" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowW" Type="int(5)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowGrid" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowGlass" Type="bit(1)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FramugaWindowGlassType" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="trashorders">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Blank" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="BlankDate" Type="date" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Shet" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="ShetDate" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Dostavka" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Montag" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Srok" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Zakaz" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Contact" Type="varchar(255)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="Note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="status" Type="int(11)" Null="YES" Key="" Default="0" Extra="" />
+    </Table>
+    <Table name="workers">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="Num" Type="varchar(10)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="FIO" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="DolgnostID" Type="int(11)" Null="NO" Key="" Default="0" Extra="" />
+      <Column Field="Placement" Type="date" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="LogIn" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="LogOut" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="phone" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="phone1" Type="varchar(50)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="adress" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="note" Type="text" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="fired" Type="int(1)" Null="YES" Key="" Default="0" Extra="" />
+      <Column Field="SmartCartNum" Type="varchar(100)" Null="YES" Key="" Default="" Extra="" />
+      <Column Field="AuthPass" Type="varchar(10)" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="workersdidlayn">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idworker" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="timestart" Type="datetime" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="timestop" Type="datetime" Null="YES" Key="" Default="" Extra="" />
+    </Table>
+    <Table name="workingschedule">
+      <Column Field="id" Type="int(11)" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <Column Field="idWorker" Type="int(11)" Null="NO" Key="MUL" Default="" Extra="" />
+      <Column Field="DatePayment" Type="date" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="CountHour" Type="int(11)" Null="NO" Key="" Default="" Extra="" />
+      <Column Field="Cost" Type="decimal(9,2)" Null="NO" Key="" Default="" Extra="" />
+    </Table>
+  </db>
+</Notes>

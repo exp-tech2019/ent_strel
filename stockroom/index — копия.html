@@ -1,0 +1,248 @@
+﻿<!------------------------- Меню склад ----------------------------------------------------->
+	<div  class="Menu" >
+		<div  id="StockroomMenu" class="TablesMenu">
+			<h3>Склад</h3>
+			<div>
+				<p class=LeftMenu onclick="$('#StockroomManualDialog').dialog('open')">Справочник</p>
+				<p class=LeftMenu onclick="StockroomAddMaterialStart('All')">Поступление материала</p>
+				<p class=LeftMenu>История поступлений</p>
+					<hr color="#cccccc">
+				<p class=LeftMenu onclick="StockroomListSelect()">Весь склад</p>
+				<p class=LeftMenu>Поиск</p>
+			</div>
+		</div>
+<!----------------------------- Список материала на складе --------------------------------->
+		<div id="StockroomDetails" class="MenuTop">
+			<h3>Наличие на складе</h3>
+				<div>
+					<p class=LeftMenu onclick="StockroomListSelect('Лист')">Лист</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Утеплитель')">Утеплитель</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Уплотнитель')">Уплотнитель</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Круг')">Круг</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Гофрокартон')">Гофрокартон</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Петля приварная')">Петля приварная</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Замок')">Замок</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Цилиндр')">Цилиндр</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Лента противопожарная')">Лента противопожарная</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Ручка')">Ручка</p>
+					<p class=LeftMenu onclick="StockroomListSelect('Краска')">Краска</p>					
+				</div>
+		</div>
+	</div>
+<!--------------------------------- Окно склада -------------------------------->
+	<div class="MenuRight">
+		<div id="StockroomDialog">
+			<h3>Склад</h3>
+			<div>
+				<table class="Tables TablesMenu">
+					<thead class="BorderTablesThead">
+						<tr>
+							<td>Наименование</td>
+							<td>Колличество на складе шт.</td>
+							<td>Цена руб.</td>
+						</tr>
+					</thead>
+					<tbody class="BorderTablesTbody" id=StockroomMaterialsTable>
+						<tr>
+							<td>Металл 1.0</td>
+							<td>3670</td>
+							<td>31</td>
+						</tr>
+						<tr>
+							<td>Металл 1.2</td>
+							<td>1670</td>
+							<td>9</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+<!--------------------------------- Диалог добавления/редактирования материала -------------------------------->
+	<div title="Материал" id=StockroomMaterialsDialog>
+		<p>
+			<button onclick="StockManualGroupDialogShow()">...</button>
+			Тип: <select id=StockroomMaterialsDialogType></select><br>
+			Материал: <input id=StockroomMaterialsDialogMaterial><hidden id=StockroomMaterialsDialogMaterialID><span onclick="StockroomManualsDialogOpen()"  style="border:solid 1px black; padding:2px; cursor:pointer">...</span><br>
+			
+			Цена: <input id=StockroomMaterialsDialogPrice><br>
+			Количество: <input id=StockroomMaterialsDialogCount>&nbsp;<span id=StockroomMaterialsDialogSI></span>
+			<div id=StockroomMaterialsDialogBugs style="color:red"><hr></div>
+		</p>
+	</div>
+	<script>
+		StockroomListSelect();
+		$("#StockroomMaterialsDialogMaterial").prop( "disabled", true );
+		$( "#StockroomMenu" ).accordion({heightStyle: "content"});
+		$( "#StockroomDetails" ).accordion({heightStyle: "content"});
+		$( "#StockroomDialog" ).accordion({heightStyle: "content"});
+		$( "#StockroomMaterialsDialog" ).dialog({
+			autoOpen: false,
+			modal:true,
+			width: 400,
+			buttons: [
+				{
+					text: "Сохранить",
+					click: function() {
+						StockroomMaterialsSave();
+					}
+				},
+				{
+					text: "Отмена",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			]
+		});
+	</script>
+<!--------------Диалог выбора материала------------------------------------------->
+<div title="Справочник" id=StockroomManualsDialogNew>
+	<p>
+		<button onclick="StockManualGroupAddEditStart('')">Добавить группу</button>
+		<div id=MainUl></div>
+	</p>
+</div>
+<script>
+	$( "#StockroomManualsDialogNew" ).dialog({autoOpen: false, width: 400});
+	
+	
+	
+	function a(MaterialID)
+	{
+		alert(  $("[GroupId="+$('[MaterialID='+MaterialID+']').attr("GroupParentId")+"]").text() )
+	}
+</script>
+<!------------Диалог добавления / редактирования группы в справочнике------------>
+<div title="Группа" id=StockroomManualsDialogNewGroup>
+	<p>
+		<input type=hidden id=StockroomManualsDialogNewGroupID>
+		Наименование: <input id=StockroomManualsDialogNewGroupName>
+		<div style="color:red" id=StockroomManualsDialogNewGroupBugs></div>
+	</p>
+</div>
+<script>
+	$( "#StockroomManualsDialogNewGroup" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 400,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {
+					StockManualGroupAddEditSave();
+				}
+			},
+			{
+				text: "Отмена",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		]
+	});
+</script>
+<!--------------------------------- Диалог выбора констант типов -------------------------------->
+<div title="Материал" id=StockroomManualsDialog>
+		<p>
+			<div class=WorkerList>
+				<select size=10 id=StockroomManualsList></select><br>
+			</div>
+		</p>
+	</div>
+	<script>
+		$( "#StockroomManualsDialog" ).dialog({
+			autoOpen: false,
+			modal:true,
+			width: 200,
+			buttons: [
+				{
+					text: "Сохранить",
+					click: function() {
+						StockroomManualsDialogSave();
+					}
+				},
+				{
+					text: "Отмена",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			]
+		});
+	</script>
+<!---------------------------------Справочники------------------------------------>
+<div id=StockroomManualDialog title="Справочники">
+	<p>
+		<div id=StockroomManualTabs>
+			<ul>
+				<li><a href="#StockroomManualTab-1">Типы материалов</a></li>
+				<li onclick="StockManualGroupSelectt()"><a href="#StockroomManualTab-2">Группы</a></li>
+			</ul>
+			<div id="StockroomManualTab-1">
+				<!--Типы материалов-->
+				
+			</div>
+			<div id="StockroomManualTab-2">
+				<!--Группы-->
+				<p><span onclick="StockManualGroupDialogShow('Add')">Добавить группу</span></p>
+				<table>
+					<thead>
+						<tr>
+							<td>Наименование</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody id=StockManualGroupTable></tbody>
+				</table>
+				<div id=StockroomManualGroupDialog title="Группа">
+					<p>
+						Наименование <input id=StockroomManualGroupInpName><br>
+						<input id=StockroomManualGroupInpId type=hidden>
+						
+						<div id=StockroomManualGroupBugs style="color:red"><hr></div>
+					</p>
+				</div>
+			</div>
+		</div>
+	</p>
+</div>
+	<script>
+		$("#StockroomManualGroupBugs").hide();
+		$( "#StockroomManualDialog" ).dialog({
+			autoOpen: false,
+			modal:true,
+			width: 600
+		});
+		$("#StockroomManualDialog").tabs();
+		//Диалоговое окно группы
+		$( "#StockroomManualGroupDialog" ).dialog({
+			autoOpen: false,
+			modal:true,
+			width: 200,
+			buttons: [
+				{
+					text: "Сохранить",
+					click: function() {
+						if($("#StockroomManualGroupInpName").val()=="")
+						{
+							$("#StockroomManualGroupBugs").show();
+							$("#StockroomManualGroupBugs").html("<hr>Не заполненно поле наименование");
+						}
+						else
+						if($("#StockroomManualGroupInpId").val()=="")
+						{ 
+							StockManualGroupAdd();
+						}
+						else StockManualGroupEdit();
+					}
+				},
+				{
+					text: "Отмена",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			]
+		});
+	</script>

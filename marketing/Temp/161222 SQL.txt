@@ -1,0 +1,34 @@
+CREATE TABLE `ent`.`tempcalcnaves` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NOT NULL,
+  `HSign` INT NULL,
+  `H` INT NULL,
+  `SignEqual` INT NULL,
+  `WSign` INT NULL,
+  `W` INT NULL,
+  `SEqual` BIT NULL,
+  `Sum` DECIMAL(9,2) NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `ent`.`tempcalcfurnitura` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NOT NULL,
+  `Currency` VARCHAR(5) NOT NULL,
+  `Sum` DECIMAL(9,2) NOT NULL,
+  PRIMARY KEY (`id`));
+
+  CREATE TABLE `ent`.`tempcalcglass` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `Name` VARCHAR(45) NOT NULL,
+    `M2` VARCHAR(45) NULL,
+    `Sum` DECIMAL(9,2) NOT NULL,
+    `SumPlus` DECIMAL(9,2) NULL,
+    PRIMARY KEY (`id`));
+ALTER TABLE `ent`.`tempcalcglass`
+CHANGE COLUMN `M2` `M2` BIT NULL DEFAULT NULL ;
+
+CREATE TABLE `ent`.`tempcalcother` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NOT NULL,
+  `Sum` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`));

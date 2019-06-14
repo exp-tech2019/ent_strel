@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<meta charset="utf-8" /> 
+	</head>
+	<body>
+		<form method="post" action="http://localhost:8082/Stock/">
+			<input name="t1">
+			<input name="t2">
+			<input type="submit">
+		</form>
+	</body>
+</html>
+<script type="text/javascript">
+	var http = new XMLHttpRequest();
+var url = "http://localhost:8082/Stock/";
+var params = "lorem=ipsum&name=binny";
+http.open("POST", url, true);
+
+//Send the proper header information along with the request
+http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+http.onreadystatechange = function() {//Call a function when the state changes.
+    if(http.readyState == 4 && http.status == 200) {
+        alert(http.responseText);
+    }
+}
+var arr={};
+for(var i=0;i<10;i++)
+	arr[i]={
+		"typeDoor":23
+	}
+var str=JSON.stringify( {
+	"Result":{
+		"Action":"Customer_Select",
+		"Value":{
+			"idDoor":123,
+			"TypeDoors":arr
+		}
+	}
+});
+console.log(str);
+http.send(str);
+</script>

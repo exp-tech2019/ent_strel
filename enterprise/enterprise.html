@@ -1,0 +1,897 @@
+<div id="EbtTabs">
+	<ul>
+		<li onclick="EntNaraydListSelect();"><a href="#EbtTabs-1">Основное</a></li>
+		<li onclick="EntNaryadTempListSelect(); $('#EbtTabs-2').height($('#EntNarayadTempAcc').height())"><a href="#EbtTabs-2">Не распределенные наряды</a></li>
+		<li onclick="EntLaserSelect(); EntGibkaSelect()"><a href="#EbtTabs-3">Лазер / Гибка</a></li>
+		<li onclick=""><a href="#EbtTabs-4">График работ</a></li>
+	</ul>
+	<div id="EbtTabs-1">
+		<div>
+			<script> EntWorkerSelectOnline();</script>
+			<table class=TablesMenu >
+				<tr>
+					<td style="vertical-align:top">
+						<div style="width:250px; margin-right:20px; float:left;" id="enterpriseworker">
+							<h3>Сотрудники на производстве</h3>
+							<div id="EntWorkerListOnline">
+							</div>
+						</div>
+					</td>
+					<td style="vertical-align:top">
+						<div style="width:800px; margin-right:20px;" id="enterpriseorders">
+							<h3>Наряды в работе</h3>
+							<div>
+								<button id="EntTerminalsEnable"><span>Заблокировать терминалы</span></button>
+								<script>
+									if(ParamGetValue("TerminalsStatus")=="Disable")
+										$("#EntTerminalsEnable span").text("Разблокировать терминалы");
+									$("#EntTerminalsEnable").click(function(){
+										$.post(
+											'enterprise/enterprise.php',
+											{"Method":"TerminalsAlterStatus"},
+											function(data){
+												if(data=="Enable" || data=="Disable")
+												{
+													switch(data)
+													{
+														case "Enable":
+															$("#EntTerminalsEnable span").text("Заблокировать терминалы");
+														break;
+														case "Disable":
+															$("#EntTerminalsEnable span").text("Разблокировать терминалы");
+														break;
+													};
+												}
+												else
+													console.log(data);
+											}
+										);
+									});
+									$("#EntTerminalsEnable").button();
+								</script>
+								<div>
+									<div style="margin-bottom: 5px;">
+										Год <select id="EntNaryadPanelYear"></select>
+										<input type=checkbox id="EntNaryadPanelChStatusCancel"> Учитывать отмененные заказы
+									</div>
+									<div>
+										<span style="padding: 4px; border:1px solid black; margin-right: 3px;">
+											№ наряда <input id="EntNaryadPanelNum" style="width:70px;">
+										</span>
+										<span style="padding: 4px; border:1px solid black; margin-right: 3px;">
+											№ счета <input id="EntNaryadPanelShet" style="width:80px;">
+											№ двери <input id="EntNaryadPanelNumInOrder" style="width:40px;">
+										</span>
+										<span style="padding: 4px; border:1px solid black; margin-right: 3px;">
+											№ штильды <input id="EntNaryadPanelShtild" style="width:70px;">
+										</span>
+									</div>
+									<div>
+										Этапы: 
+											<input type=checkbox id="EntNaryadPanelChSgibka"> Гибка 
+											<input type=checkbox id="EntNaryadPanelChSvarka"> Сварка 
+											<input type=checkbox id="EntNaryadPanelChSborka"> Сборка 
+											<input type=checkbox id="EntNaryadPanelChColor"> Покраска
+											<input type=checkbox id="EntNaryadPanelChUpak"> Упаковка
+											<input type=checkbox id="EntNaryadPanelChShpt"> Погрузка
+									</div>
+									
+									<br>
+									<button onclick="EntNaraydListSelectFind()">Найти</button>&nbsp;&nbsp;&nbsp;<button onclick="EntNaraydListSelectFindClear()">Очистить поиск</button>
+									<button id="EntNaryadListPrintBtn" onclick="EntNaraydListPrint()">Печать списка</button>
+									<img id="EntNaryadListPrintLoader" src="images/loader.gif" width=20>
+									<script>
+										//Скрываем кнопку загрузки печати списка
+										$("#EntNaryadListPrintLoader").hide();
+										//Нажатие клавиши enter для полей поиска
+										$("#EntNaryadPanelNum").keypress(function(e){
+											if(e.which==13) EntNaraydListSelectFind();
+										})
+										$("#EntNaryadPanelShet").keypress(function(e){
+											if(e.which==13) EntNaraydListSelectFind();
+										})
+										$("#EntNaryadPanelNumInOrder").keypress(function(e){
+											if(e.which==13) EntNaraydListSelectFind();
+										})
+										$("#EntNaryadPanelShtild").keypress(function(e){
+											if(e.which==13) EntNaraydListSelectFind();
+										})
+										//Формируем список годов
+										for(var i=parseInt(new Date().getFullYear()); i>=2015; i--)
+											$("#EntNaryadPanelYear").append("<option>"+i+"</option>");
+										$("#EntNaryadPanelYear").append("<option></option>");
+										//Обрабатываем события ввода в поля поиска
+										$(document).ready(function(){
+											$("#EntNaryadPanelNum").focusin(function(){
+												$(this).css("background-color","lightgreen");
+												$("#EntNaryadPanelShet").css("background-color","white");
+												$("#EntNaryadPanelNumInOrder").css("background-color","white");
+												$("#EntNaryadPanelShtild").css("background-color","white");
+
+												$("#EntNaryadPanelShet").val("");
+												$("#EntNaryadPanelNumInOrder").val("");
+												$("#EntNaryadPanelNumInOrder").prop("disabled",true);
+												$("#EntNaryadPanelShtild").val("");
+											});
+											$("#EntNaryadPanelShet").focusin(function(){
+												$(this).css("background-color","lightgreen");
+												$("#EntNaryadPanelNum").css("background-color","white");
+												$("#EntNaryadPanelNumInOrder").css("background-color","lightgreen");
+												$("#EntNaryadPanelShtild").css("background-color","white");
+
+												$("#EntNaryadPanelNum").val("");
+												$("#EntNaryadPanelNumInOrder").val("");
+												$("#EntNaryadPanelNumInOrder").prop("disabled",false);
+												$("#EntNaryadPanelShtild").val("");
+											});
+											$("#EntNaryadPanelShtild").focusin(function(){
+												$(this).css("background-color","lightgreen");
+												$("#EntNaryadPanelShet").css("background-color","white");
+												$("#EntNaryadPanelNum").css("background-color","white");
+												$("#EntNaryadPanelNumInOrder").css("background-color","white");
+
+												$("#EntNaryadPanelNum").val("");
+												$("#EntNaryadPanelShet").val("");
+												$("#EntNaryadPanelNumInOrder").val("");
+												$("#EntNaryadPanelNumInOrder").prop("disabled",true);
+											});
+										})
+									</script>
+								</div>
+								<table class="TablesHeight Tables">
+									<thead id="EntNaryadTableHeader" class="BorderTablesThead">
+										<tr>
+											<td>№ наряда</td>
+											<td>Счет/№ двери</td>
+											<td>Наименование</td>
+											<td>Размеры</td>
+											<td>Работы</td>
+											<td></td>
+										</tr>
+									</thead>
+								</table>
+								<img id="EntNaryadTableLoader" src="images/loader.gif" width="50"></img>
+								<div id=EntNaryadTableDiv style="overflow: auto; height:200px;">
+									<table class="TablesHeight Tables">
+										<tbody id="EntNaryadTable" class="BorderTablesTbody"></tbody>
+									</table>
+								</div>
+								<script>
+									$("#EntNaryadTableLoader").hide();
+									$("#EntNaryadTableDiv").ready(function(){
+										var DH=$(document).height();
+										$("#EntNaryadTableDiv").css("height",(DH-1450).toString()+"px");
+									})
+									EntNaraydListSelect();
+
+//------Подгрузка контента-----
+$(document).ready(function(){
+	var EntNaryadDiv=$("#EntNaryadTableDiv");
+	var EntNaryadTable1=$("#EntNaryadTable");
+	$("#EntNaryadTableDiv").scroll(function(){
+		if(EntNaryadDiv.offset().top+EntNaryadDiv.height()+10>EntNaryadTable1.find("tr:last").offset().top+EntNaryadTable1.find("tr:last td:first").height())
+		{
+			for(var i=0;i<15;i++)
+			{
+				var RW=EntNaryadSelectList[EntNaryadRowDisplay];
+				$('#EntNaryadTable').append(
+					'<tr Class=" '+RW.StatusColorClass+' " onclick="EntNaryadEditStart('+RW.id+')" id=EntNaryadTableTR'+RW.id+'>'+
+						'<td>'+RW.Blank+'</td>'+
+						'<td>'+RW.Shet+"/"+RW.NumInOrder+'</td>'+
+						'<td>'+RW.Name+'</td>'+
+						'<td>'+RW.H+' * '+RW.W+(RW.S!=""?" * "+RW.S:"")+'</td>'+
+						'<td style="background-color:'+RW.ColorTR+'">'+RW.Step+'</td>'+
+						//'<td tdType=note title="'+o.NaryadNote+'">'+o.NaryadNoteS+'</td>'+
+						"<td>"+RW.NullPositionImg+"</td>"+
+					'</tr>'
+				);
+				EntNaryadRowDisplay++;
+			};
+		};
+	});
+});
+
+								</script>
+							</div>
+						</div>
+						<br style="clear:both">
+						
+						
+						<!--- Диалог карточки наярда -->
+						
+						<div id="EntNaryadDialog" title="Наряд заказ" class="NaryadDialog">
+							<p>
+								<h1 align=center>НАРЯД-ЗАКАЗ № <span id="EntNaryadDialogInpBlank"></span></h1>
+									<h1 align=center>Модель: &nbsp;<span id="EntNaryadDialogInpName"></span></h1>
+									<h2 align=center>№ двери в заказе: <span id="EntNaryadDialogInpNumInOrder"></span></h2>
+									<img src="enterprise/naryadimg.php?idNaryad=" id=EntNaryadDialogInpImg style="float:left;margin:5px; height: 300px;">
+									<h2>Обналичка: &nbsp;<span id="EntNaryadDialogInpNalichnik"></span></h2>
+									<h2>Цвет: &nbsp;<span id="EntNaryadDialogInpRAL"></span></h2>
+									<h2>Замок: &nbsp;<span id="EntNaryadDialogInpZamok"></span></h2>
+									<h2>Фурнитура: &nbsp;<span id=></span></h2>
+									<h2>Панель: &nbsp;<span id=></span></h2>
+									<h2>№ штильды: &nbsp; <span id="EntNaryadDialogInpShtild"></span></h2>
+									<h2>Примечание к двери:</h2> <h3><span id=EntNaryadDialogInpDoorNote></span></h3>
+									<div style="clear: both"></div>
+										<hr color="#ccccc">
+										<h2>Лазер: &nbsp;<span id=EntNaryadDialogInpLaser></span>&nbsp;<span id=EntNaryadDialogInpLaserComplite></span>
+											Стоимость работ<input id=EntNaryadDialogInpLaserSum>
+										</h2>
+										<h2>Сгибка: &nbsp;<span id=EntNaryadDialogInpSgibkaNum></span> - <span id=EntNaryadDialogInpSgibka></span>&nbsp;<span id=EntNaryadDialogInpSgibkaComplite></span>
+											Стоимость работ<input id=EntNaryadDialogInpSgibkaSum>
+										</h2>
+									<!--Сварка-->
+									<div class="NaryadStep">
+										<h2 class="Title">Сварка</h2>
+										<div>
+											<div class="Sum">
+												Соимость: <br> <span id="EntNaryadDialogStepSvarkaSum">1700</span>
+											</div>
+											<button onclick="EntNaryadAddProcess('Svarka')">Добавить выполнение</button><br>
+
+											<table>
+												<thead>
+													<tr>
+														<td width=100>Стоимость</td>
+														<td width=400>ФИО</td>
+														<td width=200>Дата назначения</td>
+														<td width=200>Дата выполнения</td>
+													</tr>
+												</thead>
+												<tbody id="EntNaryadDialogStepSvarkaWorks"></tbody>
+											</table>
+										</div>
+									</div>
+									<!--Рамка-->
+									<div class="NaryadStep">
+										<h2 class="Title">Рамка</h2>
+										<div>
+											<div class="Sum">
+												Соимость: <br> <span id="EntNaryadDialogStepFrameSum">1700</span>
+											</div>
+											<button onclick="EntNaryadAddProcess('Frame')">Добавить выполнение</button><br>
+
+											<table>
+												<thead>
+													<tr>
+														<td width=100>Стоимость</td>
+														<td width=400>ФИО</td>
+														<td width=200>Дата назначения</td>
+														<td width=200>Дата выполнения</td>
+													</tr>
+												</thead>
+												<tbody id="EntNaryadDialogStepFrameWorks"></tbody>
+											</table>
+										</div>
+									</div>
+									<!--МДФ-->
+									<div class="NaryadStep">
+										<h2 class="Title">МДФ</h2>
+										<div>
+											<div class="Sum">
+												Соимость: <br> <span id="EntNaryadDialogStepMdfSum">1700</span>
+											</div>
+											<button onclick="EntNaryadAddProcess('Mdf')">Добавить выполнение</button><br>
+
+											<table>
+												<thead>
+													<tr>
+														<td width=100>Стоимость</td>
+														<td width=400>ФИО</td>
+														<td width=200>Дата назначения</td>
+														<td width=200>Дата выполнения</td>
+													</tr>
+												</thead>
+												<tbody id="EntNaryadDialogStepMdfWorks"></tbody>
+											</table>
+										</div>
+									</div>
+									<!--Сборка-->
+									<div class="NaryadStep">
+										<h2 class="Title">Сборка</h2>
+										<div>
+											<div class="Sum">
+												Соимость: <br> <span id="EntNaryadDialogStepSborkaSum">1700</span>
+											</div>
+											<button onclick="EntNaryadAddProcess('Sborka')">Добавить выполнение</button><br>
+
+											<table>
+												<thead>
+													<tr>
+														<td width=100>Стоимость</td>
+														<td width=400>ФИО</td>
+														<td width=200>Дата назначения</td>
+														<td width=200>Дата выполнения</td>
+													</tr>
+												</thead>
+												<tbody id="EntNaryadDialogStepSborkaWorks"></tbody>
+											</table>
+										</div>
+									</div>
+									<!--Малярка-->
+									<div class="NaryadStep">
+										<h2 class="Title">Малярка</h2>
+										<div>
+											<div class="Sum">
+												Соимость: <br> <span id="EntNaryadDialogStepColorSum">1700</span>
+											</div>
+											<button onclick="EntNaryadAddProcess('Color')">Добавить выполнение</button><br>
+
+											<table>
+												<thead>
+													<tr>
+														<td width=100>Стоимость</td>
+														<td width=400>ФИО</td>
+														<td width=200>Дата назначения</td>
+														<td width=200>Дата выполнения</td>
+													</tr>
+												</thead>
+												<tbody id="EntNaryadDialogStepColorWorks"></tbody>
+											</table>
+										</div>
+									</div>
+									<!--Сборка МДФ-->
+									<div class="NaryadStep">
+										<h2 class="Title">Сборка МДФ</h2>
+										<div>
+											<div class="Sum">
+												Соимость: <br> <span id="EntNaryadDialogStepSborkaMdfSum">1700</span>
+											</div>
+											<button onclick="EntNaryadAddProcess('SborkaMdf')">Добавить выполнение</button><br>
+
+											<table>
+												<thead>
+													<tr>
+														<td width=100>Стоимость</td>
+														<td width=400>ФИО</td>
+														<td width=200>Дата назначения</td>
+														<td width=200>Дата выполнения</td>
+													</tr>
+												</thead>
+												<tbody id="EntNaryadDialogStepSborkaMdfWorks"></tbody>
+											</table>
+										</div>
+									</div>
+									<!--Упаковка-->
+									<div class="NaryadStep">
+										<h2 class="Title">Упаковка</h2>
+										<div>
+											<div class="Sum">
+												Соимость: <br> <span id="EntNaryadDialogStepUpakSum">1700</span>
+											</div>
+											<button onclick="EntNaryadAddProcess('Upak')">Добавить выполнение</button><br>
+
+											<table>
+												<thead>
+													<tr>
+														<td width=100>Стоимость</td>
+														<td width=400>ФИО</td>
+														<td width=200>Дата назначения</td>
+														<td width=200>Дата выполнения</td>
+													</tr>
+												</thead>
+												<tbody id="EntNaryadDialogStepUpakWorks"></tbody>
+											</table>
+										</div>
+									</div>
+									<!--Разрешить погрузку-->
+									<div class="ShtpAllow">
+										Погрузка разрешена: <button id="EntNaryadDialogShptAllowBtn" onclick="EntNaryadDialogShptAllowBtnClick()">Разрешить</button>
+										<span id="EntNaryadDialogShptAllowFIO"></span> <span id="EntNaryadDialogShptAllowDate"></span>
+									</div>
+									<!--Погрузка-->
+									<div class="NaryadStep">
+										<h2 class="Title">Погрузка</h2>
+										<div>
+											<div class="Sum">
+												Соимость: <br> <span id="EntNaryadDialogStepShptSum">1700</span>
+											</div>
+											<button onclick="EntNaryadAddProcess('Shpt')">Добавить выполнение</button><br>
+
+											<table>
+												<thead>
+													<tr>
+														<td width=100>Стоимость</td>
+														<td width=400>ФИО</td>
+														<td width=200>Дата назначения</td>
+														<td width=200>Дата выполнения</td>
+													</tr>
+												</thead>
+												<tbody id="EntNaryadDialogStepShptWorks"></tbody>
+											</table>
+										</div>
+									</div>
+
+										Примечание<br>
+											<textarea style="width:100%; height:50px" id=EntNaryadDialogInpNote></textarea>
+										<h2>Мастер: &nbsp;<span id=EntNaryadDialogInpMaster></span></h2>
+								<!------------------------------------------- ------------------------------------------------>
+
+								<span id=EntNaryadDialogInpBugs style="width:100%; color:red; display:none;"><hr color=red></span>
+								<input type=hidden id=EntNaryadDialogInpID>
+							</p>
+						</div>
+						<div title="Выберите сотрудника" id=EntNaryadChoseWorkerDialog>
+							<p>
+								<span id=EntNaryadChoseWorkerLoader><img src="images/loader.gif" width=25>Загрузка</span>
+								<div class=WorkerList>
+									<select size=2 id=EntNaryadChoseWorkerSelect>	</select>
+								</div>
+								<input id=EntNaryadChoseElWorker type=hidden>
+								<input id=EntNaryadChoseElDate type=hidden>
+							</p>
+						</div>
+						<script>
+							$("#EntNaryadChoseWorkerLoader").hide();
+							$("#EntNaryadChoseWorkerButton").button({icons:{primary: "ui-icon-pencil"}});
+							$("#EntNaryadSvarkaWorkDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadSvarkaCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadFrameCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadSborkaCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadColorCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadUpakCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadShptCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadShptAllowCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadDialogInpShptDel").button({icons:{primary: "ui-icon-circle-close"}});
+							//EntNaryadChoseWorkerCompliteSvarka
+							$("#EntNaryadChoseWorkerCompliteSvarka").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteFrame").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteSborka").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteColor").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteUpak").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteShpt").button({icons:{primary: "ui-icon-flag"}});
+							$( "#EntNaryadDialog" ).dialog({
+								autoOpen: false,
+								modal:true,
+								width: 1000,
+								buttons: [
+									{
+										text: "Печать",
+										click: function() {
+											EntNaryadDialogPrintNaryad();
+										}
+									},
+									{
+										text: "Сохранить",
+										click: function() {
+											EntNaryadDialogSave();
+										}
+									},
+									{
+										text: "Отмена",
+										click: function() {
+											$( this ).dialog( "close" );
+										}
+									}
+								]
+							});
+							$( "#EntNaryadChoseWorkerDialog" ).dialog({
+								autoOpen: false,
+								modal:true,
+								width: 400,
+								buttons: [
+									{
+										text: "Выбрать",
+										click: function() {
+											var s=$("#EntNaryadChoseWorkerSelect").val();
+											if(s.indexOf(" (")>-1)
+												s=s.substring(0,s.indexOf(' ('));
+											var s0=s.substring(0,s.indexOf(' -'));
+											var s1=s.substring(s.indexOf('- ')+2);
+											$("#"+$("#EntNaryadChoseElWorker").val()+"Num").text(s0);
+											$("#"+$("#EntNaryadChoseElWorker").val()).text(s1);
+											$("#"+$("#EntNaryadChoseElDate").val()).text(new Date().format("dd.mm.yyyy HH:MM:ss"));
+											$( this ).dialog( "close" );
+										}
+									},
+									{
+										text: "Отмена",
+										click: function() {
+											$( this ).dialog( "close" );
+										}
+									}
+								]
+							});
+							$.post(
+								"MainAutorize.php",
+								{"Method":"GetSession"},
+								function(data)
+								{
+									var o =jQuery.parseJSON(data);
+									if(o.Type==4)
+									{
+										$("#EntNaryadDialogInpLaserSum").prop("disabled","disabled");
+										$("#EntNaryadDialogInpSgibkaSum").prop("disabled","disabled");
+										$("#EntNaryadDialogInpSvarkaSum").prop("disabled","disabled");
+										$("#EntNaryadDialogInpSborkaSum").prop("disabled","disabled");
+										$("#EntNaryadDialogInpColorSum").prop("disabled","disabled");
+										$("#EntNaryadDialogInpUpakSum").prop("disabled","disabled");
+										$("#EntNaryadDialogInpLaserSum").prop("disabled","disabled");
+										$("#EntNaryadDialogInpShptSum").prop("disabled","disabled");
+										$("#EntNaryadDialogInpFrameSum").prop("disabled","disabled");
+										/*
+										$("#EntNaryadFrameCompliteDel").hide();
+										$("#EntNaryadChoseWorkerCompliteFrame").hide();
+										$("#EntNaryadSborkaCompliteDel").hide();
+										$("#EntNaryadChoseWorkerCompliteSborka").hide();
+										$("#EntNaryadColorCompliteDel").hide();
+										$("#EntNaryadChoseWorkerCompliteColor").hide();
+										$("#EntNaryadUpakCompliteDel").hide();
+										$("#EntNaryadChoseWorkerCompliteUpak").hide();
+										$("#EntNaryadShptCompliteDel").hide();
+										$("#EntNaryadChoseWorkerCompliteShpt").hide();*/
+									};
+								}
+							);
+						</script>
+						
+	<!- конец наряд-заказ->
+						
+					</td>
+					<td style="vertical-align:top">
+	<!-Склад упакованных дверей->
+						<div style="width:350px; margin-right:20px;" id="enterprisepayment">
+							<h3>Склад</h3>
+							<div>
+								<button id=EntBtnOpenShptDialog onclick="$('#EntShptNewDialog').dialog('open');">Отгруженные двери</button>
+									<script>
+										$('#EntBtnOpenShptDialog').button({icons:{primary: 'ui-icon-cart'}});
+										$('#EntBtnOpenShptAllowDialog').button({icons:{primary: 'ui-icon-cart'}});
+									</script>
+								<div style="margin-top:5px;">
+									Поиск: <input id="EntStockTableOrdersFilter" placeholder="Введите номер счета">
+									<button onclick="EntStockTableOrdersFilterClick()">Отобразить</button>
+									<script>
+										function EntStockTableOrdersFilterClick(){
+											for(var i=0; i<$("#EntStockTableOrders").find('tr[type=header]').length; i++)
+											{
+												var TR=$("#EntStockTableOrders tr[type=header]:eq("+i+")");
+												if(TR.find("td:eq(1)").text().toLowerCase().indexOf($("#EntStockTableOrdersFilter").val().toLowerCase())>-1)
+												{
+													TR.show();
+													TR.next().show();
+												}
+												else
+												{	
+													TR.hide();
+													TR.next().hide();
+												};
+											};
+										}
+										$("#EntStockTableOrdersFilter").keypress(function(e){
+											if(e.which==13) EntStockTableOrdersFilterClick();
+										})
+									</script>
+								</div>
+								<table class=Tables>
+									<thead>
+										<tr>
+											<td></td>
+											<td>№ заказа</td>
+											<td>Кол-во дверей</td>
+											<td>Кол-во дверей для отгрузки</td>
+											<td></td>
+										</tr>
+									</thead>
+									<tbody id=EntStockTableOrders></tbody>
+								</table>
+								
+								<table class=Tables>
+									<thead>
+										<tr>
+											<th>Наряд</th>
+											<th>Тип</ht>
+											<th>Размер</th>
+											<th>Выполнен</th>
+											<th>Погрузка</th>
+										</tr>
+									</thead>
+									<tbody id=EntStockTable></tbody>
+									<script>EntStockSelect("1=1 AND o.status<>-1")</script>
+								</table>
+							</div>
+						</div>
+						<!--Диалог отгруженных дверей-->
+						<div title="Отгруженные двери" id=EntShptDialog>
+							<p>
+								<table>
+									<thead>
+										<tr>
+											<th>Наряд</th>
+											<th>Тип</ht>
+											<th>Размер</th>
+											<th>Выполнен</th>
+											<th>Погрузка</th>
+										</tr>
+									</thead>
+									<tbody id=EntShptTable></tbody>
+								</table>
+							</p>
+						</div>
+						<script>$( "#EntShptDialog" ).dialog({autoOpen: false,modal:true,width: 400});</script>
+						<div title="Погрузка" id=EntStockAllowDialog1>
+							<p>
+								<input type=radio name=EntStockAllowDialogRadio	value=Allow checked>Разрешить отгрузку<br>
+								<input type=radio name=EntStockAllowDialogRadio	value=Cancel>Отменить отгрузку<br>
+							</p>
+						</div>
+						<script>
+						$( "#EntStockAllowDialog1" ).dialog({
+							autoOpen: false,
+							modal:true,
+							width: 300,
+							buttons: [
+								{
+									text: "Далее",
+									click: function() {
+										EntStockAllowStep2();
+									}
+								}
+							]
+							});
+						</script>
+						
+						<!-Отгруженные двери->
+						<div title="Отгруженные двери" id="EntShptNewDialog">
+							<p>
+								<div class="ui-widget-header ui-corner-all">
+									Поиск: № заказа <input style="width:40px" id=EntShptNewInpBlank>  Дата с <input id=EntShptNewInpDateWith> по <input id=EntShptNewInpDateBy><br>
+									Сортировка: <input type=radio name=EntShptNewInpOrderBy value=1> по номеру заказа;   <input type=radio name=EntShptNewInpOrderBy value=2 checked> по дате отгрузки<br>
+									<button id=EntShptNewBtnFind onclick="EntShptNewOrdersSelect();">Отобразить</button>
+									<button id=EntShptNewBtnNalog onclick="EntShptNewNalog()">Отчет для налоговой</button>
+									<script type="text/javascript">
+										$(document).ready(function(){
+											if(ParamGetValue("NalogView")=="false") $("#EntShptNewBtnNalog").hide();
+										});
+									</script>
+								</div>
+								<div style="font-weight:900">Всего дверей: <span id=EntShptNewCount></span>, отгруженно: <span id=EntShptNewCountComplite></span></div>
+								<hr>
+								<table id=EntShptNewOrders>	</table>
+							</p>
+						</div>
+						
+						<script>
+						$( "#EntShptNewInpDateWith" ).datepicker();
+						$( "#EntShptNewInpDateBy" ).datepicker();
+						$("#EntShptNewBtnFind").button();
+						$("#EntShptNewBtnNalog").button();
+						$( "#EntShptNewDialog" ).dialog({
+							autoOpen: false,
+							modal:true,
+							width: 500
+							});
+						</script>
+	<!--// Склад окончен-->
+					</td>
+				</tr>
+			</table>
+			<script>
+				$( "#enterpriseworker" ).accordion({heightStyle: "content"});
+				$( "#enterpriseworker" ).hide();
+				$( "#enterpriseorders" ).accordion({heightStyle: "content"});
+				$( "#enterprisepayment" ).accordion({heightStyle: "content"});
+			</script>
+		</div>
+	</div>
+	
+	<div id="EbtTabs-2">
+		<div>
+			<div style="width:600px; margin-right:20px;" id="EntNarayadTempAcc">
+				<h3>Нераспределенные наряды (после гибки) </h3>
+				<div>
+					<button onclick="EntPrintDialogOpen()">Печать</button>
+					<button onclick="EntNaryadTempListSelect(); $('#EbtTabs-2').height($('#EntNarayadTempAcc').height());">Обновить</button>
+					<table>
+						<thead>
+							<tr>
+								<td>№ заказа</td>
+								<td>Наименование</td>
+								<td>Размеры</td>
+								<td>Лазер</td>
+								<td>Сгибка</td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody id=EntNaryadTempTable></tbody>
+					</table>
+					<script>
+						EntNaryadTempListSelect();
+						$( "#EntNarayadTempAcc" ).accordion({heightStyle: "content"});
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="EbtTabs-3">
+		<div id=EntLasserAccord style="float:left; margin-right:20px">
+			<h3>Лазер</h3>
+			<div>
+				<table>
+					<thead>
+					<tr>
+						<td>№ заказа</td>
+						<td>Наименование</td>
+						<td>Высота</td>
+						<td>Ширина</td>
+						<td>Выполнил</td>
+						<td>Время</td>
+					</tr>
+					</thead>
+					<tbody id=EntLaser></tbody>
+				</table>
+			</div>
+		</div>
+		<div id=EntSgibkaAccord style="float:left">
+			<h3>Гибка</h3>
+			<div>
+				<table>
+					<thead>
+					<tr>
+						<td>№ заказа</td>
+						<td>Наименование</td>
+						<td>Высота</td>
+						<td>Ширина</td>
+						<td>Выполнил</td>
+						<td>Время</td>
+					</tr>
+					</thead>
+					<tbody id=EntSgibka></tbody>
+				</table>
+			</div>
+		</div>
+		<script>
+			$( "#EntLasserAccord" ).accordion({heightStyle: "content"});
+			$( "#EntSgibkaAccord" ).accordion({heightStyle: "content"});
+			$('#EbtTabs-2').css('height',($("#EntLaser").height()+150).toString()+'px');
+		</script>
+	</div>
+
+	<div id="EbtTabs-4">
+		<div class="ui-widget-header ui-corner-all" style="padding: 5px;">
+			Год: <select onchange="EntShLoad()" id="EntShYearList"></select>
+			Месяц: <select onchange="EntShLoad()" id="EntShMonthList">
+				<option value="1">Январь</option>
+				<option value="2">Февраль</option>
+				<option value="3">Март</option>
+				<option value="4">Апрель</option>
+				<option value="5">Май</option>
+				<option value="6">Июнь</option>
+				<option value="7">Июль</option>
+				<option value="8">Август</option>
+				<option value="9">Сентябрь</option>
+				<option value="10">Октябрь</option>
+				<option value="11">Ноябрь</option>
+				<option value="12">Декабрь</option>
+			</select>
+			Поиск: <input id="EntShInpFind" oninput="EntShFindFIODolgnost()" style="width: 200px;">
+			<button id="EntShBtnFind" onclick="EntShFindFIODolgnost()">Найти</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button id="EntShBtnSetting" onclick="EntShSettingLoad()">Настройки</button>
+		</div>
+		<br>
+		<div id="EntShBtn_SvaeCancel">
+			<button onclick="EntShInpSave()">Сохранить</button>
+			<button onclick="EntShInpCancel()">Отмена</button>
+		</div>
+		<table id="EntWorkingScheduleTable" class="TablesHeight Tables">
+			<thead class="BorderTablesThead">
+				<tr>
+					<td Type="HeadDolgnost">ФИО</td>
+					<td Type="HeadFIO">Должность</td>
+				</tr>
+			</thead>
+			<tbody class="OrderTable"></tbody>
+		</table>
+		<!--Диалог назначения стомиости по графику-->
+		<div id="EntShSettingDialog" title="Настройка стоимости по графику">
+			<p>
+			<table>
+				<thead>
+				<tr>
+					<td>Должность</td>
+					<td>Стоимость час</td>
+				</tr>
+				</thead>
+				<tbody id="EntShSettingTableCost"></tbody>
+			</table>
+			</p>
+		</div>
+		<script src="Enterprise/WorkingSchedule.js"></script>
+		<script>
+			$(document).ready(function(){
+			    $("#EntShBtnFind").button();
+			    $("#EntShBtnSetting").button();
+			    $("#EntShBtn_SvaeCancel button").button();
+			    $("#EntShBtn_SvaeCancel").hide();
+			    $("#EntShSettingDialog").dialog({
+                    autoOpen: false,
+                    modal: true,
+					buttons:{
+                        "Отмена":function(){$(this).dialog("close")},
+                        "Сохранить":function(){EntShSettingSave()}
+					}
+				});
+			    for(var i=2016;i<=new Date().getFullYear(); i++)
+			        $("#EntShYearList").append("<option "+(i==new Date().getFullYear() ? "selected" : "")+" value='"+i.toString()+"'>"+i.toString()+"</option>");
+			    $("#EntShMonthList option[Value="+((new Date().getMonth()+1).toString())+"]").attr("Selected","true");
+                EntShLoad();
+			})
+		</script>
+	</div>
+</div>
+<script>
+	$( "#EbtTabs" ).tabs();
+</script>
+
+<!--Диалог печати-->
+<div id="EntPrintDialog" title="Выбор печати нарядов">
+	<p>
+		<input type="Checkbox" id="EntPrintDialogChAll" onclick="EntPrintDialogSelectAll()"> Выбрать все <hr>
+		<table id="EntPrintDialogTable"></table>
+	</p>
+</div>
+<script>
+	$( "#EntPrintDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 400,
+		buttons: [
+			{
+				text: "Печать",
+				click: function() {
+					EntPrintDialogPrint();
+				}
+			},
+			{
+				text: "Отмена",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		]
+	});
+</script>
+
+<!--Справочник сотрудников-->
+<div id="EntManualWorkersDialog" title="Поиск сотрудника">
+	<div class="FindDialogTable">
+		<input type="hidden" id="EntManualWorkersDialogRowIndex">
+		<input type="hidden" id="EntManualWorkersDialogStep">
+		<div style="width:550px;">
+			ФИО: <input id="EntManualWorkersDialogFindFIO" onkeyup="EntManualDialogFindFIO()" style="width:400px;"><span onclick="EntManualDialogFindClear()">x</span>
+		</div>
+		<table style="width:550px;">
+			<thead>
+				<tr>
+					<td width=100>№</td>
+					<td width=450>ФИО</td>
+				</tr>
+			</thead>
+			<tbody id="EntManualWorkersDialogTableFIO"></tbody>
+		</table>
+	</div>
+</div>
+<script>
+$("#EntManualWorkersDialogBtnFind").button();
+$( "#EntManualWorkersDialog" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 600,
+	buttons: [
+		{
+			text: "Выбрать",
+			click: function() {
+				EntManualWorkersDialogComplite();
+			}
+		},
+		{
+			text: "Отмена",
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	]
+});
+</script>

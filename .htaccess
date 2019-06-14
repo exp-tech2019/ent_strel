@@ -1,0 +1,2 @@
+﻿php_value max_input_vars 100000
+php_value max_execution_time 300

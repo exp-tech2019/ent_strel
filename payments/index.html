@@ -1,0 +1,452 @@
+﻿<div id="Payments">
+
+	<ul>
+		<li onclick="PaymentsClick1()"><a href="#Payments-1">Сотрудники</a></li>
+		<li onclick="PaymentsClick2()"><a href="#Payments-2">Заказы</a></li>
+	</ul>
+<!--- Выплаты сотрудникам -->
+<div id="Payments-1">
+<!-- Меню -->
+	<div class="Menu">
+		<div  id="PaymentsWorksMenu" class="Menu">
+			<h3>Меню</h3>
+			<div>
+				<p class=LeftMenu onclick="PayamentsWorksAdd('Minus')">Выплаты</p>
+				<p class=LeftMenu onclick="PayamentsWorksAdd('Plus')">Начисления</p>
+				<p class=LeftMenu onclick="PaymentsPrintWorkersList()">Печать списка</p>
+				<hr>
+				<!--<p class=LeftMenu onclick="PaymentsSumNull()">Обнулить платежи</p>-->
+				<!--<p class=LeftMenu onclick="$('#PaymentsSumNullViewDialog').dialog('open'); PaymentsSumNullHistory();">История обнулений</p>-->
+			</div>
+		</div>
+		<div id="PaymentsWorksDateBetween" class="Menu">
+			<h3>Произвольный период</h3>
+			<div>
+				С:&nbsp; <input id="PaymentsWorkBetweenWith"></input><br>
+				По: <input id="PaymentsWorkBetweenBy"></input><br>
+				<button id="PaymentsWorkBetweenSelect" onclick="PayamentsWorksSelectBetween()">Задать</button>
+			</div>
+		</div>
+<!--- Сортировка по дате -->
+		<div id="PaymentsWorksDate" class="MenuTop">
+			<h3>Период</h3>
+				<div>
+					Год: <select id=PaymentsWorksListYear></select>
+					<script>
+						var d=new Date();
+						for(var i=2014; i<2054; i++)
+							$("#PaymentsWorksListYear").append("<option>"+i+"</option>");
+						$("#PaymentsWorksListYear").val(d.format("yyyy"));
+					</script>
+					<hr color="#ccccc">
+					<p class=LeftMenu month=01 onclick='$("[month]").css("border","0");PayamentsWorksSelectList("01",$("#PaymentsWorksListYear").val(), this)'>Январь</p>
+					<p class=LeftMenu month=02 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("02",$("#PaymentsWorksListYear").val(), this)'>Февраль</p>
+					<p class=LeftMenu month=03 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("03",$("#PaymentsWorksListYear").val(), this)'>Март</p>
+					<p class=LeftMenu month=04 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("04",$("#PaymentsWorksListYear").val(), this)'>Апрель</p>
+					<p class=LeftMenu month=05 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("05",$("#PaymentsWorksListYear").val(), this)'>Май</p>
+					<p class=LeftMenu month=06 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("06",$("#PaymentsWorksListYear").val(), this)'>Июнь</p>
+					<p class=LeftMenu month=07 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("07",$("#PaymentsWorksListYear").val(), this)'>Июль</p>
+					<p class=LeftMenu month=08 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("08",$("#PaymentsWorksListYear").val(), this)'>Август</p>
+					<p class=LeftMenu month=09 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("09",$("#PaymentsWorksListYear").val(), this)'>Сентябрь</p>
+					<p class=LeftMenu month=10 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("10",$("#PaymentsWorksListYear").val(), this)'>Октябрь</p>
+					<p class=LeftMenu month=11 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("11",$("#PaymentsWorksListYear").val(), this)'>Ноябрь</p>
+					<p class=LeftMenu month=12 onclick='$("[month]").css("border","0"); PayamentsWorksSelectList("12",$("#PaymentsWorksListYear").val(), this)'>Декабрь</p>
+				</div>
+		</div>
+	</div>
+<!--------------------------------- Окно Отчета -------------------------------->
+	<div class="MenuRight">
+		<div id="PaymentsWorksReport">
+			<h3>Отчет</h3>
+			<div>
+				<p class="ui-widget-header ui-corner-all" style="padding:4px;">
+					Поиск: <input  style="min-width:200px; width:70%" id="PaymentsWorksTablesFilter" placeholder="Введите ФИО или должность">
+					<button onclick="PayamentsWorksSelectListFilter()">Отобразить</button>
+					<script>
+						$("#PaymentsWorksTablesFilter").keydown(function (e) {
+						    if (e.which == 13) {
+						        PayamentsWorksSelectListFilter();
+							}
+						})
+					</script>
+				</p>
+				<span id=PaymentsWorksReportLoader><img src="images/loader.gif" width=25>Загрузка</span>
+				<table class="Tables TablesMenu">
+					<thead class="BorderTablesThead">
+						<tr>
+							<td>ФИО</td>
+							<td>Должность</td>
+							<td>На начало периода</td>
+							<td>Заработанно (тек. мес.)</td>
+							<td>Выплачено (тек. мес.)</td>
+							<td>На конец периода</td>
+						</tr>
+					</thead>
+					<tbody id="PaymentsWorksTables" class="BorderTablesTbody">
+					</tbody>
+				</table>
+				<script>
+					$("#PaymentsWorksReportLoader").hide();
+					//Выборка зарплат сотрудников по умолчанию
+					var DateS=new Date(); PayamentsWorksSelectList(DateS.format("mm"), DateS.format("yyyy"));
+					//Выделяем текущий месяц в левом списке
+					$("[month="+DateS.format("mm")+"]").css("border","solid 1px black");
+				</script>
+			</div>
+		</div>
+	</div>
+
+	<script>
+
+		$( "#PaymentsWorksMenu" ).accordion({heightStyle: "content"});
+		$( "#PaymentsWorksDateBetween" ).accordion({heightStyle: "content"});
+		$( "#PaymentsWorkBetweenWith" ).datepicker();
+		$( "#PaymentsWorkBetweenBy" ).datepicker();
+		$("#PaymentsWorkBetweenSelect").button();
+		$( "#PaymentsWorksDate" ).accordion({heightStyle: "content"});
+		$( "#PaymentsWorksReport" ).accordion({heightStyle: "content"});
+	</script>
+</div>
+<!--Диалог выплат-->
+<div id="PaymentsWorksDialogPayment" tiitle="Платеж">
+	<p>
+		<input style="width:0px;">
+		<input type=hidden id="PaymentsWorksDialogPaymentIDPayment"><br>
+		<input type=hidden id="PaymentsWorksDialogPaymentLine"><br>
+		Дата платежа: <input id="PaymentsWorksDialogPaymentDate"><br>
+		Сотрудник: <select id="PaymentsWorksDialogPaymentWorker" onchange="SelectWorkerBalance(); SelectWorkerDolgnost();"></select><br>
+		Должность: <span id="PaymentsWorksDialogPaymentDolgnost"></span><br>
+		Баланс: <input id="PaymentsWorksDialogPaymentBalance" disabled><span id="PaymentsWorksDialogPaymentBalanceLoad"><img src="images/loader.gif" width=25>Загрузка</span><br>
+		Сумма:
+			<select id="PaymentsWorksDialogPaymentSumPlusMinus">
+				<option>Начисления</option>
+				<option>Выплаты</option>
+			</select>&nbsp;
+			<input id="PaymentsWorksDialogPaymentSum"><br>
+		Примечание:<br>
+		<textarea style="Width:100%; height:150px;" id="PaymentsWorksDialogPaymentNote"></textarea>
+		<p style="color:red;" id="PaymentsWorksDialogPaymentBugs"></p>
+	</p>
+</div>
+<script>
+	$( "#PaymentsWorksDialogPayment" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 700,
+		buttons: [
+			{
+				text: "Печать",
+				click: function() {
+					if($("#PaymentsWorksDialogPaymentIDPayment").val()=="")
+					{
+						PayamentsWorksPrint();
+					}
+					else
+						PayamentsWorksPrintNoSave(
+							$("#PaymentsWorksDialogPaymentWorker").val(),
+							$("#PaymentsWorksDialogPaymentDolgnost").text(),
+							$("#PaymentsWorksDialogPaymentDate").val(),
+							$("#PaymentsWorksDialogPaymentSum").val(),
+							$("#PaymentsWorksDialogPaymentNote").val()
+						);
+				}
+			},
+			{
+				text: "Сохранить",
+				click: function() {
+					if($("#PaymentsWorksDialogPaymentIDPayment").val()=="")
+					{
+						PayamentsWorksSave();
+					}
+					else
+						PayamentsWorksEditSave();
+				}
+			},
+			{
+				text: "Отмена",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		]
+	});
+	$('#PaymentsWorksDialogPaymentDate').datepicker({dateFormat:'dd.mm.yy'});
+</script>
+<!--Диалог подробного отчета выплат конкертному сотруднику-->
+<div id="PaymentsWorksDialogPaymentOne">
+	<p>
+	<input style="width:0px">
+		<input type=hidden id="PaymentsWorksDialogPaymentOneIdWorker">
+		Сотрудник: <span id="PaymentsWorksDialogPaymentOneFIO"></span><br>
+		Должность: <span id="PaymentsWorksDialogPaymentOneDolgnost"></span><br>
+		с <input id="PaymentsWorksDialogPaymentOneFilterWith"> по<input id="PaymentsWorksDialogPaymentOneFilterBy">
+		<button onclick="PayamentsWorksOneSelect($('#PaymentsWorksDialogPaymentOneIdWorker').val(), $('#PaymentsWorksDialogPaymentOneFIO').text(), $('#PaymentsWorksDialogPaymentOneDolgnost').text(), $('#PaymentsWorksDialogPaymentOneFilterWith').val(), $('#PaymentsWorksDialogPaymentOneFilterBy').val())">Задать</button>
+		<span id="PaymentsWorksDialogPaymentOneLoad"><img src="images/loader.gif" width=25>Загрузка</span><br>
+		<span style="display:none"><input type=checkbox id="PaymentsWorksDialogPaymentOneCh" checked onclick="PayamentsWorksOneSelect($('#PaymentsWorksDialogPaymentOneIdWorker').val(), $('#PaymentsWorksDialogPaymentOneFIO').text(), $('#PaymentsWorksDialogPaymentOneDolgnost').text(), $('#PaymentsWorksDialogPaymentOneFilterWith').val(), $('#PaymentsWorksDialogPaymentOneFilterBy').val())">Не отображать начисдения по нарядам</span>
+		<button onclick="PayamentsWorksOnePrint();">Печать</button>
+		<button onclick="PayamentsWorksAdd('Minus', true)">Выплатить</button>
+		<button onclick="PayamentsWorksAdd('Plus', true)">Начислить</button>
+		<br>
+		<div id="PaymentsWorksDialogPaymentOneTabs">
+			<ul>
+				<li><a href="#PaymentsWorksDialogPaymentOneTab1">Общее</a></li>
+				<li><a href="#PaymentsWorksDialogPaymentOneTab2">Подробнее</a></li>
+			</ul>
+			<div id="PaymentsWorksDialogPaymentOneTab1">
+				<p>
+					<table>
+						<tr><td>На начало периода</td><td id="PaymentsWorksDialogPaymentOneSumWith"></td></tr>
+						<tr><td>Заработанно (тек. пер.)</td><td id="PaymentsWorksDialogPaymentOneSumPlus"></td></tr>
+						<tr><td>Выплачено (тек. пер.)</td><td id="PaymentsWorksDialogPaymentOneSumMinus"></td></tr>
+						<tr><td>На конец периода</td><td id="PaymentsWorksDialogPaymentOneSumEnd"></td></tr>
+					</table>
+				</p>
+			</div>
+			<div id="PaymentsWorksDialogPaymentOneTab2">
+				<p>
+					<h3>Заказы</h3>
+					<table style="display:none;">
+						<thead>
+							<tr>
+								<td>Дата</td>
+								<td>Описание</td>
+								<td>Начисления</td>
+								<td>Выплаты</td>
+								<td>Выплатил</td>
+							</tr>
+						</thead>
+						<tbody id="PaymentsWorksDialogPaymentOneTable"></tbody>
+					</table>
+					<table  class="TablesHeight Tables">
+						<thead  class="BorderTablesThead">
+							<tr><td></td><td>№ заказа</td><td>Сумма</td><td>Кол-во</td></tr>
+						</thead>
+						<tbody id="PaymentsWorksDialogPaymentOneOrders"></tbody>
+					</table>
+					<h3>Платежи</h3>
+					<table  class="Tables">
+						<thead  class="BorderTablesThead">
+							<tr><td>Дата</td><td>Описание</td><td>Начисления</td><td>Выплаты</td><td>Выплатил</td><td></td><td></td><td></td></tr>
+						</thead>
+						<tbody id="PaymentsWorksDialogPaymentOnePayments"></tbody>
+					</table>
+				</p>
+			</div>
+		</div>
+		<script>$("#PaymentsWorksDialogPaymentOneTabs").tabs();</script>
+
+	</p>
+</div>
+<script>
+	$( "#PaymentsWorksDialogPaymentOne" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 700,
+		buttons: [
+			{
+				text: "Печать ",
+				click: function() {
+					PayamentsWorksOnePrint();
+				}
+			},
+			{
+				text: "Закрыть",
+				click: function() {
+					$(this).dialog("close");
+				}
+			}
+		]
+	});
+	$('#PaymentsWorksDialogPaymentOneFilterWith').datepicker({dateFormat:'dd.mm.yy'});
+	$('#PaymentsWorksDialogPaymentOneFilterBy').datepicker({dateFormat:'dd.mm.yy'});
+	$('#PaymentsWorksDialogPaymentOneBy').datepicker({dateFormat:'dd.mm.yy'});
+	$("#PaymentsWorksDialogPaymentOneLoad").hide();
+</script>
+
+
+<!-- Выплаты по заказам -->
+<div id="Payments-2">
+<!-- Меню -->
+	<div class="Menu">
+		<div  id="PaymentsOrderMenu" class="TablesMenu">
+			<h3>Меню</h3>
+			<div>
+				<p class=LeftMenu>Печать</p>
+			</div>
+		</div>
+<!-- Сортировка по дате -->
+		<div id="PaymentsOrderFilter" class="MenuTop">
+			<h3>Период</h3>
+				<div>
+					<p>Год: <select id="PaymentsOrderFilterYear"></select>
+					<hr color="#ccccc">
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(01,this)">Январь</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(02,this)">Февраль</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(03,this)">Март</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(04,this)">Апрель</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(05,this)">Май</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(06,this)">Июнь</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(07,this)">Июль</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(08,this)">Август</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(09,this)">Сентябрь</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(10,this)">Октябрь</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(11,this)">Ноябрь</p>
+					<p class=LeftMenu onclick="PaymentsOrderSelectFromMonth(12,this)">Декабрь</p>
+				</div>
+		</div>
+	</div>
+<!-- Окно отчета -->
+	<div class="MenuRight">
+		<div id="PaymentsOrderReport">
+			<h3>Отчет</h3>
+			<div>
+				<table class="Tables TablesMenu">
+					<thead class="BorderTablesThead">
+						<tr>
+							<td>Заказ №</td>
+							<td>Дата</td>
+							<td>Счет</td>
+							<td>Планируемая сумма</td>
+							<td>Начисленно</td>
+						</tr>
+					</thead>
+					<tbody id="PaymentsOrderTable" class="BorderTablesTbody">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script>
+		$( "#PaymentsOrderMenu" ).accordion({heightStyle: "content"});
+		$( "#PaymentsOrderFilter" ).accordion({heightStyle: "content"});
+		$( "#PaymentsOrderReport" ).accordion({heightStyle: "content"});
+		for(var i=new Date().getFullYear();i>=2015;i--)
+			$("#PaymentsOrderFilterYear").append("<option>"+i.toString()+"</option>");
+		function PaymentsClick1()
+		{
+			if(($("#PaymentsWorksDate").position().top+$("#PaymentsWorksDate").height())>$("#PaymentsWorksReport").height())
+			{
+
+				$('#Payments').css('height',($("#PaymentsWorksDate").position().top+$("#PaymentsWorksDate").height()+120).toString()+'px');
+			}
+			else
+				$('#Payments').css('height',($("#PaymentsWorksReport").position().top+$("#PaymentsWorksReport").height()+120).toString()+'px');
+		};
+		PaymentsClick1();
+		function PaymentsClick2()
+		{
+			/*
+			if(($("#PaymentsZakazDate").position().top+$("#PaymentsZakazDate").height())>$("#PaymentsZakazReport").height())
+			{
+
+				$('#Payments').css('height',($("#PaymentsZakazDate").position().top+$("#PaymentsZakazDate").height()+120).toString()+'px');
+			}
+			else
+				$('#Payments').css('height',($("#PaymentsZakazReport").position().top+$("#PaymentsZakazReport").height()+120).toString()+'px');
+			*/
+			//Выведем список заказов за текущий месяц
+			var MonthNow=new Date().getMonth()+1;
+			PaymentsOrderSelectFromMonth(MonthNow, $("#PaymentsOrderFilter div p:eq("+MonthNow+")"));
+		};
+	</script>
+</div>
+</div>
+<script>
+	$( "#Payments" ).tabs();
+</script>
+<!------------- Обнуление платежей---------->
+<div id=PaymentsSumNullViewDialog title="Просмотр задач по обнулению">
+	<p>
+		<div  class="ui-widget-header ui-corner-all">
+			Период: с <input id=PaymentsSumNullViewWith> по <input id=PaymentsSumNullViewBy> <button id=PaymentsSumNullViewBtn onclick="PaymentsSumNullHistory()">отобразить</button>
+		</div>
+		<script>
+			$( "#PaymentsSumNullViewWith" ).datepicker();
+			$( "#PaymentsSumNullViewBy" ).datepicker();
+			dt=new Date();
+			$( "#PaymentsSumNullViewWith" ).val(dt.format("dd.mm.yyyy"));
+			$( "#PaymentsSumNullViewBy" ).val(dt.format("dd.mm.yyyy"));
+			$("#PaymentsSumNullViewBtn").button();
+		</script>
+		<table class="TablesHeight Tables">
+			<thead class=BorderTablesThead>
+				<tr>
+					<td style="width:20px"></td>
+					<td>Дата</td>
+					<td>Кол-во</td>
+					<td>Сумма</td>
+					<td>Мэнеджер</td>
+				</tr>
+			</thead>
+			<tbody id=PaymentsSumNullViewTable></tbody>
+		</table>
+	</p>
+</div>
+<script>
+	$( "#PaymentsSumNullViewDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 700,
+		buttons: [
+			{
+				text: "Закрыть",
+				click: function() {
+					$(this).dialog("close");
+				}
+			}
+		]
+	});
+</script>
+<div id=PaymentsSumNullEditDialog title="Установить сотрудника">
+	<p>
+		<input type=hidden id=PaymentsSumNullEditIDNaryad>
+		<input type=hidden id=PaymentsSumNullEditIDHistoryList>
+		<table>
+			<tr>
+				<td>Наряд: </td>
+				<td><span id=PaymentsSumNullEditNaryad></span></td>
+			</tr>
+			<tr>
+				<td>Стадия: </td>
+				<td><span id=PaymentsSumNullEditStep></span></td>
+			</tr>
+			<tr>
+				<td>Сумма: </td>
+				<td><span id=PaymentsSumNullEditSumm></span></td>
+			</tr>
+			<tr>
+				<td>Сотрудник: </td>
+				<td><select id=PaymentsSumNullEditWorker></select></td>
+			</tr>
+			<tr>
+				<td>Дата: </td>
+				<td><input id=PaymentsSumNullEditDate></td>
+			</tr>
+		</table>
+		<hr>
+		<div id=PaymentsSumNullEditBus style="color:red;"></div>
+	</p>
+</div>
+<script>
+	$( "#PaymentsSumNullEditDate" ).datepicker();
+	$( "#PaymentsSumNullEditDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 500,
+		buttons: [
+			{
+
+				text: "Сохранить",
+				click: function() {
+					PaymentsSumNullEditSave();
+				}
+			},
+			{
+				text: "Закрыть",
+				click: function() {
+					$(this).dialog("close");
+				}
+			}
+		]
+	});
+</script>

@@ -1,0 +1,260 @@
+﻿<div id="EbtTabs">
+	<ul>
+		<li><a href="#EbtTabs-1">Основное</a></li>
+		<li onclick="EntLaserSelect(); EntGibkaSelect()"><a href="#EbtTabs-2">Лазер / Гибка</a></li>
+	</ul>
+	<div id="EbtTabs-1">
+		<div>
+			<script> EntWorkerSelectOnline();</script>
+			<table class=TablesMenu >
+				<tr>
+					<td style="vertical-align:top">
+						<div style="width:250px; margin-right:20px; float:left" id="enterpriseworker">
+							<h3>Сотрудники на производстве</h3>
+							<div id=EntWorkerListOnline>
+							</div>
+						</div>
+					</td>
+					<td style="vertical-align:top">
+						<div style="width:600px; margin-right:20px;" id="enterpriseorders">
+							<h3>Наряды в работе</h3>
+							<div>
+								<table class="TablesHeight Tables">
+									<thead class="BorderTablesThead">
+										<tr>
+											<td>№ заказа</td>
+											<td>Наименование</td>
+											<td>Размеры</td>
+											<td>Работы</td>
+											<td>Примечание</td>
+										</tr>
+									</thead>
+									<tbody id=EntNaryadTable class="BorderTablesTbody"></tbody>
+								</table>
+								<script>EntNaraydListSelect()</script>
+							</div>
+						</div>
+						<br style="clear:both">
+						<div style="width:600px; margin-right:20px;" id="EntNarayadTempAcc">
+							<h3>Нераспределенные наряды (после гибки)</h3>
+							<div>
+								<table>
+									<thead>
+										<tr>
+											<td>№ заказа</td>
+											<td>Наименование</td>
+											<td>Размеры</td>
+											<td>Лазер</td>
+											<td>Сгибка</td>
+											<td></td>
+										</tr>
+									</thead>
+									<tbody id=EntNaryadTempTable></tbody>
+								</table>
+								<script>EntNaryadTempListSelect();</script>
+							</div>
+						</div>
+						
+						<!--------------------------------------------------- Диалог карточки наярда ---------------------------------------------------------->
+						
+						<div id=EntNaryadDialog title="Наряд заказ">
+							<p>
+								<h1 align=center>НАРЯД-ЗАКАЗ №<span id=EntNaryadDialogInpBlank></span></h1>
+								<h1>Модель: &nbsp;<span id=EntNaryadDialogInpName></span></h1>
+									<img src="enterprise/naryadimg.php?idNaryad=" id=EntNaryadDialogInpImg style="float:left;margin:5px">
+									<h2>Обналичка: &nbsp;<span id=EntNaryadDialogInpNalichnik></span></h2>
+									<h2>Цвет: &nbsp;<span id=EntNaryadDialogInpRAL></span></h2>
+									<h2>Замок: &nbsp;<span id=EntNaryadDialogInpZamok></span></h2>
+									<h2>Фурнитура: &nbsp;<span id=></span></h2>
+									<h2>Панель: &nbsp;<span id=></span></h2>
+						<!--------------------------------------------- Ход выполнения --------------------------------->
+										<h1 align=center>Ход выполнения работ</h2>
+										<hr color="#ccccc">
+										<h2>Лазер: &nbsp;<span id=EntNaryadDialogInpLaser></span>&nbsp;<span id=EntNaryadDialogInpLaserComplite></span>
+											Стоимость работ<input id=EntNaryadDialogInpLaserSum>
+										</h2>
+										<h2>Сгибка: &nbsp;<span id=EntNaryadDialogInpSgibkaNum></span> - <span id=EntNaryadDialogInpSgibka></span>&nbsp;<span id=EntNaryadDialogInpSgibkaComplite></span>
+											Стоимость работ<input id=EntNaryadDialogInpSgibkaSum>
+										</h2>
+										<h2>Сварка: &nbsp;<span id=EntNaryadDialogInpSvarkaWorkNum></span> - <span id=EntNaryadDialogInpSvarkaWork></span>&nbsp;(<span id=EntNaryadDialogInpSvarkaWorkEdit></span>)&nbsp;
+											<button style="width:30px;height:30px" title="Удалить назначенного сотрудника" onclick="EntNaryadStatusDel('SvarkaWork' )" id=EntNaryadSvarkaWorkDel></button>
+											<span id=EntNaryadDialogInpSvarkaComplite></span>
+											<button style="width:30px;height:30px" title="Редатировать" onclick="EntNaryadChoseWorker('Svarka','EntNaryadDialogInpSvarkaWork','EntNaryadDialogInpSvarkaWorkEdit' )" id=EntNaryadChoseWorkerButton></button>
+											<button style="width:30px;height:30px" title="Удалить статус выполненно" onclick="EntNaryadStatusDel('Svarka' )" id=EntNaryadSvarkaCompliteDel></button>
+											<button style="width:30px;height:30px" title="Отчитаться о выполнении" onclick="EntNaryadChoseWorker('Svarka','EntNaryadDialogInpSvarkaWork','EntNaryadDialogInpSvarkaComplite' )" id=EntNaryadChoseWorkerCompliteSvarka></button>
+											Стоимость работ<input id=EntNaryadDialogInpSvarkaSum>
+										</h2>
+										<h2>Сборка: &nbsp;<span id=EntNaryadDialogInpSborkaCompliteWorkNum></span> - <span id=EntNaryadDialogInpSborkaCompliteWork></span>&nbsp;<span id =EntNaryadDialogInpSborkaComplite></span>
+											<button style="width:30px;height:30px" title="Удалить статус выполненно" onclick="EntNaryadStatusDel('Sborka' )" id=EntNaryadSborkaCompliteDel></button>
+											<button style="width:30px;height:30px" title="Отчитаться о выполнении" onclick="EntNaryadChoseWorker('Sborka','EntNaryadDialogInpSborkaCompliteWork','EntNaryadDialogInpSborkaComplite' )" id=EntNaryadChoseWorkerCompliteSborka></button>
+											Стоимость работ<input id=EntNaryadDialogInpSborkaSum>
+										</h2>
+										<h2>Покраска: &nbsp;<span id=EntNaryadDialogInpColorCompliteWorkNum></span> - <span id=EntNaryadDialogInpColorCompliteWork></span>&nbsp;<span id=EntNaryadDialogInpColorComplite></span>
+											<button style="width:30px;height:30px" title="Удалить статус выполненно" onclick="EntNaryadStatusDel('Color' )" id=EntNaryadColorCompliteDel></button>
+											<button style="width:30px;height:30px" title="Отчитаться о выполнении" onclick="EntNaryadChoseWorker('Color','EntNaryadDialogInpColorCompliteWork','EntNaryadDialogInpColorComplite' )" id=EntNaryadChoseWorkerCompliteColor></button>
+											Стоимость работ<input id=EntNaryadDialogInpColorSum>
+										</h2>
+										<h2>Упаковка: &nbsp;<span id=EntNaryadDialogInpUpakCompliteWorkNum></span> - <span id=EntNaryadDialogInpUpakCompliteWork></span>&nbsp;<span id=EntNaryadDialogInpUpakComplite></span>
+											<button style="width:30px;height:30px" title="Удалить статус выполненно" onclick="EntNaryadStatusDel('Upak' )" id=EntNaryadUpakCompliteDel></button>
+											<button style="width:30px;height:30px" title="Отчитаться о выполнении" onclick="EntNaryadChoseWorker('Upak','EntNaryadDialogInpUpakCompliteWork','EntNaryadDialogInpUpakComplite' )" id=EntNaryadChoseWorkerCompliteUpak></button>
+											Стоимость работ<input id=EntNaryadDialogInpUpakSum>
+										</h2>
+										<h2>Погрузка: &nbsp;<span id=EntNaryadDialogInpShptCompliteWorkNum></span> - <span id=EntNaryadDialogInpShptCompliteWork></span>&nbsp;<span id=EntNaryadDialogInpShptComplite></span>
+											<button style="width:30px;height:30px" title="Удалить статус выполненно" onclick="EntNaryadStatusDel('Shpt' )" id=EntNaryadShptCompliteDel></button>
+											<button style="width:30px;height:30px" title="Отчитаться о выполнении" onclick="EntNaryadChoseWorker('Shpt','EntNaryadDialogInpShptCompliteWork','EntNaryadDialogInpShptComplite' )" id=EntNaryadChoseWorkerCompliteShpt></button>
+											Стоимость работ<input id=EntNaryadDialogInpShptSum>
+										</h2>
+										Примечание<br>
+											<textarea style="width:100%; height:50px" id=EntNaryadDialogInpNote></textarea>
+										<h2>Мастер: &nbsp;<span id=></span></h2>
+								
+								<!------------------------------------------- ------------------------------------------------>
+								<span id=EntNaryadDialogInpBugs style="width:100%; color:red; display:none;"><hr color=red></span>
+								<input type=hidden id=EntNaryadDialogInpID>
+							</p>
+						</div>
+						<div title="Выберите сотрудника" id=EntNaryadChoseWorkerDialog>
+							<p>
+								<span id=EntNaryadChoseWorkerLoader><img src="images/loader.gif" width=25>Загрузка</span>
+								<div class=WorkerList>
+									<select size=2 id=EntNaryadChoseWorkerSelect>	</select>
+								</div>
+								<input id=EntNaryadChoseElWorker type=hidden>
+								<input id=EntNaryadChoseElDate type=hidden>
+							</p>
+						</div>
+						<script>
+							$("#EntNaryadChoseWorkerLoader").hide();
+							$("#EntNaryadChoseWorkerButton").button({icons:{primary: "ui-icon-pencil"}});
+							$("#EntNaryadSvarkaWorkDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadSvarkaCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadSborkaCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadColorCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadUpakCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							$("#EntNaryadShptCompliteDel").button({icons:{primary: "ui-icon-circle-close"}});
+							//EntNaryadChoseWorkerCompliteSvarka
+							$("#EntNaryadChoseWorkerCompliteSvarka").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteSborka").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteColor").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteUpak").button({icons:{primary: "ui-icon-flag"}});
+							$("#EntNaryadChoseWorkerCompliteShpt").button({icons:{primary: "ui-icon-flag"}});
+							$( "#EntNaryadDialog" ).dialog({
+								autoOpen: false,
+								modal:true,
+								width: 1000,
+								buttons: [
+									{
+										text: "Печать",
+										click: function() {
+											EntNaryadDialogPrintNaryad();
+										}
+									},
+									{
+										text: "Сохранить",
+										click: function() {
+											EntNaryadDialogSave();
+										}
+									},
+									{
+										text: "Отмена",
+										click: function() {
+											$( this ).dialog( "close" );
+										}
+									}
+								]
+							});
+							$( "#EntNaryadChoseWorkerDialog" ).dialog({
+								autoOpen: false,
+								modal:true,
+								width: 400,
+								buttons: [
+									{
+										text: "Выбрать",
+										click: function() {
+											var s=$("#EntNaryadChoseWorkerSelect").val();
+											if(s.indexOf(' (')>-1)
+												s=s.substring(0,s.indexOf(' ('));
+											var s0=s.substring(0,s.indexOf(' -'));
+											var s1=s.substring(s.indexOf('- ')+2);
+											$("#"+$("#EntNaryadChoseElWorker").val()+"Num").text(s0);
+											$("#"+$("#EntNaryadChoseElWorker").val()).text(s1);
+											$("#"+$("#EntNaryadChoseElDate").val()).text(new Date().format("dd.mm.yyyy HH:MM:ss"));
+											$( this ).dialog( "close" );
+										}
+									},
+									{
+										text: "Отмена",
+										click: function() {
+											$( this ).dialog( "close" );
+										}
+									}
+								]
+							});
+						</script>
+						
+	<!----------------------------------------------------- конец наряд-заказ------------------------------------------------------------------------------->
+						
+					</td>
+					<td style="vertical-align:top">
+						<div style="width:250px; margin-right:20px;" id="enterprisepayment">
+							<h3>Склад</h3>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script>
+				$( "#enterpriseworker" ).accordion({heightStyle: "content"});
+				$( "#enterpriseorders" ).accordion({heightStyle: "content"});
+				$( "#enterprisepayment" ).accordion({heightStyle: "content"});
+				$( "#EntNarayadTempAcc" ).accordion({heightStyle: "content"});
+			</script>
+		</div>
+	</div>
+	
+	<div id="EbtTabs-2">
+		<div id=EntLasserAccord style="float:left; margin-right:20px">
+			<h3>Лазер</h3>
+			<div>
+				<table>
+					<thead>
+					<tr>
+						<td>№ заказа</td>
+						<td>Наименование</td>
+						<td>Высота</td>
+						<td>Ширина</td>
+						<td>Выполнил</td>
+						<td>Время</td>
+					</tr>
+					</thead>
+					<tbody id=EntLaser></tbody>
+				</table>
+			</div>
+		</div>
+		<div id=EntSgibkaAccord style="float:left">
+			<h3>Гибка</h3>
+			<div>
+				<table>
+					<thead>
+					<tr>
+						<td>№ заказа</td>
+						<td>Наименование</td>
+						<td>Высота</td>
+						<td>Ширина</td>
+						<td>Выполнил</td>
+						<td>Время</td>
+					</tr>
+					</thead>
+					<tbody id=EntSgibka></tbody>
+				</table>
+			</div>
+		</div>
+		<script>
+			$( "#EntLasserAccord" ).accordion({heightStyle: "content"});
+			$( "#EntSgibkaAccord" ).accordion({heightStyle: "content"});
+			$('#EbtTabs-2').css('height',($("#EntLaser").height()+150).toString()+'px');
+		</script>
+	</div>
+</div>
+<script>
+	$( "#EbtTabs" ).tabs();
+</script>

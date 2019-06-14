@@ -1,0 +1,2205 @@
+<?php include "Orders/Sp18/index.php"; ?>
+<script src="Orders/st_Shpt/CreateAct.js"></script>
+<script>
+	$('#OrderTable').find('tr').remove();
+</script>
+<!--Кнопка по которой можно получить значение стиля по умолчанию-->
+<button style="display:none" id="ButtonDefailtStyle"></button>
+<script>
+	//Переменная определяющаяв каком статусе открыть диалоговое окно
+	var OrderDialogStatus='Add';
+	var OrderIDEdit=-1;
+</script>
+
+<!-------------------------------------Главная форма и таблица-->
+	<br style="clear:both;">
+<table class=TablesMenu>
+	<tr>
+		<td  style="vertical-align:top;">
+			<div class="Menu" id="OrderAccordionZT" >
+				<h3>Заказы</h3>
+				<div>
+					<p class=LeftMenu onclick="OrderRefresh('All')">Все заказы</p>
+					<p class=LeftMenu onclick="OrderRefresh('New')">Новые заказы</p>
+					<p class=LeftMenu onclick="OrderRefresh('Work')">Заказы на выполнении</p>
+					<p class=LeftMenu onclick="OrderRefresh('Complite')">Выполненные заказы</p>
+					<p class=LeftMenu onclick="OrderRefresh('Cancel')">Отмененные заказы</p>
+					<?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]!=4) echo '<p class=LeftMenu onclick="OrderTrashSelect()">Корзина</p>'; ?>
+				</div>
+			</div>
+			<script>
+				$( "#OrderAccordionZT" ).accordion({heightStyle: "content"});
+			</script>
+			<br>
+			<div class="Menu" id="OrderAccordion">
+				<h3>Действия</h3>
+				<div>
+					<?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]!=4) echo '<p class="LeftMenu" onclick="OrderImportDialogLoad()">Импорт</p>'; ?>
+					<p class='LeftMenu' onclick="OrderRefresh('Refresh')">Обновить</p>
+					<p class='LeftMenu' onclick="$('#orderDialogInputID').val('');	OrderDialogLoad();">Добавить заказ</p>
+					<p class='LeftMenu' onclick="OrderPrint()">Печать</p>
+					<?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]!=4) echo '<p class="LeftMenu" onclick="OrderEditWorkSumDialogOpen()">Изменение стоимости работ</p>'; ?>
+					<p class='LeftMenu' onclick="
+						if(OrderAccordionFiltersZakazVisible)
+						{
+							$('#OrderAccordionFiltersZakaz').hide();
+							$(this).css('background-color','transparent');
+							$(this).hover(function() { $(this).css('background-color','#8dc1e9')});
+							$(this).mouseout(function() { $(this).css('background-color','transparent')});
+							OrderAccordionFiltersZakazVisible=false;
+						}
+						else
+						{
+							$('#OrderAccordionFiltersZakaz').show();
+							$(this).css('background-color','#8dc1e9');
+							$(this).hover(function() { $(this).css('background-color','#8dc1e9')});
+							$(this).mouseout(function() { $(this).css('background-color','#8dc1e9')});
+							OrderAccordionFiltersZakazVisible=true;
+						};">Поиск</p>
+				</div>
+			</div>
+			
+			<br style="clear:both;">
+			<script>
+				var OrderAccordionFiltersZakazVisible=false;
+				
+			</script>
+			<div style="width:250px; margin-right:20px;" id="OrderAccordionFiltersZakaz">
+				<h3>Поиск заказов</h3>
+				<div>
+					<table >
+						<tr>
+							<td>№ заказа</td>
+							<td><input id="OrderFilterBlank"></td>
+						</tr>
+						<tr>
+							<td colspan=2>Дата заказа</td>
+						</tr>
+						<tr>
+							<td>с</td>
+							<td><input id="OrderFilterBlankDateWith"></td>
+						</tr>
+						<tr>
+							<td>по</td>
+							<td><input id="OrderFilterBlankDateDo"></td>
+						</tr>
+						<script>
+							$('#OrderFilterBlankDateWith').datepicker({dateFormat:'dd.mm.yy'});
+							$('#OrderFilterBlankDateDo').datepicker({dateFormat:'dd.mm.yy'});
+						</script>
+						<tr>
+							<td colspan=2>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>Счет</td>
+							<td><input id="OrderFilterShet"></td>
+						</tr>
+						<tr>
+							<td>Заказчик</td>
+							<td><input id="OrderFilterZakaz"></td>
+						</tr>
+						<tr>
+							<td>Контакты</td>
+							<td><input id="OrderFilterContact"></td>
+						</tr>
+						<tr>
+							<td colspan=2><button onclick="OrderFilterZakaz()">Искать</button>
+							&nbsp;&nbsp;&nbsp;
+							<button onclick="
+								$('#OrderFilterBlank').val('');
+								$('#OrderFilterBlankDateWith').val('');
+								$('#OrderFilterBlankDateDo').val('');
+								$('#OrderFilterShet').val('');
+								$('#OrderFilterZakaz').val('');
+								$('#OrderFilterContact').val('');
+								">Очистить</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<h3>Поиск дверей</h3>
+				<div>
+					<table>
+						<tr>
+							<td>Наименование</td>
+							<td><select id="OrderFilterDoorsName" style="width:100%"></select></td>
+						</tr>
+						<tr>
+							<td colspan=2>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>Высота</td>
+							<td><input id="OrderFilterDoorsH"></td>
+						</tr>
+						<tr>
+							<td>Ширина</td>
+							<td><input id="OrderFilterDoorsW"></td>
+						</tr>
+						<tr>
+							<td colspan=2>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>RAL окрас</td>
+							<td><input id="OrderFilterDoorsRAL"></td>
+						</tr>
+						<tr>
+							<td>№ шильды</td>
+							<td><input id="OrderFilterDoorsShtild"></td>
+						</tr>
+						<tr>
+							<td colspan=2><button onclick="OrderFilterDoorsZakaz()">Искать</button>
+							&nbsp;&nbsp;&nbsp;
+							<button onclick="
+								$('#OrderFilterDoorsH').val('');
+								$('#OrderFilterDoorsW').val('');
+								$('#OrderFilterDoorsName').val('');
+								$('#OrderFilterDoorsRAL').val('');
+								$('#OrderFilterDoorsShtild').val('');
+								">Очистить</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<script>
+				$( "#OrderAccordion" ).accordion({heightStyle: "content"});
+				$( "#OrderAccordionFiltersZakaz" ).accordion({heightStyle: "content"});
+				$('#OrderAccordionFiltersZakaz').hide();
+				$( "#orderButtonAdd" ).button();
+			</script>
+		</td>
+		<td style="vertical-align:top">
+			<div id=OrderTableAccordion>
+				<h3>Заказы</h3>
+				<div>
+					<button id="OrderTableRefresh">Обновить</button><br>
+					<table class="TablesHeight Tables">
+						<thead id="OrderTableHeader" class=BorderTablesThead>
+							<tr>
+								<td></td>
+								<td>№</td>
+								<td>Дата</td>
+								<td>Счет</td>
+								<td>Дата счета</td>
+								<td>Срок до</td>
+								<td>Кол-во</td>
+								<td>Заказчик</td>
+								<td>Ответственное лицо</td>
+							</tr>
+						</thead>
+					</table>
+					<img id="OrderTableLoader" src="images/loader.gif" width="50"></img>
+					<div id=OrderTableDiv style="overflow: auto; height:200px;">
+						<table class="TablesHeight Tables">
+							<tbody id=OrderTable class="BorderTablesTbody"></tbody>
+						</table>
+					</div>
+					<script type="text/javascript">
+						$("#OrderTableDiv").ready(function(){
+							var DH=$(document).height();
+							$("#OrderTableDiv").css("height",(DH-550).toString()+"px");
+						})
+					</script>
+				</div>
+			</div>
+			<script>$( "#OrderTableAccordion" ).accordion({heightStyle: "content"});</script>
+		</td>
+	</tr>
+</table>
+		<script>
+			$(document).ready(function(){
+				$("#OrderTableRefresh").button();
+				$("#OrderTableRefresh").click(function(){ OrderSelect(); });
+				$("#OrderTableLoader").hide();
+				OrdersWhere="AND (o.status=0 OR o.status=1 OR o.status=2)";
+				OrderSelect();
+			});
+		</script>
+		
+	
+<!---->
+<!--Диалоги-->
+<!--Добавить заказ-->
+<div id="orderDialog" title="Заказ">
+	<p>
+		<h2 id="OrderDialogBlockStatus" style="color:red; clear:both;"></h2>
+		<div id="OrderDialogPanelSummary" style="float:left; padding:4px; display: inline-block;" class="ui-widget-header ui-corner-all">
+			<button><span>Всего: Упаковано: Отгруженно: </span></button>
+			<script type="text/javascript">
+				$("#OrderDialogPanelSummary button").button();
+				$("#OrderDialogPanelSummary button").click(function(){
+					OrderSummaryPrint();
+				});
+			</script>
+		</div>
+		<div id="OrderDialogPanelButton" style="float:right; padding:4px; display: inline-block;" class="ui-widget-header ui-corner-all">
+			<button style="float:right; <?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]==3 || $_SESSION["AutorizeType"]==4) echo "display:none; " ?>" id="orderDlalogBtnPrlCalc" onclick="OrderPrlCalcAllRows()">Расчитать зарплату</button><img id="orderDlalogImgPrlCalc" src="images/loader.gif" width="25">
+			<button style="float:right; <?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]==3 || $_SESSION["AutorizeType"]==4) echo "display:none; " ?>" id="orderDlalogBtnStatus1" onclick="OrderSetNoSetStatusCancel()">Снять с производства</button>
+			<button style="float:right; <?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]==3 || $_SESSION["AutorizeType"]==4) echo "display:none; " ?>" id="orderDlalogBtnStatus0" onclick="OrderSetNoSetStatusCancel()">Вернуть в производства</button>
+			<span style="display:none" id="orderDlalogBtnStatusStr"></span>
+			<button style="float:right; <?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]==4) echo "display:none; " ?>" id="orderDlalogBtnCopy" onclick="OrderCopy()">Коприровать</button>
+			<button style="float:right; <?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]==4) echo "display:none; " ?>" id="orderDlalogBtnSave" onclick="OrderDialogSave()">Сохранить</button>
+			<button style="float:right; <?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]==4) echo "display:none; " ?>" id="orderDlalogBtnDel" id="OrderDialogBtnDelete" onclick="OrderDelete()">Удалить</button>
+			<select id="orderDialogBtnShpt">
+				<option value="Shpt" selected="selected">Отгрузка</option>
+				<option value="History">Истори</option>
+			</select>
+			<select id="orderDialogBtnPrint">
+				<option value="Naryad" id="orderDlalogBtnPrintNaryad">Печать нарядов <img id="orderDlalogImgPrintNaryad" src="images/loader.gif" width="25"></option>
+				<option value="Markirovka">Маркировка</option>
+				<option value="Order">Печать заказа</option>
+			</select>
+			<script>
+				$(function(){
+                    $("#orderDlalogBtnPrlCalc").button();
+                    $("#orderDlalogImgPrlCalc").hide();
+                    $("#orderDlalogBtnStatus1").button();
+                    $("#orderDlalogBtnStatus0").button();
+                    $("#orderDlalogBtnCopy").button();
+                    $("#orderDlalogBtnPrint").button();
+                    $("#orderDlalogImgPrintNaryad").hide();
+                    $("#orderDlalogBtnSave").button();
+                    $("#orderDlalogBtnDel").button();
+                    $("#orderDialogBtnShpt").selectmenu({
+                        width:100,
+						select:function(){
+                            switch ($(this).val()){
+                                case "Shpt":
+                                    st_ShptCreate();
+                                    break;
+                                case "History":
+                                    st_ShptHistory();
+                                    break;
+                            }
+                        }
+                    });
+                    $("#orderDialogBtnPrint").selectmenu({
+                        width:150,
+						select:function(event, ui){
+                            switch ($(this).val()){
+								case "Naryad":
+                                    OrderPrintNaryads();
+								    break;
+								case "Markirovka":
+                                    OrderDialogPrintMarkirovka();
+								    break;
+								case "Order":
+                                    OrderDialogPrint();
+								    break;
+                            }
+                        }
+                    });
+				});
+			</script>
+		</div>
+		<br style="clear:both;"/>
+		<input id="orderDialogInputGUID" type="hidden">
+		<input id="orderDialogInputID" type=hidden>
+		<input id="orderDialogInputStatus" type="hidden">
+		<span onclick="orderDialogInputStatusChConfirm()" id="orderDialogInputStatusCh">В работе</span>
+		<h4 style='text-align:center'>Бланк заказа № <input id="orderDialogInputBlank"> от <input id="orderDialogInputBlankDate">  Счет № <input id="orderDialogInputShet"> от <input id="orderDialogInputShetDate"></h4>
+		<script>
+			$('#orderDialogInputBlankDate').mask('99.99.9999');
+			$('#orderDialogInputShetDate').mask('99.99.9999');
+			$('#orderDialogInputBlankDate').datepicker({dateFormat:'dd.mm.yy'});
+			$('#orderDialogInputShetDate').datepicker({dateFormat:'dd.mm.yy'});
+		</script>
+		<br style="clear:both; height:20px;">
+		
+<!---------------------------------------------- Таблица дверей-------------------------------------->
+
+		<table class="Tables TablesZakaz">
+			<thead>
+				<tr style="background-color:#b5ffbc;">
+					
+					<td rowspan=2></td>
+					<td rowspan=2>№</td>
+					<td rowspan=2>Наименование</td>
+					<td rowspan=2>Кол-во</td>
+					<td colspan=2>Размер</td>
+					<td rowspan=2>Открывание</td>
+					<td rowspan=2>Рабочая ств.</td>
+					<td rowspan=2>RAL окрас</td>
+					<td rowspan=2>Наличник</td>
+					<td rowspan=2>Доводчик</td>
+					<td rowspan=2>Примечание</td>
+					<td rowspan=2>Маркировка</td>
+					<td rowspan=2>Шильда</td>
+					<td colspan=2>Навесы</td>
+					<td colspan=2>Окно</td>
+					<td colspan=2>Фрамуга</td>
+					<td rowspan=2>Вып.</td>
+					<td rowspan=2>Констр.</td>
+					<td rowspan=2>З/П.</td>
+					<td rowspan=2 title="Спецификация">Спец.</td>
+					<td rowspan=2></td>
+					<td rowspan=2></td>
+				</tr>
+				<tr style="background-color:#b5ffbc;">
+					<td>Высота</td>
+					<td>Ширина</td>
+					<td>Раб. створка</td>
+					<td>Вт. створка</td>
+					<td>Раб. створка</td>
+					<td>Вт. створка</td>
+					<td>Наличие</td>
+					<td>Высота</td>
+				</tr>
+				<tr style=" vertical-align:top;">
+					<td></td>
+					<td><button id="OrderDialogTableBtnAddClear" onclick="OrderDialogTableAddClear()" title="Очистить поля">x</button></td>
+					<td>
+						<select id="OrderDialogTableInputName" style="width: 90%;"></select>
+					</td>
+					<td><input id="OrderDialogTableInputCount" style="width: 90%;"></td>
+					<td><input id="OrderDialogTableInputH" style="width: 90%;"></td>
+					<td><input id="OrderDialogTableInputW" style="width: 90%;"></td>
+					<td>
+						<select id="OrderDialogTableInputOpen" style="width: 90%;"></select>
+					</td>
+					<td>
+						<input id="OrderDialogTableInputS" style="width: 90%;">
+						<input id="OrderDialogTableInputSEqual" style="position:relative; left:13px; top:-18px;" type="checkbox" title="Равнопольная">
+						<script type="text/javascript">
+							$(document).ready(function(){
+								$("#OrderDialogTableInputSEqual").change(function(){
+									$("#OrderDialogTableInputS").val("");
+									if($("#OrderDialogTableInputSEqual").is(":checked"))
+									{
+										$("#OrderDialogTableInputS").prop("disabled","true");
+									}
+									else
+										$("#OrderDialogTableInputS").removeAttr("disabled");
+								})
+							})
+						</script>
+					</td>
+					<td><input id="OrderDialogTableInputRAL" style="width: 90%;"></td>
+					<td>
+						<select id="OrderDialogTableInputNalichnik" style="width: 90%;"></select>
+					</td>
+					<td>
+						<select id="OrderDialogTableInputDovod" style="width: 90%;">
+							<option selected="selected">да</option>
+							<option>нет, подготовка</option>
+							<option>нет</option>
+						</select>
+					</td>
+					<td>
+						<div style="border:1px solid gray; cursor:pointer; width:100%;" id="OrderDialogTableInputNoteSpan" onclick="$('#OrderDialogTableNoteTextarea').val($('#OrderDialogTableInputNote').val()); $('#OrderDialogTableNote').dialog('open')">&nbsp;</div>
+						<textarea id="OrderDialogTableInputNote" style="width: 90%; height:50px; display:none;">&nbsp;</textarea>
+					</td>
+					<td><input id="OrderDialogTableInputMarkirovka" style="width: 90%;"></td>
+					<td><input id="OrderDialogTableInputShtild" style="width: 90%;"></td>
+					<td><input type=number id="OrderDialogTableInputPetlyaWrk" style="width: 90%;"></td>
+					<td><input type=number id="OrderDialogTableInputPetlyaStv" style="width: 90%;"></td>
+					<td><input type=checkbox id="OrderDialogTableInputWindowWrk" style="width: 90%;"></td>
+					<td><input type=checkbox id="OrderDialogTableInputWindowStv" style="width: 90%;"></td>
+					<td><input type=checkbox id="OrderDialogTableInputFramuga" style="width: 90%;"></td>
+					<td><input id="OrderDialogTableInputFramugaH" style="width: 90%;"></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+						<button id="OrderDialogTableBtnAddRow" onclick="OrderDialogTableAddRow()" title="Добавить">+</button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=25 id="OrderDialogTableTRAddBugs" style="text-align:left; font-weight:bold; color:red;"></td>
+				</tr>
+			</thead>
+			<tbody  id="OrderDialogTable">
+			</tbody>
+		</table>
+		
+		<!--Диалог примечания для двери-->
+		<div title="Примечание" id="OrderDialogTableNote">
+			<p><textarea id="OrderDialogTableNoteTextarea" style="width:100%; height:100%"></textarea></p>
+		</div>
+		<script>
+			$( "#OrderDialogTableNote" ).dialog({
+				autoOpen: false,
+				modal:true,
+				width: 500,
+				buttons: [
+					{
+						text: "Сохранить",
+							click: function() {
+								$("#OrderDialogTableInputNote").val($("#OrderDialogTableNoteTextarea").val());
+								$("#OrderDialogTableInputNoteSpan").text($("#OrderDialogTableNoteTextarea").val().substring(0,10)+"...");
+								$( this ).dialog( "close" );
+							}
+					},
+					{
+						text: "Отмена",
+							click: function() {
+								$( this ).dialog( "close" );
+							}
+					}
+				]
+			});
+		</script>
+		
+		<br style="clear:both; height:20px;">
+		<table style=" <?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]==4) echo "display:none; " ?>">
+			<tr>
+				<td>Срок изготовления</td>
+				<td><input id="OrderDialogInputSrok"> дней</td>
+			</tr>
+			<tr>
+				<td>Заказчик</td>
+				<td><input style="width:300px" id="OrderDialogInputZakaz"><button onclick="OrderContragentListLoad('OrderDialogInputZakaz','OrderDialogInputContact')">...</button></td>
+			</tr>
+			<tr>
+				<td>Контакты</td>
+				<td><input id="OrderDialogInputContact"></td>
+			</tr>
+		</table>
+		
+		<p>Ответственное лицо за составление заявок <span id="OrderDialogInputManager"></span></p>
+		<p>Примечание<br><textarea id="OrderDialogInputNote"  style="width:100%;height:50px"></textarea>
+		
+		<!----Багтрекер заказа-->
+		<div style="text-align:left; font-weight:bold; color:red;" id="OrderDialogBugs"></div>
+	</p>
+</div>
+<!------------------------->
+<!--------------->
+
+<!--Диалог редактирования двери-->
+<div id="OrderDialogDoor" title="Редатирование двери">
+	<p>
+		<table class="Tables TablesZakaz">
+			<thead>
+				<tr style="background-color:#b5ffbc;">
+					<td rowspan=2></td>
+					<td rowspan=2>№</td>
+					<td rowspan=2>Наименование</td>
+					<td rowspan=2>Кол-во</td>
+					<td colspan=2>Размер по коробке</td>
+					<td rowspan=2>Открывание</td>
+					<td rowspan=2>Размер раб. ств.</td>
+					<td rowspan=2>RAL окрас</td>
+					<td rowspan=2>Наличник</td>
+					<td rowspan=2>Доводчик</td>
+					<td rowspan=2>Примечание</td>
+					<td rowspan=2>Маркировка</td>
+					<td rowspan=2>Шильда</td>
+					<td colspan=2>Навесы</td>
+					<td colspan=2>Окно</td>
+					<td colspan=2>Фрамуга</td>
+					<td rowspan=2></td>
+				</tr>
+				<tr style="background-color:#b5ffbc;">
+					<td>Высота</td>
+					<td>Ширина</td>
+					<td>Раб. створка</td>
+					<td>Вт. створка</td>
+					<td>Левое</td>
+					<td>Правое</td>
+					<td>Наличие</td>
+					<td>Высота</td>
+				</tr>
+				<tr id="OrderDialogDoorInputs" style=" vertical-align:top;">
+					<td></td>
+					<td></td>
+					<td>
+						<select id="OrderDialogDoorInputName" style="width: 90%;"></select>
+					</td>
+					<td><input id="OrderDialogDoorInputCount" style="width: 90%;"></td>
+					<td><input id="OrderDialogDoorInputH" style="width: 90%;"></td>
+					<td><input id="OrderDialogDoorInputW" style="width: 90%;"></td>
+					<td>
+						<select id="OrderDialogDoorInputOpen" style="width: 90%;">
+							<option selected="selected">Прав.</option>
+							<option>Лев.</option>
+						</select>
+					</td>
+					<td>
+						<input id="OrderDialogDoorInputS" style="width: 90%;">
+						<input id="OrderDialogDoorInputSEqual" style="position:relative; left:28px; top:-18px;" type="checkbox" title="Равнопольная">
+						<script type="text/javascript">
+							$(document).ready(function(){
+								$("#OrderDialogDoorInputSEqual").change(function(){
+									$("#OrderDialogDoorInputS").val("");
+									if($("#OrderDialogDoorInputSEqual").is(":checked"))
+									{
+										$("#OrderDialogDoorInputS").prop("disabled","true");
+									}
+									else
+										$("#OrderDialogDoorInputS").removeAttr("disabled");
+								})
+							})
+						</script>
+					</td>
+					<td><input id="OrderDialogDoorInputRAL" style="width: 90%;"></td>
+					<td>
+						<select id="OrderDialogDoorInputNalichnik" style="width: 90%;">
+							<option selected="selected">да</option>
+							<option>нет</option>
+						</select>
+					</td>
+					<td>
+						<select id="OrderDialogDoorInputDovod" style="width: 90%;">
+							<option selected="selected">да</option>
+							<option>нет, подготовка</option>
+							<option>нет</option>
+						</select>
+					</td>
+					<td>
+						<div style="border:1px solid gray; cursor:pointer; width:100%; height:100%;" id="OrderDialogDoorInputNoteSpan" onclick="$('#OrderDoorInputNoteDialogTextarea').val($('#OrderDialogDoorInputNote').val()); $('#OrderDoorInputNoteDialog').dialog('open')">&nbsp;</div>
+						<textarea id="OrderDialogDoorInputNote" style="width: 90%; height:50px;display:none; cursor:pointer;"></textarea>
+					</td>
+					<td><input id="OrderDialogDoorInputMarkirovka" style="width: 90%;"></td>
+					<td><input id="OrderDialogDoorInputShtild" style="width: 90%;"></td>
+					<td><input type=number id="OrderDialogDoorInputPetlyaWrk" style="width: 90%;"></td>
+					<td><input type=number id="OrderDialogDoorInputPetlyaStv" style="width: 90%;"></td>
+					<td><input type=checkbox id="OrderDialogDoorInputWindowWrk" style="width: 90%;"></td>
+					<td><input type=checkbox id="OrderDialogDoorInputWindowStv" style="width: 90%;"></td>
+					<td><input type=checkbox id="OrderDialogDoorInputFramuga" style="width: 90%;"></td>
+					<td><input id="OrderDialogDoorInputFramugaH" style="width: 90%;"></td>
+				</tr>
+				<tr>
+					<td colspan=15 id="OrderDialogDoorBugs" style="text-align:left; font-weight:bold; color:red;"></td>
+				</tr>
+			</thead>
+		</table>
+		<input type=hidden id="OrderDialogDoorID">
+	</p>
+</div>
+<!--Диалог примечания для двери-->
+<div title="Примечание" id="OrderDoorInputNoteDialog">
+	<p><textarea style="width:100%; height:100%" id="OrderDoorInputNoteDialogTextarea"></textarea></p>
+</div>
+
+<script>
+$( "#OrderDoorInputNoteDialog" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 500,
+	buttons: [
+		{
+			text: "Сохранить",
+			click: function() {
+				$("#OrderDialogDoorInputNote").val($("#OrderDoorInputNoteDialogTextarea").val());
+				$("#OrderDialogDoorInputNoteSpan").text($("#OrderDoorInputNoteDialogTextarea").val().substring(0,10)+"...");
+				$( this ).dialog( "close" );
+			}
+		},
+		{
+			text: "Отмена",
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	]
+});
+
+//Диалог редактирования дверей
+$( "#OrderDialogDoor" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 1200,
+	buttons: [
+		{
+			text: "Сохранить",
+			click: function() {
+				OrderDoorEditSave();
+			}
+		},
+		{
+			text: "Отмена",
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	]
+});
+
+$( "#orderDialog" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 1200,
+	beforeClose:function(event,ui){OrderClose();},
+	<?php if(isset($_SESSION["AutorizeType"])) if($_SESSION["AutorizeType"]!=4) echo '
+	buttons: [
+		{
+			text: "Печать маркировки",
+			click: function(){ OrderDialogPrintMarkirovka()}
+		},
+		{
+			text: "Удалить",
+			click: function(){ OrderDelete()}
+		},
+		{
+			text: "Сохранить",
+			click: function() {
+				OrderDialogSave();
+			}
+		},
+		{
+			text: "Отмена",
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	]
+	'; ?>
+});
+
+$("#orderAddDialogDetalAddName").selectmenu();
+$("#OrderDialogTableBtnAddRow").button();
+$("#OrderDialogTableBtnAddClear").button();
+</script>
+
+<!---------------------------------------Корзина-------------------------------------->
+<div id="orderTrashDialog" title="Удаленные заказы">
+	<p>
+		<table style="text-align:center">
+			<thead>
+				<tr style="background-color:#b5ffbc;">
+					<th></th>
+					<th>№ заказа</th>
+					<th>Дата заказа</th>
+					<th>Счет</th>
+					<th>Дата счета</th>
+					<th>Срок ДО</th>
+					<th>Заказчик</th>
+					<th>Ответственное лицо</th>
+				</tr>
+			</thead>
+			<tbody id=OrderTrashTable></tbody>
+		</table>
+	</p>
+</div>
+<script>
+	$( "#orderTrashDialog" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 1000,
+	buttons: [
+		{
+			text: "OK",
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	]
+});
+</script>
+<!--------Диалог отображения выполнения двери по стадиям------>
+<div id="OrderDoorProcessingDialog" title="Выполнение заказа">
+	<p>
+		<span id="OrderDoorProcessingLoader"><img src="images/loader.gif" width=25>Загрузка</span>
+		<table>
+			<tr><td>Лазер</td><td><div style="width:200px" id="OrderDoorProcessingLaser"></idv></td><td id="OrderDoorProcessingLaserText">50</td></tr>
+			<tr><td>Сгибка</td><td><div style="width:200px" id="OrderDoorProcessingSgibka"></idv></td><td id="OrderDoorProcessingSgibkaText">50</td></tr>
+			<tr><td>Сварка</td><td><div style="width:200px" id="OrderDoorProcessingSvarka"></idv></td><td id="OrderDoorProcessingSvarkaText">50</td></tr>
+			<tr><td>МДФ</td><td><div style="width:200px" id="OrderDoorProcessingMdf"></idv></td><td id="OrderDoorProcessingMdfText">50</td></tr>
+			<tr><td>Сборка</td><td><div style="width:200px" id="OrderDoorProcessingSborka"></idv></td><td id="OrderDoorProcessingSborkaText">50</td></tr>
+			<tr><td>Покарска</td><td><div style="width:200px" id="OrderDoorProcessingColor"></idv></td><td id="OrderDoorProcessingColorText">50</td></tr>
+			<tr><td>Сборка МДФ</td><td><div style="width:200px" id="OrderDoorProcessingSborkaMdf"></idv></td><td id="OrderDoorProcessingSborkaMdfText">50</td></tr>
+			<tr><td>Упаковка</td><td><div style="width:200px" id="OrderDoorProcessingUpak"></idv></td><td id="OrderDoorProcessingUpakText">50</td></tr>
+		</table>
+	</p>
+</div>
+<script>
+	$( "#OrderDoorProcessingDialog" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 500
+	});
+	$("#OrderDoorProcessingLaser").progressbar({value:50});
+	$("#OrderDoorProcessingSgibka").progressbar({value:50});
+	$("#OrderDoorProcessingSvarka").progressbar({value:50});
+	$("#OrderDoorProcessingMdf").progressbar({value:50});
+	$("#OrderDoorProcessingSborka").progressbar({value:50});
+	$("#OrderDoorProcessingSborkaMdf").progressbar({value:50});
+	$("#OrderDoorProcessingColor").progressbar({value:50});
+	$("#OrderDoorProcessingUpak").progressbar({value:50});
+</script>
+
+<!-------------------- Диалог конструкции ддвери (Конструктор)------------------------>
+<div id="OrderDialogConstruct" title="Конструкция двери">
+	<p>
+		<div  style="width:200px; float:left; display:block-inline;">
+			<input type=hidden id="OrderDialogConstructID">
+			<div id="OrderDialogConstructMenu0">
+				<h3>Дполнительно</h3>
+				<div>
+					<table>
+						<tr>
+							<td>Антипаника</td>
+							<td>
+								<select id="OrderDialogConstructOtherAntipanik">
+									<option selected></option>
+									<option>Да</option>
+									<option>Нет</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Отбойник</td>
+							<td>
+								<select id="OrderDialogConstructOtherOtboynik">
+									<option selected></option>
+									<option>Да</option>
+									<option>Нет</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Калитка</td>
+							<td>
+								<select id="OrderDialogConstructOtherWicket">
+									<option selected></option>
+									<option>Да</option>
+									<option>Нет</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Врезка замка</td>
+							<td>
+								<select id="OrderDialogConstructOtherBoxLock">
+									<option selected></option>
+									<option>Да</option>
+									<option>Нет</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Ответка</td>
+							<td>
+								<select id="OrderDialogConstructOtherOtvetka">
+									<option selected></option>
+									<option>Да</option>
+									<option>Нет</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Утепление</td>
+							<td>
+								<select id="OrderDialogConstructOtherIsolation">
+									<option selected></option>
+									<option>Да</option>
+									<option>Нет</option>
+								</select>
+							</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+			<div id="OrderDialogConstructMenu1">
+				<h3>Рабочая створка </h3>
+				<div>
+					<input type=hidden id="OrderDialogConstructWorkSectionOpen">
+					<input type=hidden id="OrderDialogConstructWorkSectionW">
+					<input type=hidden id="OrderDialogConstructWorkSectionH">
+					Петли: <input id="OrderDialogConstructWorkSectionPetlya" >
+					<script>$("#OrderDialogConstructWorkSectionPetlya").spinner({min:0, stop:function( event, ui ) {OrderConstructDraw()}});</script><br>
+					<?php $WindowIArr=array("","1","2"); ?>
+					<?php for($WindowI=0; $WindowI<3; $WindowI++) {$WindowNum=$WindowIArr[$WindowI];?>
+					<input type=CheckBox id="OrderDialogConstructWorkWindowCh<?=$WindowNum;?>">Окно <?=$WindowNum;?><br>
+						<div id="OrderDialogConstructWorkWindowP<?=$WindowNum;?>" style="border:solid 1px black; padding: 5px;">
+							<table>
+								<tr>
+									<td>Без рамки</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructWorkWindowNoFrame<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td>Высота</td>
+									<td><input style="width:50px;" type=text id="OrderDialogConstructWorkWindowH<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td>Ширина</td>
+									<td><input style="width:50px;" type=text id="OrderDialogConstructWorkWindowW<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td>Усиление</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructWorkWindowGain<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td>Остекление </td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructWorkWindowGlass<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>
+										<select style="width:50px;" id="OrderDialogConstructWorkWindowGlassType<?=$WindowNum;?>">
+											<option>Простое</option>
+											<option>Армированное</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Решетка</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructWorkWindowGrid<?=$WindowNum;?>"></td>
+								</tr>
+							</table>>
+							<script>
+								$(document).ready(function(){
+									//Открытие доп параметров для Рабочая створка -> Окно
+									$("#OrderDialogConstructWorkWindowP<?=$WindowNum;?>").hide();
+									$("#OrderDialogConstructWorkWindowCh<?=$WindowNum;?>").click(
+										function (e) {
+											if( $("#OrderDialogConstructWorkWindowCh<?=$WindowNum;?>").is(":checked"))
+											{ $("#OrderDialogConstructWorkWindowP<?=$WindowNum;?>").show();  OrderConstructDraw(); }
+											else { $("#OrderDialogConstructWorkWindowP<?=$WindowNum;?>").hide(); OrderConstructDraw(); }
+										}
+									)
+									$("#OrderDialogConstructWorkWindowNoFrame<?=$WindowNum;?>").click(function(){
+										console.log("#OrderDialogConstructWorkWindowNoFrame<?=$WindowNum;?>");
+										OrderConstructDraw();
+									});
+									$("#OrderDialogConstructWorkWindowGain<?=$WindowNum;?>").click(function(){
+										OrderConstructDraw();
+									});
+									//Окно рабочей створки -> Тип :активная/ не активаня
+									$("#OrderDialogConstructWorkWindowGlass<?=$WindowNum;?>").click(
+										function (e) {
+											if($("#OrderDialogConstructWorkWindowGlass<?=$WindowNum;?>").is(":checked"))
+											{ 
+												$("#OrderDialogConstructWorkWindowGlassType<?=$WindowNum;?>").prop("disabled",false); 
+												$("#OrderDialogConstructWorkWindowGlassType<?=$WindowNum;?>").val("Простое"); 
+											}
+											else 
+											{
+												$("#OrderDialogConstructWorkWindowGlassType<?=$WindowNum;?>").prop("disabled",true);
+											};
+										}
+									)
+									$("#OrderDialogConstructWorkWindowGlass<?=$WindowNum;?>").change(function(){
+										if($("#OrderDialogConstructWorkWindowGlass<?=$WindowNum;?>").is(":checked"))
+											$("#OrderDialogConstructWorkWindowGrid<?=$WindowNum;?>").removeAttr("checked");
+										OrderConstructDraw();
+									});
+									$("#OrderDialogConstructWorkWindowGrid<?=$WindowNum;?>").change(function(){
+										if($("#OrderDialogConstructWorkWindowGrid<?=$WindowNum;?>").is(":checked"))
+										{
+											$("#OrderDialogConstructWorkWindowGlass<?=$WindowNum;?>").removeAttr("checked");
+											$("#OrderDialogConstructWorkWindowGlassType<?=$WindowNum;?>").attr("disabled","disabled");
+										};
+										OrderConstructDraw();
+									});
+								})
+							</script>
+						</div>
+					<?php };?>
+						<!--Решетка вверху-->
+					<input type="checkbox" id="OrderDialogConstructWorkUpGridCh">Решетка вверху<br>
+					<input type="checkbox" id="OrderDialogConstructWorkDownGridCh">Решетка внизу
+				</div>
+			</div>
+			<div id="OrderDialogConstructMenu2">
+				<h3>Вторая створка </h3>
+				<div>
+					<input type=hidden id="OrderDialogConstructStvorkaS">
+					Петли: <input id="OrderDialogConstructStvorkaPetlya" >
+					<script>
+						$("#OrderDialogConstructStvorkaPetlya").spinner({min:0, stop:function( event, ui ) {OrderConstructDraw()}});
+					</script><br>
+					<!--Окно-->
+					<?php for($WindowI=0; $WindowI<3; $WindowI++) {$WindowNum=$WindowIArr[$WindowI];?>
+					<input type=CheckBox id="OrderDialogConstructStvorkaWindowCh<?=$WindowNum;?>">Окно <?=$WindowNum;?><br>
+						<div id="OrderDialogConstructStvorkaWindowP<?=$WindowNum;?>" style="border:solid 1px black; padding: 5px;">
+							<table>
+								<tr>
+									<td>Без рамки</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructStvorkaWindowNoFrame<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td>Высота</td>
+									<td><input style="width:50px;" type=text id="OrderDialogConstructStvorkaWindowH<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td>Ширина</td>
+									<td><input style="width:50px;" type=text id="OrderDialogConstructStvorkaWindowW<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td>Усиление</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructStvorkaWindowGain<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td>Остекление</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructStvorkaWindowGlass<?=$WindowNum;?>"></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>
+										<select style="width:50px;" id="OrderDialogConstructStvorkaWindowGlassType<?=$WindowNum;?>">
+												<option>Простое</option>
+												<option>Армированное</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Решетка</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructStvorkaWindowGrid<?=$WindowNum;?>"></td>
+								</tr>
+							</table>
+							<script>
+								$(document).ready(function(){
+									//Открытие доп параметров для Вторая створка -> Окно
+									$("#OrderDialogConstructStvorkaWindowP<?=$WindowNum;?>").hide();
+									$("#OrderDialogConstructStvorkaWindowCh<?=$WindowNum;?>").click(
+										function (e) {
+											if( $("#OrderDialogConstructStvorkaWindowCh<?=$WindowNum;?>").is(":checked"))
+											{ 
+												$("#OrderDialogConstructStvorkaWindowP<?=$WindowNum;?>").show();   
+											}
+											else { 
+												$("#OrderDialogConstructStvorkaWindowP<?=$WindowNum;?>").hide(); 
+											};
+											OrderConstructDraw();
+										}
+									)
+									
+									$("#OrderDialogConstructStvorkaWindowNoFrame<?=$WindowNum;?>").click(function(){
+										OrderConstructDraw();
+									});
+									$("#OrderDialogConstructStvorkaWindowGain<?=$WindowNum;?>").click(function(){
+										OrderConstructDraw();
+									});
+									//Окно второй створки -> Тип :активная/ не активаня
+									$("#OrderDialogConstructStvorkaWindowGlass<?=$WindowNum;?>").click(
+										function (e) {
+											if($("#OrderDialogConstructStvorkaWindowGlass<?=$WindowNum;?>").is(":checked"))
+											{ 
+												$("#OrderDialogConstructStvorkaWindowGlassType<?=$WindowNum;?>").prop("disabled",false); 
+												$("#OrderDialogConstructStvorkaWindowGlassType<?=$WindowNum;?>").val("Простое"); 
+											}
+											else {
+												$("#OrderDialogConstructStvorkaWindowGlassType<?=$WindowNum;?>").prop("disabled",true);
+											};
+										}
+									)
+									$("#OrderDialogConstructStvorkaWindowGlass<?=$WindowNum;?>").change(function(){
+										if($("#OrderDialogConstructStvorkaWindowGlass<?=$WindowNum;?>").is(":checked"))
+											$("#OrderDialogConstructStvorkaWindowGrid<?=$WindowNum;?>").removeAttr("checked");
+										OrderConstructDraw();
+									});
+									$("#OrderDialogConstructStvorkaWindowGrid<?=$WindowNum;?>").change(function(){
+										if($("#OrderDialogConstructStvorkaWindowGrid<?=$WindowNum;?>").is(":checked"))
+										{
+											$("#OrderDialogConstructStvorkaWindowGlass<?=$WindowNum;?>").removeAttr("checked");
+											$("#OrderDialogConstructStvorkaWindowGlassType<?=$WindowNum;?>").attr("disabled","disabled");
+										};
+										OrderConstructDraw();
+									});
+								})
+							</script>
+						</div>
+					<?php };?>
+					<input type="checkbox" id="OrderDialogConstructStvorkaUpGridCh">Решетка вверху<br>
+					<input type="checkbox" id="OrderDialogConstructStvorkaDownGridCh">Решетка внизу
+				</div>
+			</div>
+			<div id="OrderDialogConstructMenu3">
+				<h3>Фрамуга </h3>
+				<div>
+					Высота: <input id="OrderDialogConstructFramugH">
+					<script>$("#OrderDialogConstructFramugH").spinner({min:0, stop:function( event, ui ) {OrderConstructDraw()}});</script><br>
+					<input type=CheckBox id="OrderDialogConstructFramugWindowCh">Окно<br>
+						<div id="OrderDialogConstructFramugWindowP">
+							<table>
+								<tr>
+									<td>Без рамки</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructFramugaWindowNoFrame"></td>
+								</tr>
+								<tr>
+									<td>Высота</td>
+									<td><input style="width:50px;" type=text id="OrderDialogConstructFramugWindowH"></td>
+								</tr>
+								<tr>
+									<td>Ширина</td>
+									<td><input style="width:50px;" type=text id="OrderDialogConstructFramugWindowW"></td>
+								</tr>
+								<tr>
+									<td>Усиление</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructFramugWindowGain" onclick="OrderConstructDraw()"></td>
+								</tr>
+								<tr>
+									<td>Остекление</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructFramugWindowGlass"></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>
+										<select style="width:50px;" id="OrderDialogConstructFramugWindowGlassType">
+											<option>Простое</option>
+											<option>Армированное</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Решетка</td>
+									<td><input style="width:50px;" type=CheckBox id="OrderDialogConstructFramugWindowGrid"></td>
+								</tr>
+							</table>
+							<script>
+								$(document).ready(function(){
+									//Открытие доп параметров для Фрамуга -> Окно
+									$("#OrderDialogConstructFramugWindowP").hide();
+									$("#OrderDialogConstructFramugWindowCh").click(
+										function (e) {
+											if( $("#OrderDialogConstructFramugWindowCh").is(":checked"))
+											{ $("#OrderDialogConstructFramugWindowP").show();  OrderConstructDraw(); }
+											else { $("#OrderDialogConstructFramugWindowP").hide(); OrderConstructDraw(); }
+										}
+									)
+									$("#OrderDialogConstructFramugaWindowNoFrame").click(function(){
+										OrderConstructDraw();
+									})
+									$("#OrderDialogConstructFramugWindowGain").click(function(){
+										OrderConstructDraw();
+									})
+									//Окно фрамуги створки -> Тип :активная/ не активаня
+									$("#OrderDialogConstructFramugWindowGlass").click(
+										function (e) {
+											if($("#OrderDialogConstructFramugWindowGlass").is(":checked"))
+											{ 
+												$("#OrderDialogConstructFramugWindowGlassType").prop("disabled",false); 
+												$("#OrderDialogConstructFramugWindowGlassType").val("Простое"); 
+											}
+											else {
+												$("#OrderDialogConstructFramugWindowGlassType").prop("disabled",true);
+											};
+										}
+									)
+									$("#OrderDialogConstructFramugWindowGlass").change(function(){
+										if($("#OrderDialogConstructFramugWindowGlass").is(":checked"))
+											$("#OrderDialogConstructFramugWindowGrid").removeAttr("checked");
+										OrderConstructDraw();
+									});
+									$("#OrderDialogConstructFramugWindowGrid").change(function(){
+										if($("#OrderDialogConstructFramugWindowGrid").is(":checked"))
+										{
+											$("#OrderDialogConstructFramugWindowGlass").removeAttr("checked");
+											$("#OrderDialogConstructFramugWindowGlassType").attr("disabled","disabled");
+										};
+										OrderConstructDraw();
+									});
+								})
+							</script>
+						</div>
+					<input type="Checkbox" id="OrderDialogConstructFramugUpGridCh">Решетка вверху<br>
+					<input type="Checkbox" id="OrderDialogConstructFramugDownGridCh">Решетка внизу
+				</div>
+			</div>
+		</div>
+		<canvas width=400 height=500 style="float:right" id="OrderDialogConstructCanvas" ></canvas>
+	</p>
+</div>
+<script>
+	$( "#OrderDialogConstructMenu0" ).accordion({heightStyle: "content"});
+	$( "#OrderDialogConstructMenu1" ).accordion({heightStyle: "content"});
+	$( "#OrderDialogConstructMenu2" ).accordion({heightStyle: "content"});
+	$( "#OrderDialogConstructMenu3" ).accordion({heightStyle: "content"});
+	$("#OrderDialogConstructMenu3 div").hide();
+	$("#OrderDialogConstructMenu3 h3").click(
+		function (e) {
+				//e.stopPropagation();
+				if($("#OrderDialogConstructMenu3 div").is(':visible'))
+				{
+					$("#OrderDialogConstructMenu3 div").hide();
+					OrderConstructDraw();
+				}
+				else
+				{
+					$("#OrderDialogConstructMenu3 div").show();
+					$("#OrderDialogConstructFramugWindowCh").prop("checked",false);
+					$("#OrderDialogConstructFramugWindowP").hide();
+					$("#OrderDialogConstructFramugWindowH").val("");
+					$("#OrderDialogConstructFramugWindowW").val("");
+					$("#OrderDialogConstructFramugWindowGrid").prop("checked",false);
+					OrderConstructDraw();
+				};
+			}
+	);
+	
+	//Рештки на рабочей створке
+	$("#OrderDialogConstructWorkUpGridCh").click(function(){
+		OrderConstructDraw();
+	})
+	$("#OrderDialogConstructWorkDownGridCh").click(function(){
+		OrderConstructDraw();
+	})
+	//Рештки на второй створки
+	$("#OrderDialogConstructStvorkaUpGridCh").click(function(){
+		OrderConstructDraw();
+	})
+	$("#OrderDialogConstructStvorkaDownGridCh").click(function(){
+		OrderConstructDraw();
+	})
+	//Рештки на фрамуге
+	$("#OrderDialogConstructFramugUpGridCh").click(function(){
+		OrderConstructDraw();
+	})
+	$("#OrderDialogConstructFramugDownGridCh").click(function(){
+		OrderConstructDraw();
+	})
+	
+	$( "#OrderDialogConstruct" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 630,
+	buttons: [
+		{
+			text: "Сохранить",
+			click: function() {	OrderDoorConstructSave($("#OrderDialogConstructID").val())	}
+		},
+		{
+			text: "Отмена",
+			click: function() {	$( this ).dialog( "close" );	}
+		}
+	]
+	});
+
+	
+</script>
+
+<!--Зарплата-->
+<div id="OrderCostDialog" title="Зароботная плата">
+<p>
+	<span style="display:none;" id="OrderCostDialogID"></span>
+	<h2 style="text-align:center">Заказ №:  <span id="OrderCostDialogHeaderZakazNum"></span> позиция: <span id="OrderCostDialogHeaderDorrPos"></span></h2>
+	<table>
+		<tr>
+			<td>Лазер</td>
+			<td><input id="OrderCostDialogLaser"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>Сгибка</td>
+			<td><input id="OrderCostDialogSgibka"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>Сварка</td>
+			<td><input id="OrderCostDialogSvarka"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>Рамка</td>
+			<td><input id="OrderCostDialogFrame"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>МДФ</td>
+			<td><input id="OrderCostDialogMdf"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>Сборка</td>
+			<td><input id="OrderCostDialogSborka"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>Покраска</td>
+			<td><input id="OrderCostDialogColor"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>Сборка МДФ</td>
+			<td><input id="OrderCostDialogSborkaMdf"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>Упаковка</td>
+			<td><input id="OrderCostDialogUpak"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+		<tr>
+			<td>Отгрузка</td>
+			<td><input id="OrderCostDialogShpt"><a href="#" onclick="OrderPrlReadMoreOpen(this)">Расчитать</a></td>
+		</tr>
+	</table>
+</p>
+</div>
+<script>
+	$( "#OrderCostDialog" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 630,
+	buttons: [
+		{
+			text: "Сохранить",
+			click: function() {	OrderCostDialogSave($("#OrderCostDialogID").text())	}
+		},
+		{
+			text: "Отмена",
+			click: function() {	$( this ).dialog( "close" );	}
+		}
+	]
+	});
+</script>
+
+<!--Диалог просмотра примечания-->
+<div id=OrderDialogNoteView>
+	<p></p>
+</div>
+<script>
+	$("#OrderDialogNoteView").dialog({
+		autoOpen: false,
+		modal:true,
+		width: 630,
+		buttons: [
+			{
+				text: "Закрыть",
+				click: function() {	$( this ).dialog( "close" );	}
+			}
+		]
+	});
+</script>
+
+<!--Диалог изменения стоимости работ-->
+<div id="OrderEditWorkSumDialog">
+	<p>
+		<input id="OrderEditWorkSumDialogInpOrderNum"><img src="images/arrow_skip.png" onclick="OrderEditWorkSumLoad()"><br>
+		<table>
+			<thead>
+				<tr><td>Позиция</td><td>Тип</td><td>Размер</td><td>Кол-во</td><td>Лазер</td><td>Сгибка</td><td>Сварка</td><td>Рамка</td><td>МДФ</td><td>Сборка</td><td>Сборка МДФ</td><td>Покраска</td><td>Упаковка</td><td>Отгрузка</td><td>Всего</td></tr>
+			</thead>
+			<tbody id="OrderEditWorkSumDialogTable"></tbody>
+		</table>
+		<p id="OrderEditWorkSumDialogBugs" style="color:red"></p>
+	</p>
+</div>
+<script>
+	$("#OrderEditWorkSumDialog").dialog({
+		autoOpen: false,
+		modal:true,
+		width: 900,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {	OrderEditWorkSumComplite();	}
+			},
+			{
+				text: "Закрыть",
+				click: function() {	$( this ).dialog( "close" );	}
+			}
+		]
+	});
+</script>
+<!--Импорт-->
+<div title="Импорт" id="OrderImportDialog">
+	<p>
+		<!--Верхний блок-->
+		<div>
+			<h4 style='text-align:center'>Бланк заказа № <input id="OrderImportInputBlank"> от <input id="OrderImportInputBlankDate">  Счет № <input id="OrderImportInputShet"> от <input id="OrderImportInputShetDate"></h4>
+		</div>
+		<div style=" padding:4px; display: inline-block; width:100%" class="ui-widget-header ui-corner-all">
+			<input type="file" id="OrderImportInpFile">
+			<button id="OrderImportInpSubmit">Загрузить</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<button id="OrderImportInpBack" onclick="OrderImportHystoryBack()">Назад</button>
+			<button id="OrderImportInpNext" onclick="OrderImportHystoryNext()">Вперед</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<button id="OrderImportInpAddCol" onclick="OrderInportAddCol()">Добавить столбец</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button id="OrderImportInpForm1">Преобразовать к форме</button>
+			<div class="ajax-respond"></div>
+		</div>
+		
+		<script>
+			$('#OrderImportInputBlankDate').mask('99.99.9999');
+			$('#OrderImportInputShetDate').mask('99.99.9999');
+			$('#OrderImportInputBlankDate').datepicker({dateFormat:'dd.mm.yy'});
+			$('#OrderImportInputShetDate').datepicker({dateFormat:'dd.mm.yy'});
+			$("#OrderImportInpFile").button();
+			$("#OrderImportInpNext").button({icons:{primary: "ui-icon-arrowreturnthick-1-e"}});
+			$("#OrderImportInpBack").prop("disabled","true");
+			$("#OrderImportInpNext").prop("disabled","true");
+			$("#OrderImportInpBack").button({icons:{primary: "ui-icon-arrowreturnthick-1-w"}});
+			$("#OrderImportInpAddCol").button({icons:{primary: "ui-icon-plus"}});
+			$("#OrderImportInpForm1").button();
+		</script>
+		<!--Багтрекер-->	
+		<div id="OrderImportBugs" style="background-color:pink"></div>
+		
+		<br style="clear:both; height:20px;">
+		<div style="width:100%; height:400px; overflow:auto;">
+			<table id="OrderImportTable">
+				<thead id="OrderImportTableTHEAD"></thead>
+				<tbody id="OrderImportTableTBODY"></tbody>
+			</table>
+		</div>
+		<!--Нижний блок-->
+		<br style="clear:both; height:20px;">
+		<table>
+			<tr>
+				<td>Срок изготовления</td>
+				<td><input id="OrderImportInputSrok"> дней</td>
+			</tr>
+			<tr>
+				<td>Заказчик</td>
+				<td><input style="width:300px" id="OrderImportInputZakaz"><button onclick="OrderContragentListLoad('OrderImportInputZakaz','OrderImportInputContact')">...</button></td>
+			</tr>
+			<tr>
+				<td>Контакты</td>
+				<td><input id="OrderImportInputContact"></td>
+			</tr>
+		</table>
+		<p>Ответственное лицо за составление заявок <span id="OrderImportInputManager"></span></p>
+		<p>Примечание<br><textarea id="OrderImportInputNote"  style="width:100%;height:50px"></textarea>
+		
+	</p>
+</div>
+<script>
+	$("#OrderImportTableTHEAD").find("tr").remove();
+	$("#OrderImportTableTBODY").find("tr").remove();
+	var ImportFiles;
+	$("#OrderImportInpFile").change(function(){
+		ImportFiles=this.files;
+	});
+	$('#OrderImportInpSubmit').click(function( event ){
+		$("#OrderImportTableTHEAD").find("tr").remove();
+		$("#OrderImportTableTBODY").find("tr").remove();
+		event.stopPropagation(); // Остановка происходящего
+		event.preventDefault();  
+		var data = new FormData();
+		$.each( ImportFiles, function( key, value ){
+			data.append( key, value );
+		});
+		$.ajax({
+			url: 'orders/orderExcel.php?uploadfiles',
+			type: 'POST',
+			data: data,
+			cache: false,
+			dataType: 'json',
+			processData: false, 
+			contentType: false, // Так jQuery скажет серверу что это строковой запрос
+			success: function( respond, textStatus, jqXHR ){
+				var r=0;
+				while(respond[r]!=null)
+				{
+					var c=0;
+					var ColS="";
+					while(respond[r][c]!=null)
+					{
+						ColS=ColS+"<td>"+respond[r][c]+"</td>";
+						c++;
+					};
+					$("#OrderImportTableTBODY").append("<tr><td onclick='OrderImportRowDel("+r.toString()+")'><img src='images/delete.png' width=16></td>"+ColS+"</tr>");
+					r++;
+				};
+				//Определим кол-во столбцов и создадим заголовок
+				var sTD="", sTDDel="";
+				for(var i=0;i<$("#OrderImportTableTBODY tr:eq(7)").find("td").length;i++)
+					if(i==0)
+					{ sTD=sTD+"<td></td>";  sTDDel=sTDDel+"<td></td>"; }
+					else
+					{
+						sTD=sTD+"<td>"+
+							"<select onchange='OrderImportChangeColType("+i.toString()+")'>"+
+								"<option></option>"+
+								"<option>№ п/п</option>"+
+								"<option>Наименование</option>"+
+								"<option>Высота</option>"+
+								"<option>Ширина</option>"+
+								"<option>Рабочая створка</option>"+
+								"<option>Открывание</option>"+
+								"<option>Наличник</option>"+
+								"<option>Доводчик</option>"+
+								"<option>RAL окрас</option>"+
+								"<option>Примечание</option>"+
+								"<option>Маркировка</option>"+
+								"<option>Кол-во</option>"+
+								"<option>№ шильды</option>"+
+								"<option>Навес раб. ств.</option>"+
+								"<option>Навес вторая ств.</option>"+
+								"<option>Окно раб. ств.</option>"+
+								"<option>Окно вторая ств.</option>"+
+								"<option>Фрамуга</option>"+
+								"<option>Высота фрамуги</option>"+
+								"<option>Решетка раб. ств.(верх)</option>"+
+								"<option>Решетка раб. ств.(низ)</option>"+
+								"<option>Решетка вторая ств.(верх)</option>"+
+								"<option>Решетка вторая ств.(низ)</option>"+
+								"<option>Решетка фрамуга (верх)</option>"+
+								"<option>Решетка фрамуга (низ)</option>"+
+							"</select>"+
+						"</td>";
+						sTDDel=sTDDel+"<td onclick='OrderImportColDel("+i.toString()+")'>[ удалить ]</td>";
+					};
+				$("#OrderImportTableTHEAD").append("<tr>"+sTD+"</tr>");
+				$("#OrderImportTableTHEAD").append("<tr>"+sTDDel+"</tr>");
+			},
+			error: function( jqXHR, textStatus, errorThrown ){
+				console.log('ОШИБКИ AJAX запроса: ' + textStatus+" "+errorThrown );
+			}
+		});
+	});
+	
+	//Преобразование к специаьлной форме
+	$("#OrderImportInpForm1").click(function(){
+		$("#OrderImportInputZakaz").val($("#OrderImportTableTBODY tr:eq(2) td:eq(2)").text());
+		$.post(
+			"orders/order.php",
+			{"method":"ContragentImport", "Zakaz":$("#OrderImportInputZakaz").val()},
+			function(data){
+				$("#OrderImportInputZakaz").css("background-color",(parseInt(data)==0?"pink":"white"));
+			}
+		);
+		$("#OrderImportInputContact").val($("#OrderImportTableTBODY tr:eq(3) td:eq(2)").text());
+		//Удалим первые 8 строк
+		for(var i=0; i<8; i++)
+			$("#OrderImportTableTBODY tr:eq("+i+")").hide();
+		//Удалим пустые строки после значений а так же скорректируем значения
+		var NumPP=1;
+		for(var i=7;i<$("#OrderImportTableTBODY").find("tr").length;i++)
+		{
+			var elTR=$("#OrderImportTableTBODY tr:eq("+i+")");
+			if(!elTR.is(":visible")) continue;
+			if(elTR.find("td:eq(1)").text().toUpperCase().indexOf("ИТОГО")>-1)
+			{
+				elTR.hide();
+				continue;
+			};
+			if(elTR.find("td:eq(1)").text()=="")
+			{
+				elTR.hide();
+				continue;
+			};
+			//Установим номера по порядку для позиций
+			elTR.find("td:eq(1)").text(NumPP); NumPP++;
+
+			if(elTR.find("td:eq(6)").text().indexOf("прав")!=-1)
+				elTR.find("td:eq(6)").text("Прав.");
+			if(elTR.find("td:eq(6)").text().indexOf("лев")!=-1)
+				elTR.find("td:eq(6)").text("Лев.");
+			//Переместим петли в случае односторонней двери
+			var S=elTR.find("td:eq(7)").text();
+			var WorkPetlya=elTR.find("td:eq(11)").text();
+			var StvorkaPetlya=elTR.find("td:eq(12)").text();
+			if(S=="" & WorkPetlya=="" & StvorkaPetlya!="")
+			{
+				elTR.find("td:eq(11)").text(StvorkaPetlya);
+				elTR.find("td:eq(12)").text("");
+			};
+			//В случае заполнением полей: окно раб.ств., окно вт.ств., высота фрамуги словом НЕТ
+			//заменим на пустое поле
+			if(elTR.find("td:eq(13)").text().toUpperCase().indexOf("НЕТ")>-1)
+				elTR.find("td:eq(13)").text("");
+			if(elTR.find("td:eq(14)").text().toUpperCase().indexOf("НЕТ")>-1)
+				elTR.find("td:eq(14)").text("");
+			if(elTR.find("td:eq(18)").text().toUpperCase().indexOf("НЕТ")>-1)
+				elTR.find("td:eq(18)").text("");
+		};
+
+		//Назначим для каждого столбца свой тип
+		var a=new Array("№ п/п", "Наименование","Кол-во","Высота","Ширина","Открывание","Рабочая створка","RAL окрас","Наличник","Доводчик","Навес раб. ств.","Навес вторая ств.","Окно раб. ств.","Окно вторая ств.","Решетка раб. ств.(верх)","Решетка вторая ств.(верх)","Фрамуга","Высота фрамуги","Примечание","№ шильды","Маркировка");
+		for(var i=1; i<$("#OrderImportTableTHEAD tr:eq(0)").find("td").length;i++)
+		{
+			$("#OrderImportTableTHEAD tr:eq(0) td:eq("+i+") select").val(a[i-1]);
+			OrderImportChangeColType(i);
+		};
+	});
+
+	function OrderImportColDel(pos)
+	{
+		$("#OrderImportTableTHEAD").find("tr").find("td:eq("+pos+")").hide();
+		$("#OrderImportTableTBODY").find("tr").find("td:eq("+pos+")").hide();
+		OrderImportHystoryAdd("ColDel",pos);
+	}
+	function OrderImportRowDel(pos)
+	{
+		$("#OrderImportTableTBODY").find("tr:eq("+pos+")").hide();
+		OrderImportHystoryAdd("RowDel",pos);
+	}
+	//Изменение типа столбца с проверкой валидности значений
+	function OrderImportChangeColType(posTR)
+	{
+		var arr=new Array();
+		var typeEl="", s="";
+		if($("#OrderImportTableTBODY tr:eq(0) td:eq("+posTR+") input").length) typeEl="input";
+		if($("#OrderImportTableTBODY tr:eq(0) td:eq("+posTR+") textarea").length) typeEl="textarea";
+		if($("#OrderImportTableTBODY tr:eq(0) td:eq("+posTR+") select").length) typeEl="select";
+
+		for(var i=0;i<$("#OrderImportTableTBODY").find("tr").length;i++)
+		{
+			s=typeEl=="" ? $("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").text() : $("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") "+typeEl).val();
+			switch($("#OrderImportTableTHEAD tr:eq(0) td:eq("+posTR+") select").val())
+			{
+				case "№ п/п":
+				case "Высота":
+				case "Ширина":
+				case "Кол-во":
+					var colorErr="white";
+					if(isNaN(parseInt(s)) ) colorErr="pink";
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<input style='background-color:"+colorErr+"' type=text value='"+s+"'>");
+				break;
+				case "Наименование":
+					var colorErr="white";
+					var arrList=OrderGlobalTypesDoor;
+					if(arrList.indexOf(s)==-1 ) colorErr="pink";
+					var OptionsHtml=""; var d=0;
+					while(OrderGlobalTypesDoor[d]!=null)
+					{
+						OptionsHtml=OptionsHtml+"<option>"+OrderGlobalTypesDoor[d]+"</option>";
+						d++;
+					};
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html(
+						"<select style='background-color:"+colorErr+"'>"+
+							"<option>"+s+"</option>"+
+							OptionsHtml+
+						"</select>"
+					);
+				break;
+				case "Рабочая створка":
+					var colorErr="white";
+					if(isNaN(parseInt(s)) & s!="" & s.toUpperCase().indexOf("РАВН")==-1 ) colorErr="pink";
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<input style='background-color:"+colorErr+"' type=text value='"+s+"'>");
+				break;
+				case "Высота фрамуги":
+					var colorErr="white";
+					if(isNaN(parseInt(s)) & s!="" ) colorErr="pink";
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<input style='background-color:"+colorErr+"' type=text value='"+s+"'>");
+				break;
+				case "Открывание":
+					var colorErr="white";
+					var arrList=OrderGlobalOpenDoor;
+					if(arrList.indexOf(s)==-1 ) colorErr="pink";
+					var OptionsHtml=""; var d=0;
+					while(OrderGlobalOpenDoor[d]!=null)
+					{
+						OptionsHtml=OptionsHtml+"<option>"+OrderGlobalOpenDoor[d]+"</option>";
+						d++;
+					};
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html(
+						"<select style='background-color:"+colorErr+"'>"+
+							"<option>"+s+"</option>"+
+							OptionsHtml+
+						"</select>"
+					);
+				break;
+				case "Наличник":
+					var colorErr="white";
+					var arrList=OrderGlobalNalichnikDoor;
+					if(arrList.indexOf(s)==-1 ) colorErr="pink";
+					var OptionsHtml=""; var d=0;
+					while(OrderGlobalNalichnikDoor[d]!=null)
+					{
+						OptionsHtml=OptionsHtml+"<option>"+OrderGlobalNalichnikDoor[d]+"</option>";
+						d++;
+					};
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html(
+						"<select style='background-color:"+colorErr+"'>"+
+							"<option>"+s+"</option>"+
+							OptionsHtml+
+						"</select>"
+					);
+				break;
+				case "Доводчик":
+					var colorErr="white";
+					var arrList=OrderGlobalDovodDoor;
+					if(arrList.indexOf(s)==-1 ) colorErr="pink";
+					var OptionsHtml=""; var d=0;
+					while(OrderGlobalDovodDoor[d]!=null)
+					{
+						OptionsHtml=OptionsHtml+"<option>"+OrderGlobalDovodDoor[d]+"</option>";
+						d++;
+					};
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html(
+						"<select style='background-color:"+colorErr+"'>"+
+							"<option>"+s+"</option>"+
+							OptionsHtml+
+						"</select>"
+					);
+				break;
+				case "RAL окрас":
+				case "Маркировка":
+				case "№ шильды":
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<input type=text value='"+s+"'>");
+				break;
+				case "Навес раб. ств.":
+					var colorErr="white";
+					if(isNaN( parseInt(s) ) ) colorErr="pink";
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<input style='background-color:"+colorErr+"' type=text value='"+s+"'>");
+				break;
+				case "Навес вторая ств.":
+					var colorErr="white";
+					if(isNaN(parseInt(s)) & s!="") colorErr="pink";
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<input style='background-color:"+colorErr+"' type=text value='"+s+"'>");
+				break;
+				case "Окно раб. ств.":
+					var colorErr="white";
+					if(s!="" & s!="1" & s!="2" & s!="3" & s.toLowerCase()!="да") colorErr="pink";
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<input style='background-color:"+colorErr+"' type=text value='"+s+"'>");
+				break;
+				case "Окно вторая ств.":
+					var colorErr="white";
+					if(s!="" & s!="1" & s!="2" & s!="3" & s.toLowerCase()!="да") colorErr="pink";
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<input style='background-color:"+colorErr+"' type=text value='"+s+"'>");
+				break;
+				case "Решетка раб. ств.(верх)":
+				case "Решетка вторая ств.(верх)":
+				case "Фрамуга":
+					var colorErr="white";
+					if(s!="" & s!="да" & s!="нет" ) colorErr="pink";
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html(
+						"<select style='background-color:"+colorErr+"'>"+
+							"<option>"+s+"</option>"+
+							"<option>да</option>"+
+							"<option>нет</option>"+
+						"</select>"
+					);
+				break;
+				case "Примечание":
+					$("#OrderImportTableTBODY tr:eq("+i+") td:eq("+posTR+") ").html("<textarea>"+s+"</textarea>");
+				break;
+			};
+		};
+	}
+	//Проверка правильности заполнения перед сохранением
+	function OrderImportControlColType()
+	{
+		$("#OrderImportBugs").html("");
+		var err=false;
+		var findNumPPEl=false, findNameEl=false, findHEl=false, findWEl=false, findCountEl=false;
+		for(var TD=0; TD<$("#OrderImportTableTHEAD tr:eq(0)").find("td").length;TD++)
+			if($("#OrderImportTableTHEAD tr:eq(0) td:eq("+TD+")").is(":visible"))
+			{
+				var typeEl="", s="";
+				if($("#OrderImportTableTBODY tr:eq(0) td:eq("+TD+") input").length) typeEl="input";
+				if($("#OrderImportTableTBODY tr:eq(0) td:eq("+TD+") textarea").length) typeEl="textarea";
+				if($("#OrderImportTableTBODY tr:eq(0) td:eq("+TD+") select").length) typeEl="select";
+				for(var TR=0;TR<$("#OrderImportTableTBODY").find("tr").length;TR++)
+				if($("#OrderImportTableTBODY tr:eq("+TR+")").length)
+				if($("#OrderImportTableTBODY tr:eq("+TR+")").is(":visible"))
+				{
+					var colorErr="white";
+					s=typeEl=="" ? $("#OrderImportTableTBODY tr:eq("+TR+") td:eq("+TD+") ").text() : $("#OrderImportTableTBODY tr:eq("+TR+") td:eq("+TD+") "+typeEl).val();
+					//console.log(TD+"--"+$("#OrderImportTableTHEAD tr:eq(0) td:eq("+TD+") select").val());
+					switch($("#OrderImportTableTHEAD tr:eq(0) td:eq("+TD+") select").val())
+					{
+						case "№ п/п":
+						case "Высота":
+						case "Ширина":
+						case "Кол-во":
+							if(isNaN(parseInt(s)) ) colorErr="pink";
+						break;
+						case "Наименование":
+							var arrList=OrderGlobalTypesDoor;
+							if(arrList.indexOf(s)==-1 ) colorErr="pink";
+						break;
+						case "Рабочая створка":
+							if(isNaN(parseInt(s)) & s!="" & s.toUpperCase().indexOf("РАВН")==-1 ) colorErr="pink";
+						break;
+						case "Высота фрамуги":
+							if(isNaN(parseInt(s)) & s!="" ) colorErr="pink";
+						break;
+						case "Открывание":
+							var arrList=OrderGlobalOpenDoor;
+							if(arrList.indexOf(s)==-1 ) colorErr="pink";
+						break;
+						case "Наличник":
+							var arrList=OrderGlobalNalichnikDoor;
+							if(arrList.indexOf(s)==-1 ) colorErr="pink";
+						break;
+						case "Доводчик":
+							var arrList=OrderGlobalDovodDoor;
+							if(arrList.indexOf(s)==-1 ) colorErr="pink";
+						break;
+						case "Навес раб. ств.":
+							if(isNaN( parseInt(s) ) ) colorErr="pink";
+						break;
+						case "Навес вторая ств.":
+							if(isNaN(parseInt(s)) & s!="") colorErr="pink";
+						break;
+						case "Окно раб. ств.":
+							if(s!="" & s!="1" & s!="2" & s!="3" & s.toLowerCase()!="да") colorErr="pink";
+						break;
+						case "Окно вторая ств.":
+							if(s!="" & s!="1" & s!="2" & s!="3" & s.toLowerCase()!="да") colorErr="pink";
+						break;
+						case "Решетка раб. ств.(верх)":
+						case "Решетка вторая ств.(верх)":
+						case "Фрамуга":
+							if(s!="" & s!="да" & s!="нет" ) colorErr="pink";
+						break;
+					};
+					$("#OrderImportTableTBODY tr:eq("+TR+") td:eq("+TD+") "+typeEl).css("background-color",colorErr);
+					if(colorErr=="pink") err=true;
+				};
+				
+				//Проверим наличие обязательных столбцов
+				switch($("#OrderImportTableTHEAD tr:eq(0) td:eq("+TD+") select").val())
+				{
+					case "№ п/п": findNumPPEl=true; break;
+					case "Наименование": findNameEl=true; break;
+					case "Высота": findHEl=true; break;
+					case "Ширина": findWEl=true; break;
+					case "Кол-во": findCountEl=true; break;
+				};
+			};
+		//В случае отсутствия обязательных столбцов вывод ошибку
+		if(!findNumPPEl || !findNameEl || !findHEl || !findWEl || !findCountEl)
+		{
+			if(!findNumPPEl) {err=true; $("#OrderImportBugs").html($("#OrderImportBugs").html() + "<br>Не найден обязательный столбец: № п/п");};
+			if(!findNameEl) {err=true; $("#OrderImportBugs").html($("#OrderImportBugs").html() + "<br>Не найден обязательный столбец: НАИМЕНОВАНИЕ");};
+			if(!findHEl) {err=true; $("#OrderImportBugs").html($("#OrderImportBugs").html() + "<br>Не найден обязательный столбец: ВЫСОТА");};
+			if(!findWEl) {err=true; $("#OrderImportBugs").html($("#OrderImportBugs").html() + "<br>Не найден обязательный столбец: ШИРИНА");};
+			if(!findCountEl) {err=true; $("#OrderImportBugs").html($("#OrderImportBugs").html() + "<br>Не найден обязательный столбец: КОЛ-ВО");};
+		};
+		//Проверим на заполненность остальные поля
+		$('#OrderImportInputBlank').css("background-color","white");
+		$('#OrderImportInputBlankDate').css("background-color","white");
+		if($('#OrderImportInputBlank').val()=="") {err=true; $("#OrderImportBugs").html($("#OrderImportBugs").html() + "<br>Не заполнено поле: № заказа"); $('#OrderImportInputBlank').css("background-color","pink");};
+		if($('#OrderImportInputBlankDate').val()=="") {err=true; $("#OrderImportBugs").html($("#OrderImportBugs").html() + "<br>Не заполнено поле: Дата заказа"); $('#OrderImportInputBlankDate').css("background-color","pink");};
+		return err;
+	}
+	
+	function OrderImportDialogLoad()
+	{
+		$('#OrderImportTableTBODY').find('tr').remove();
+		$('#OrderImportTableTHEAD').find('tr').remove();
+		$("#OrderImportBugs").html("");
+		var d=new Date();
+		$('#OrderImportInputBlankDate').val(d.format('dd.mm.yyyy'));
+		$('#OrderImportInputBlank').val('');
+
+		$("#OrderImportInputShet").val("");
+		$("#OrderImportInputShetDate").val("");
+
+		$("#OrderImportInputZakaz").val("");
+		$("#OrderImportInputZakaz").css("background-color","white");
+		$("#OrderImportInputContact").val("");
+		$("#OrderImportInputSrok").val("");
+		$("#OrderImportInputNote").val("");
+		//Выводим номер заказа макс+1
+		$.post(
+			'orders/order.php',
+			{'method':'OrderAddMaxBlank'},
+			function (data) { $('#OrderImportInputBlank').val(data)}
+		);
+		$('#OrderImportDialog').dialog('open');
+	}
+	
+	$("#OrderImportInpSubmit").button();
+	$("#OrderImportDialog").dialog({
+		autoOpen: false,
+		modal:true,
+		width: $(window).width()-50,
+		height:$(window).height()-50,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {	if(!OrderImportControlColType()) OrderImportDialogSave(); 	}
+			},
+			{
+				text: "Закрыть",
+				click: function() {	$( this ).dialog( "close" );	}
+			}
+		]
+	});
+	//Прячем, показываем основную полосу прокрутки
+	$("#OrderImportDialog").mouseenter(function(){
+		$('body').css("overflow","hidden");
+	}).mouseleave(function() {
+        $('body').css("overflow","visible")
+    });
+	
+</script>
+
+<!-- Спецификация -->
+<div title="Спецификация" id=OrderSpecificDialog>
+	<p>
+		<input type=hidden id=OrderSpecificidDoor>
+		<button onclick="spe_AddGroupLoad()">Добавить группу</button>
+		<table id="OrderSpecificTable"></table>
+	</p>
+</div>
+<script>
+	$("#OrderSpecificDialog").dialog({
+		autoOpen: false,
+		modal:true,
+		width: 400,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {OrederSpecificSave();}
+			},
+			{
+				text: "Закрыть",
+				click: function() { $( this ).dialog( "close" ); }
+			}
+		]
+	});
+</script>
+<div id=spe_GoodDialog title="Выберите материал">
+	<p>
+		<div style="overflow:auto; max-width:400px;">
+			<table style="max-width:400px;" id=spe_GoodDialogList></table>
+		</div>
+	</p>
+</div>
+<script>
+	$("#spe_GoodDialog").dialog({
+		autoOpen: false,
+		modal:true,
+		width: 300,
+		height:300,
+		buttons: [
+			{
+				text: "Выбрать",
+				click: function() {spe_GoodSelected();}
+			},
+			{
+				text: "Закрыть",
+				click: function() { $( this ).dialog( "close" ); }
+			}
+		]
+	});
+</script>
+
+<div id="spe_GroupDialog" title="Группы">
+	<p>
+		<div style="overflow:auto; max-width:400px;">
+			<table style="max-width:400px;" id="spe_GroupTable"></table>
+		</div>
+	</p>
+</div>
+<script>
+    $("#spe_GroupDialog").dialog({
+        autoOpen: false,
+        modal:true,
+        width: 300,
+        height:300,
+        buttons: [
+            {
+                text: "Выбрать",
+                click: function() {spe_GroupSelected();}
+            },
+            {
+                text: "Закрыть",
+                click: function() { $( this ).dialog( "close" ); }
+            }
+        ]
+    });
+</script>
+<!-- -------- Контрагенты -------------- -->
+<div id="OrderContragentListDialog" title="Список контрагентов">
+	<p>
+		<input type="hidden" id="OrderContragentListDialogElIN">
+		<input type="hidden" id="OrderContragentListDialogElINContact">
+
+		<div class="ui-widget-header ui-corner-all">
+			<input type="text" id="OrderContragentListDialogFindInp" style="width:70%" placeholder="Наименование организации">
+			<button id="OrderContragentListDialogFindBtn" onclick="OrderContragentListSelect();">Найти</button>
+			<button id="OrderContragentListDialogAddBtn" onclick="OrderContragenAdd()">Добавить</button>
+			<script type="text/javascript">
+				$("#OrderContragentListDialogFindBtn").button();
+				$("#OrderContragentListDialogAddBtn").button({ icons: { primary: "ui-icon-circle-plus" }});
+			</script>
+		</div>
+		<table class="Tables">
+			<thead style="display:block;">
+				<td width="250">Наименование</td>
+				<td width="130">ИНН</td>
+				<td width="130">Телефон</td>
+				<td width="20"></td>
+				<td width="20"></td>
+			</thead>
+			<tbody style="max-height:300px; overflow:auto; display:block; width:100%" id="OrderContragentListDialogTable"></tbody>
+		</table>
+	</p>
+</div>
+<script type="text/javascript">
+	$("#OrderContragentListDialog").dialog({
+		autoOpen: false,
+		modal:true,
+		width: 600,
+		buttons: [
+			{
+				text: "Выбрать",
+				click: function() {
+					if($("#OrderContragentListDialogTable tr[class=Complite]").length>0)
+					{
+						$("#"+$("#OrderContragentListDialogElIN").val()).val($("#OrderContragentListDialogTable tr[class=Complite]:eq(0) td:eq(0)").text());
+						if($("#OrderContragentListDialogElINContact").val()!="")
+							$("#"+$("#OrderContragentListDialogElINContact").val()).val($("#OrderContragentListDialogTable tr[class=Complite]:eq(0) td:eq(2)").text());
+						$("#OrderContragentListDialog").dialog("close");
+					};
+				}
+			},
+			{
+				text: "Закрыть",
+				click: function() { $( this ).dialog( "close" ); }
+			}
+		]
+	});
+</script>
+<div id="OrderContragenDialog">
+	<p>
+		<input type="hidden" id="OrderContragenDialogID">
+		Наименование <input type="text" id="OrderContragenDialogAlias"><br>
+		<div id="OrderContragenDialogTabs" style="width:100%">
+			<ul>
+				<li><a href="#OrderContragenDialogTab1">Общие</a></li>
+				<li><a href="#OrderContragenDialogTab2">Реквизиты</a></li>
+				<li><a href="#OrderContragenDialogTab3">Контакты</a></li>
+				<li><a href="#OrderContragenDialogTab4">Заказы</a></li>
+			</ul>
+			<div id="OrderContragenDialogTab1">
+				<table style="width:100%;">
+					<tr>
+						<td style="width:150px;">Полное наименование</td>
+						<td><input type="text" id="OrderContragenDialogName" style="width:100%;"></td>
+					</tr>
+					<tr>
+						<td>Адрес юридический</td>
+						<td><input type="text" id="OrderContragenDialogAdressUrid" style="width:100%;"></td>
+					</tr>
+					<tr>
+						<td>Адрес фактический</td>
+						<td><input type="text" id="OrderContragenDialogAdressFact" style="width:100%;"></td>
+					</tr>
+					<tr>
+						<td>Адрес для отгрузки</td>
+						<td><input type="text" id="OrderContragenDialogAdressShpt" style="width:100%;"></td>
+					</tr>
+					<tr>
+						<td>Примечание</td>
+						<td><textarea id="OrderContragenDialogNote" style="width:100%; height:100px;"></textarea></td>
+					</tr>
+				</table>
+			</div>
+			<div id="OrderContragenDialogTab2">
+				<table>
+					<tr>
+						<td>ИНН</td>
+						<td><input type="text" id="OrderContragenDialogINN" maxlength="12"></td>
+					</tr>
+					<tr>
+						<td>КПП</td>
+						<td><input type="text" id="OrderContragenDialogKPP" maxlength="9"></td>
+					</tr>
+					<tr>
+						<td>ОКПО</td>
+						<td><input type="text" id="OrderContragenDialogOKPO" maxlength="10"></td>
+					</tr>
+					<tr>
+						<td>ОГРН</td>
+						<td><input type="text" id="OrderContragenDialogOGRN" maxlength="15"></td>
+					</tr>
+				</table>
+			</div>
+			<div id="OrderContragenDialogTab3">
+				<div class="ui-widget-header ui-corner-all">
+					<button id="OrderContragenDialogContactBtnAdd" onclick="OrderContragenContactAdd();">Добавить</button>
+					<script type="text/javascript">$("#OrderContragenDialogContactBtnAdd").button({ icons: { primary: "ui-icon-circle-plus" }});</script>
+				</div>
+				<div>
+				<table class="Tables">
+					<Thead>
+						<tr style="display:block;">
+							<td width=120>ФИО</td>
+							<td width=120>Должность</td>
+							<td width=120>Телефон</td>
+							<td width=120>Email</td>
+							<td width=20></td>
+						</tr>
+					</Thead>
+					<Tbody style="max-height:300px; overflow:auto; display:block; width:100%" id="OrderContragenDialogContactList"></Tbody>
+				</table>
+				</div>
+			</div>
+			<div id="OrderContragenDialogTab4">
+			</div>
+		</div>
+		<div id="OrderContragenDialogBugs" style="color:red;"></div>
+	</p>
+</div>
+<script type="text/javascript">
+	$("#OrderContragenDialog").dialog({
+		autoOpen: false,
+		modal:true,
+		width: 600,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {OrderContragenSave();}
+			},
+			{
+				text: "Закрыть",
+				click: function() { $( this ).dialog( "close" ); }
+			}
+		]
+	});
+	$("#OrderContragenDialogTabs").tabs();
+</script>
+<div id="OrderContragenContactDialog">
+	<p>
+		<input type="hidden" id="OrderContragenContactDialogID">
+		<table>
+			<tr>
+				<td style="width:100px">ФИО</td>
+				<td><input type="text" id="OrderContragenContactDialogFIO"></td>
+			</tr>
+			<tr>
+				<td>Должность</td>
+				<td><input type="text" id="OrderContragenContactDialogPost"></td>
+			</tr>
+			<tr>
+				<td>Телефон рабочий</td>
+				<td><input type="text" id="OrderContragenContactDialogPhone1"></td>
+			</tr>
+			<tr>
+				<td>Телефон</td>
+				<td><input type="text" id="OrderContragenContactDialogPhone2"></td>
+			</tr>
+			<tr>
+				<td>eMail</td>
+				<td><input type="text" id="OrderContragenContactDialogeMail"></td>
+			</tr>
+			<tr>
+				<td>Примечание</td>
+				<td><textarea name="" id="OrderContragenContactDialogNote" style="width:100%; height:100px;"></textarea></td>
+			</tr>
+			<tr>
+				<td>Представитель</td>
+				<td><input type="checkbox" id="OrderContragenContactDialogAgent"></td>
+			</tr>
+		</table>
+	</p>
+</div>
+<script type="text/javascript">
+	$("#OrderContragenContactDialog").dialog({
+		autoOpen: false,
+		modal:true,
+		width: 400,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {OrderContragenContactSave();}
+			},
+			{
+				text: "Закрыть",
+				click: function() { $( this ).dialog( "close" ); }
+			}
+		]
+	});
+</script>
+
+<!-- Подробности расчета зарплаты -->
+<div title="Подробности расчета з/п" id="OrderPrlDialog">
+	<p>
+		<input type="hidden" id="OrderPrlRowID">
+		<input type="hidden" id="OrderPrlRowStep">
+		<div style="float:left; height:600px; width:48%; border:solid 2px gray;" id="OrderPrlPane1" >
+			<h3>Расчет</h3>
+			<table>
+				<thead>
+					<tr>
+						<td>Описание</td>
+						<td>Сумма</td>
+					</tr>
+				</thead>
+				<tbody id="OrderPrlCalcTable"></tbody>
+			</table>
+		</div>
+ 
+		<div style="float:left; height:600px; width:48%; border:solid 2px gray;" id="OrderPrlPane2" >
+			<h3>Основание расчета</h3>
+			<p>
+				Зависимость от размеров двери:
+				<table style="border:solid 1px black">
+					<thead>
+						<tr>
+							<td>Высота</td>
+							<td>Ширина</td>
+							<td>Раб. ств.</td>
+							<td>Открывание</td>
+							<td>Фрамуга</td>
+							<td>Стоимость</td>
+						</td>
+					</thead>
+					<tbody id="OrderPrlBaseDoorType"></tbody>
+				</table>
+			</p>
+			<p>
+				Постоянные значения:
+				<table>
+					<thead>
+						<tr>
+							<td>Наименование</td>
+							<td>Стоимость</td>
+						</td>
+					</thead>
+					<tbody id="OrderPrlBaseConst"></tbody>
+				</table>
+			</p>
+		</div>
+	</p>
+</div>
+<script>
+	$(function(){
+	$("#OrderPrlDialog").dialog({
+		autoOpen: false,
+		modal:true,
+		width: 700,
+		buttons: [
+			{
+				text: "Расчитать",
+				click: function() {OrderPrlReadMoreSave();}
+			},
+			{
+				text: "Закрыть",
+				click: function() { $( this ).dialog( "close" ); }
+			}
+		]
+	});
+	$( "#OrderPrlPane1" ).resizable({
+      //alsoResize: "#also"
+    });
+    $( "#OrderPrlPane2" ).resizable();
+	})
+	
+</script>
+
+<!-- Склад отгрузка-->
+<div id="st_ShptDlgCreate" title="Создание акта на отгрузку">
+	<p>
+		<div>
+			Дверь: <input id="st_ShptDlgCreate_Find" oninput="st_ShptCreate_TRFind()">
+			<button onclick="st_ShptCreate_TRSelectAll()">Выбрать все</button>
+			<button onclick="st_ShptCreate_TRNoSelectAll()">Отменить выбор</button>
+		</div>
+		<table class="TablesHeight Tables">
+			<thead>
+				<tr>
+					<td>№ двери</td>
+					<td>Наряд</td>
+					<td>Наименование</td>
+					<td>Размеры</td>
+				</tr>
+			</thead>
+			<tbody id="st_ShptDlgCreate_Table" class="BorderTablesTbody"></tbody>
+		</table>
+	</p>
+</div>
+<script>
+    $( "#st_ShptDlgCreate" ).dialog({
+        autoOpen: false,
+        modal:true,
+        width: 500,
+        buttons: [
+            {
+                text: "Создать акт",
+                click: function() {
+                    st_ShptCreate_Save();
+                    //$( this ).dialog( "close" );
+                }
+            },
+            {
+                text: "Отмена",
+                click: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        ]
+    });
+    $(
+        function(){
+            $("#st_ShptDlgCreate button").button();
+        }
+	)
+</script>

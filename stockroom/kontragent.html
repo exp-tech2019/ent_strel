@@ -1,0 +1,172 @@
+﻿<script src="stockroom/kontragent.js"></script>
+<div class="Menu">
+	<div id=KontragentMainMenu>
+		<h3>&nbsp;</h3>
+		<div>
+			<p class="LeftMenu" onclick="$('#KontragentDialogAction').text('Add'); KontragentAdd();">Добавить контрагента</p>
+			<p class="LeftMenu" onclick="KontragentSelectList();">Обновить список</p>
+		</div>
+	</div>
+	<script>$( "#KontragentMainMenu" ).accordion({heightStyle: "content"});</script>
+</div>
+<div>
+
+<div class="MenuRight">
+	<p>Поиск: <input id=KontragentTableFind onkeypress="if(event.keyCode==13) KontragentFind()"><button onclick="KontragentFind()">Найти</button></p>
+	<table class="Tables">
+		<thead class="BorderTablesThead">
+			<tr>
+				<td>Наименование</td>
+				<td>Адрес</td>
+				<td>Контактный телефон</td>
+				<td>eMail</td>
+				<td>Офромлено поступлений</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody id=KontragentTable></tbody>
+	</table>
+	<script>KontragentSelectList();</script>
+</div>
+
+<!-------Диалог контрагента-------------------->
+<div title="Контрагент" id=KontragentDialog>
+	<p>
+		<span style="display:none" id=KontragentDialogAction></span>
+		<input type=hidden id=KontragentDialogID>
+		Наименование: <input id=KontragentDialogName maxlength=100 style="width:100%">
+		<div id=KontragentDialogTabs>
+			<ul>
+				<li><a href="#KontragentDialogTab1">Общее</a></li>
+				<li><a href="#KontragentDialogTab2">Адрес</a></li>
+				<li><a href="#KontragentDialogTab3">Контакты</a></li>
+				<li><a href="#KontragentDialogTab4">Сотрудничество</a></li>
+			</ul>
+			<div id=KontragentDialogTab1>
+				<table>
+					<tr>
+						<td>Полное наименовани</td>
+						<td>
+							<select id=KontragentDialogLegalForm>
+								<option>ООО</option>
+								<option>ЗАО</option>
+							</select>
+							<input id=KontragentDialogFullName maxlength=100>
+						</td>
+					</tr>
+					<tr><td>ИНН</td><td><input id=KontragentDialoginn maxlength=20></td></tr>
+					<tr><td>КПП</td><td><input id=KontragentDialogkpp maxlength=20></td></tr>
+					<tr><td>ОКПО</td><td><input id=KontragentDialogokpo maxlength=20></td></tr>
+					<tr><td colspan=2>Банковские реквизиты</td></tr>
+					<tr><td>Банк</td><td><input id=KontragentDialogBankName maxlength=100></td></tr>
+					<tr><td>р/с</td><td><input id=KontragentDialogBankRS maxlength=25></td></tr>
+					<tr><td>к/с</td><td><input id=KontragentDialogBankKS maxlength=25></td></tr>
+					<tr><td>бик</td><td><input id=KontragentDialogBankBik maxlength=25></td></tr>
+				</table>
+				Примечание<br>
+				<textarea id=KontragentDialogNote style="height:100%; width:100%"></textarea>
+			</div>
+			<div id=KontragentDialogTab2>
+				Фактический адрес<br>
+				<input id=KontragentDialogAdressFact maxlength=255 style="width:100%"><br>
+				Юридический адрес<br>
+				<input id=KontragentDialogAdressUrid maxlength=255 style="width:100%"><br>
+				<table>
+					<tr><td>Телефон</td><td><input id=KontragentDialogPhone maxlength=50></td></tr>
+					<tr><td>Факс</td><td><input id=KontragentDialogFax maxlength=50></td></tr>
+				</table>
+			</div>
+			<!---------Контакты-------------->
+			<div id=KontragentDialogTab3>
+				<!--Панель инструментов-->
+				<img src="images/addButton.png" width=20 onclick="KontragentContactAdd()" title="Добавить контакт">
+				<input id=KontragentDialogContactFindInput onkeypress="if(event.keyCode==13) KontragentContactFind()"><button onclick="KontragentContactFind()">Найти</button>
+				
+				<table class="Tables">
+					<thead class="BorderTablesThead">
+						<tr>
+							<td>ФИО</td>
+							<td>Должность</td>
+							<td colspan=2>Телефон</td>
+							<td>eMail</td>
+							<td>Примечание</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody id=KontragentDialogContactTable></tbody>
+				</table>
+			</div>
+			<div id=KontragentDialogTab4>
+			</div>
+		</div>
+		<div id=KontragentDialogBugs style="color:red"></div>
+	</p>
+</div>
+<script>
+	$( "#KontragentDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 600,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {
+					KontragentSave();
+				}
+			},
+			{
+				text: "Отмена",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		]
+	});
+	$( "#KontragentDialogTabs" ).tabs();
+</script>
+<!------------------------------------------------------->
+<!-----------Диалог редактирования Контактов------------->
+<div title=Контакт id=KontragentContactDialog>
+	<p>
+		<input type=hidden id=KontragentContactDialogStatus>
+		<table>
+			<tr><td>ФИО</td><td><input id=KontragentContactDialogFIO></td></tr>
+			<tr><td>Должность</td><td><input id=KontragentContactDialogDolgnost></td></tr>
+			<tr><td>Телефон</td><td><input id=KontragentContactDialogPhone></td></tr>
+			<tr><td></td><td><input id=KontragentContactDialogPhone1></td></tr>
+			<tr><td>eMail</td><td><input id=KontragentContactDialogMail></td></tr>
+		</table>
+		<br>
+		Примечание:
+		<textarea style="width:100%; height:200px;" id=KontragentContactDialogNote></textarea>
+		<p id=KontragentContactDialogBugs style="color:red"></p>
+	</p>
+</div>
+<script>
+	$( "#KontragentContactDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 600,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {
+					switch($("#KontragentContactDialogStatus").val())
+					{
+						case "Add": KontragentContactAddSave(); break;
+						case "Edit": KontragentContactEditSave(); break;
+					};
+				}
+			},
+			{
+				text: "Отмена",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		]
+	});
+</script>
+<!------------------------------------------------------->

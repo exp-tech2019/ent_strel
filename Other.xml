@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Notes>
+  <Table name="logins" />
+  <Table name="manualdolgnost" />
+  <Table name="manualdovoddoor" />
+  <Table name="manualmaterialgroup" />
+  <Table name="manualnalichnikdoor" />
+  <Table name="manualopendoor" />
+  <Table name="manualtypedoors" />
+  <Table name="materialsmanual" />
+  <Table name="nalogcalc" />
+  <Table name="naryad" />
+  <Table name="ordercontragents" />
+  <Table name="ordercontragentscontacts" />
+  <Table name="orderdoors" />
+  <Table name="oreders" />
+  <Table name="paymentssumnullhistory" />
+  <Table name="paymentssumnullhistorylist" />
+  <Table name="paymentsworkers" />
+  <Table name="payrollconstant" />
+  <Table name="payrollconstruct">
+    <Column Field="Stiffener" Type="bit(1)" />
+    <Column Field="StiffenerW" Type="bit(1)" />
+    <Column Field="StiffenerSum" Type="decimal(7,2)" />
+  </Table>
+  <Table name="payrolldoorsize" />
+  <Table name="specificconstruct" />
+  <Table name="specificlist" />
+  <Table name="stock" />
+  <Table name="stockmaterial" />
+  <Table name="stockmaterialgroup" />
+  <Table name="stockreciept" />
+  <Table name="stockrecieptmaterials" />
+  <Table name="stocksuppliers" />
+  <Table name="stocksupplierscontacts" />
+  <Table name="trashorderdoors" />
+  <Table name="trashorders" />
+  <Table name="workers" />
+  <Table name="workersdidlayn" />
+</Notes>

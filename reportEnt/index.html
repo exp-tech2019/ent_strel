@@ -1,0 +1,250 @@
+﻿
+<div  class="ui-widget-header ui-corner-all">
+	Период: с <input id="ReportRangeWith"> по <input id="ReportRangeBy"> <button id=ReportRangeBtn onclick="RaportSelect()">отобразить</button>
+</div>
+<div id="ReportTabs">
+	<ul>
+		<li onclick="RaportSelectTabIndex=1; RaportSelect();"><a href="#ReportTab-1">Общее</a></li>
+		<li onclick="RaportSelectTabIndex=2; RaportSelect();"><a href="#ReportTab-2">Производство</a></li>
+		<li onclick="RaportSelectTabIndex=3; RaportSelect();"><a href="#ReportTab-3">Платежи</a></li>
+		<li onclick="RaportSelectTabIndex=4; RaportSelect();"><a href="#ReportTab-4">Сотрудники</a></li>
+		<li onclick="RaportSelectTabIndex=5; RaportSelect();"><a href="#ReportTab-5">Склад</a></li>
+	</ul>
+	<!--Общее-->
+	<div id="ReportTab-1">
+		<p>
+			<div id="ReportGeneralGroupPayments">
+				<h3>Платежи</h3>
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<td>Заработано</td>
+								<td>Выплачено</td>
+								<td>Остатки</td>
+							</tr>
+						</thead>
+						<tbody id="ReportGeneralGroupPaymentsTable">
+							<tr>
+								<td>0</td>
+								<td>0</td>
+								<td>0</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="ReportGeneralGroupEnt">
+				<h3>Производство:</h3>
+				<div>
+					<p>Поступило дверей в производство: <span id="ReportGeneralGroupEntDoorCount"></span></p>
+					<p>Дверей на выполнении: <span id="ReportGeneralGroupEntNaryadCount"></span></p>
+					<table>
+						<thead>
+							<tr>
+								<td>Лазер</td>
+								<td>Гибка</td>
+								<td>Сварка</td>
+								<td>Рамка</td>
+								<td>Сборка</td>
+								<td>Покраска</td>
+								<td>Упаковка</td>
+								<td>Погрузка</td>
+								<td>МДФ Цех</td>
+								<td>МДФ Сборка</td>
+							</tr>
+						</thead>
+						<tbody id="ReportGeneralGroupEntNaryadStep">
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="ReportGeneralGroupWorkers">
+				<h3>Сотрудники</h3>
+				<div>
+					<p>Всего сотрудников: <span id="ReportGeneralGroupWorkerCount"></span></p>
+					<p>Сотрудники на производстве (сегодня): <span  id="ReportGeneralGroupWorkerProductionTeam"></span></p>
+					<table>
+						<thead>
+							<tr>
+								<td>Номер</td>
+								<td>ФИО</td>
+								<td>Должность</td>
+							</tr>
+						</thead>
+						<tbody id="ReportGeneralGroupWorkerProductionTeamTable"></tbody>
+					</table>
+				</div>
+			</div>
+			<div id="ReportGeneralGroupStock">
+				<h3>Склад</h3>
+				<div></div>
+			</div>
+		</p>
+	</div>
+	<div id="ReportTab-2">
+		<p>
+			<div id="ReportEntGroup1">
+				<h3>Выполненно дверей за период:</h3>
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<td></td>
+								<td>Лзеер</td>
+								<td>Гибка</td>
+								<td>МДФ Цех</td>
+								<td>Сварка</td>
+								<td>Рамка</td>
+								<td>Сборка</td>
+								<td>Покраска</td>
+								<td>Сборка МДФ</td>
+								<td>Упаковка</td>
+								<td>Погрузка</td>
+							</tr>
+						</thead>
+						<tbody id=ReportEntTable1></tbody>
+					</table>
+				</div>
+			</div>
+			<div id="ReportEntGroup2">
+				<h3>Выполненно заказов за период:</h3>
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<td>Заказ</td>
+								<td>Счет</td>
+								<td>Лзеер</td>
+								<td>Гибка</td>
+								<td>МДФ Цех</td>
+								<td>Сварка</td>
+								<td>Рамка</td>
+								<td>Сборка</td>
+								<td>Покраска</td>
+								<td>Сборка МДФ</td>
+								<td>Упаковка</td>
+								<td>Погрузка</td>
+							</tr>
+						</thead>
+						<tbody id=ReportEntTable2></tbody>
+					</table>
+				</div>
+			</div>
+		</p>
+	</div>
+	<div id="ReportTab-3">
+		<p>
+			<div id="ReportPayments1">
+				<h3>Начисления и выплаты сотрудникам</h3>
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<td>Должность</td>
+								<td>На начало периода</td>
+								<td>Начислено</td>
+								<td>Выплачено</td>
+								<td>На конец периода</td>
+							</tr>
+						</thead>
+						<tbody id=ReportPaymentsTable1></tbody>
+					</table>
+				</div>
+			</div>
+			<div id="ReportPayments2">
+				<h3>Расходы по типам дверей</h3>
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<td>Тип двери</td>
+								<td>Лзеер</td>
+								<td>Гибка</td>
+								<td>МДФ Цех</td>
+								<td>Сварка</td>
+								<td>Рамка</td>
+								<td>Сборка</td>
+								<td>Покраска</td>
+								<td>Сборка МДФ</td>
+								<td>Упаковка</td>
+								<td>Погрузка</td>
+								<td>Всего</td>
+							</tr>
+						</thead>
+						<tbody id=ReportPaymentsTable2></tbody>
+					</table>
+				</div>
+			</div>
+			<div id="ReportPayments3">
+				<h3>Расходы по заказам</h3>
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<td>Заказ</td>
+								<td>Счет</td>
+								<td>Лзеер</td>
+								<td>Гибка</td>
+								<td>МДФ Цех</td>
+								<td>Сварка</td>
+								<td>Рамка</td>
+								<td>Сборка</td>
+								<td>Покраска</td>
+								<td>Сборка МДФ</td>
+								<td>Упаковка</td>
+								<td>Погрузка</td>
+								<td>Всего</td>
+							</tr>
+						</thead>
+						<tbody id=ReportPaymentsTable3></tbody>
+					</table>
+				</div>
+			</div>
+		</p>
+	</div>
+	<div id="ReportTab-4">
+		<p></p>
+	</div>
+	<div id="ReportTab-5">
+		<p></p>
+	</div>
+</div>
+
+<script>
+	$(function(){
+	$( "#ReportRangeWith" ).datepicker();
+	$( "#ReportRangeBy" ).datepicker();
+	dt=new Date();
+	$( "#ReportRangeWith" ).val(dt.format("dd.mm.yyyy"));
+	$( "#ReportRangeBy" ).val(dt.format("dd.mm.yyyy"));
+	$("#ReportRangeBtn").button();
+	$("#ReportTabs").tabs();
+	$("#ReportGeneralGroupPayments").accordion({heightStyle: "content"});
+	$("#ReportGeneralGroupEnt").accordion({heightStyle: "content"});
+	$("#ReportGeneralGroupWorkers").accordion({heightStyle: "content"});
+	$("#ReportGeneralGroupStock").accordion({heightStyle: "content"});
+
+	$("#ReportEntGroup1").accordion({heightStyle: "content"});
+	$("#ReportEntGroup2").accordion({heightStyle: "content"});
+
+	$("#ReportPayments1").accordion({heightStyle: "content"});
+	$("#ReportPayments2").accordion({heightStyle: "content"});
+	$("#ReportPayments3").accordion({heightStyle: "content"});
+
+	$("#ReportWorkers").accordion({heightStyle: "content"});
+	RaportSelect();
+	})
+</script>

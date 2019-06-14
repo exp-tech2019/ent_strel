@@ -1,0 +1,148 @@
+.Pay{
+    display: flex;
+    justify-content: left;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+}
+.Pay-from-group{
+}
+.Pay-from-group div{
+    margin-top: 3px;
+    width: 100%;
+    display: flex;
+    justify-content: left;
+}
+.Pay-from-group div:hover{
+    background-color: lightgreen;
+}
+.Pay-label-control{
+    width: 120px;
+}
+.Pay-inp{
+    width: 120px;
+}
+.Pay button, .Pay .btn{
+    margin: 3px;
+    background-color: white;
+    border: solid 1px #0b93d5;
+    border-radius: 2px;
+    padding: 5px;
+    width: 90%;
+    cursor: pointer;
+    text-decoration: none;
+}
+.Pay-btn{
+    display: inline;
+    margin: 3px;
+    background-color: white;
+    border: solid 1px #0b93d5;
+    border-radius: 2px;
+    padding: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.Pay-btn:hover{
+    background-color: #0a7bb1;
+    color: white;
+}
+.Pay button:hover, .Pay .btn:hover{
+    background-color: lightcyan;
+}
+
+.Pay-table, Pay-table tr, .Pay-table tr{
+    border: solid 1px lightgrey;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+.Pay-table tr:hover{
+    background-color: #9acfea;
+}
+.Pay-table th, .Pay-table td{
+    border-left: dotted 1px #9acfea;
+}
+.Pay-table th{
+    text-align: center;
+}
+.Pay-table thead{
+    position: fixed;
+    margin-top: -30px;
+    background-color: white;
+}
+.Pay-table td{
+    text-align: right;
+}
+.Pay-table tbody tr th{
+    background-color: #cbf4c8;
+}
+.Pay-table td:nth-child(2){
+    width: 100px;
+}
+.Pay-table tbody{
+    overflow-y: scroll;
+    height: 300px;
+}
+.Pay-table th:nth-child(1), .Pay-table tr:nth-child(1)  td:nth-child(1){
+    width: 250px;
+}
+.Pay-table th:nth-child(2), .Pay-table tr:nth-child(1) td:nth-child(2){
+    width: 100px;
+}
+.Pay-table th:nth-child(3), .Pay-table td:nth-child(3), .Pay-table th:nth-child(4), .Pay-table td:nth-child(4),  .Pay-table th:nth-child(7), .Pay-table td:nth-child(7){
+    width: 40px;
+}
+.Pay-table th:nth-child(5), .Pay-table td:nth-child(5), .Pay-table th:nth-child(6), .Pay-table td:nth-child(6){
+    width: 60px;
+}
+.Pay-table-headerFixed{
+    top: 30px;
+}
+.Pay-td-align-left{
+    text-align: left;
+}
+
+#PayPaymentsForm label{
+    width: 150px;
+}
+#PayPaymentsForm input{
+    width: 70px;
+    clear: right;
+}
+
+.Pay-cart-group{
+    display: table-row;
+}
+.Pay-cart-group input, .Pay-cart-group label, .Pay-cart-group a, .Pay-cart-group span{
+    display: table-cell;
+}
+.Pay-cart-group a{
+    color: #0b93d5;
+}
+#PayDialog_NaryadTable td{
+    border: solid 1px lightgrey;
+    border-spacing: 0px;
+    padding: 3px;
+}
+#PayDialog_NaryadTable td[left]{
+    text-align: left;
+}
+#PayDialog_NaryadTable td[Right]{
+    text-align: right;
+}
+
+.Pay-naryads> div{
+    border: solid 1px lightgrey;
+    display: table-cell;
+}
+.Pay-naryads> div:before{
+    content: '+';
+    display: table-cell;
+    padding: 2px;
+    width: 30px;
+    height: 30px;
+    background-color: lightgrey;
+}
+.Pay-naryads div[Complite]{
+
+}

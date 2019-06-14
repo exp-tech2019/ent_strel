@@ -1,0 +1,119 @@
+﻿
+<div  class="ui-widget-header ui-corner-all">
+	Период: с <input id=ReportWith> по <input id=ReportBy> <button id=ReportBtn onclick="ReportSelect()">отобразить</button>
+</div>
+<script>
+	$( "#ReportWith" ).datepicker();
+	$( "#ReportBy" ).datepicker();
+	dt=new Date();
+	$( "#ReportWith" ).val(dt.format("dd.mm.yyyy"));
+	$( "#ReportBy" ).val(dt.format("dd.mm.yyyy"));
+	ReportSelect();
+	$("#ReportBtn").button();
+</script>
+<table class="TablesHeight Tables" style="width:auto; border: solid 1px gray; margin:10px;">
+	<thead class=BorderTablesThead>
+		<tr>
+			<td rowspan=2>Стадия</td>
+			<td colspan=2>Наряды</td>
+			<td colspan=2>Платежи</td>
+			<td rowspan=2>Остаток</td>
+		</tr>
+		<tr>
+			<td>Кол-во</td>
+			<td>Заработано</td>
+			<td>Начисленно</td>
+			<td>Выплаты</td>
+		</tr>
+	</thead>
+	<tbody id="ReportWorkersTable">
+		<tr>
+			<td>Лазер</td>
+			<td id=ReportCommonCountWorkLaser></td>
+			<td id=ReportCommonSumWorkLaser></td>
+			<td id=ReportCommonSumPlusLaser></td>
+			<td id=ReportCommonSumMinusLaser></td>
+			<td id=ReportCommonItogLaser></td>
+		</tr>
+		<tr>
+			<td>Сгибка</td>
+			<td id=ReportCommonCountWorkSgibka></td>
+			<td id=ReportCommonSumWorkSgibka></td>
+			<td id=ReportCommonSumPlusSgibka></td>
+			<td id=ReportCommonSumMinusSgibka></td>
+			<td id=ReportCommonItogSgibka></td>
+		</tr>
+		<tr>
+			<td>Сварка</td>
+			<td id=ReportCommonCountWorkSvarka></td>
+			<td id=ReportCommonSumWorkSvarka></td>
+			<td id=ReportCommonSumPlusSvarka></td>
+			<td id=ReportCommonSumMinusSvarka></td>
+			<td id=ReportCommonItogSvarka></td>
+		</tr>
+		<tr>
+			<td>Рамка</td>
+			<td id=ReportCommonCountWorkFrame></td>
+			<td id=ReportCommonSumWorkFrame></td>
+			<td id=ReportCommonSumPlusFrame></td>
+			<td id=ReportCommonSumMinusFrame></td>
+			<td id=ReportCommonItogFrame></td>
+		</tr>
+		<tr>
+			<td>Сборка</td>
+			<td id=ReportCommonCountWorkSborka></td>
+			<td id=ReportCommonSumWorkSborka></td>
+			<td id=ReportCommonSumPlusSborka></td>
+			<td id=ReportCommonSumMinusSborka></td>
+			<td id=ReportCommonItogSborka></td>
+		</tr>
+		<tr>
+			<td>Малярка</td>
+			<td id=ReportCommonCountWorkColor></td>
+			<td id=ReportCommonSumWorkColor></td>
+			<td id=ReportCommonSumPlusColor></td>
+			<td id=ReportCommonSumMinusColor></td>
+			<td id=ReportCommonItogColor></td>
+		</tr>
+		<tr>
+			<td>Упаковка</td>
+			<td id=ReportCommonCountWorkUpak></td>
+			<td id=ReportCommonSumWorkUpak></td>
+			<td id=ReportCommonSumPlusUpak></td>
+			<td id=ReportCommonSumMinusUpak></td>
+			<td id=ReportCommonItogUpak></td>
+		</tr>
+		<tr>
+			<td>Погрузка</td>
+			<td id=ReportCommonCountWorkShpt></td>
+			<td id=ReportCommonSumWorkShpt></td>
+			<td id=ReportCommonSumPlusShpt></td>
+			<td id=ReportCommonSumMinusShpt></td>
+			<td id=ReportCommonItogShpt></td>
+		</tr>
+		<tr>
+			<td>Мастер</td>
+			<td id=ReportCommonCountWorkMaster></td>
+			<td id=ReportCommonSumWorkMaster></td>
+			<td id=ReportCommonSumPlusMaster></td>
+			<td id=ReportCommonSumMinusMaster></td>
+			<td id=ReportCommonItogMaster></td>
+		</tr>
+		<tr>
+			<td>Не распределен</td>
+			<td id=ReportCommonCountWorkOther></td>
+			<td id=ReportCommonSumWorkOther></td>
+			<td id=ReportCommonSumPlusOther></td>
+			<td id=ReportCommonSumMinusOther></td>
+			<td id=ReportCommonItogOther></td>
+		</tr>
+		<tr style="font-weight:800">
+			<td>Итог</td>
+			<td id=ReportCommonItogAllCount></td>
+			<td id=ReportCommonItogAllWork></td>
+			<td id=ReportCommonItogAllPlus></td>
+			<td id=ReportCommonItogAllMinus></td>
+			<td id=ReportCommonItogAllOstatok></td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Param>
+    <DBConnect>
+        <Host>localhost</Host>
+        <User>root</User>
+        <Pass>Rfhkcjy:bd2010</Pass>
+        <DBName>Ent</DBName>
+    </DBConnect>
+    <Common>
+        <ViewRow>10</ViewRow>
+    </Common>
+</Param>

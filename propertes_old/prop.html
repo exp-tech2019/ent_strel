@@ -1,0 +1,1014 @@
+﻿<table class=TablesMenu>
+	<tr>
+		<td style="vertical-align:top;">
+			<div class=menu id=PropAccordionMain style="width:250px; margin-right:20px; float:left">
+				<h3>Основные</h3>
+				<div>
+					<p class='LeftMenu' onclick='PropShowHideCategores("PropMain")'>Глобальные</p>
+					<p class='LeftMenu' onclick='PropShowHideCategores("PropEnt")'>Производство</p>
+					<p class='LeftMenu' onclick='PropShowHideCategores("PropPrlDiv")'>Зарплата</p>
+					<p class='LeftMenu' onclick='PropShowHideCategores("PropPrlTasksDiv")'>Зарплата ИТР</p>
+					<!--<p class='LeftMenu' onclick='PropShowHideCategores("PropSpeDiv"); PropSpeLoadTypeDoors()'>Склад спецификация</p>-->
+				</div>
+			</div>
+			<br style="clear:both">
+			<div class=menu id=PropAccordionManual style="width:250px; margin-right:20px; float:left">
+				<h3>Справочники</h3>
+				<div>
+					<p class='LeftMenu' onclick='PropShowHideCategores("PropManDolgnostDiv")'>Должности</p>
+				</div>
+			</div>
+			<br style="clear:both">
+			<div class=menu id=PropAccordion style="width:250px; margin-right:20px; float:left">
+				<h3>Дополнительные модули</h3>
+				<div>
+					<p class='LeftMenu' onclick='PropShowHideCategores("PropSp18")'>Спецификация</p>
+					<p id="PropOtherNalog" class='LeftMenu' onclick='PropShowHideCategores("PropNalog")'>Отчет налоговой</p>
+					<script type="text/javascript">
+						$(document).ready(function(){
+							if(ParamGetValue("NalogView")=="false") $("#PropOtherNalog").hide();
+						})
+					</script>
+				</div>
+			</div>
+		</td>
+		<td style="vertical-align:top">
+			<div id="PropAccordionContent" style="min-width:600px; margin-right:20px; float:left">
+				<h3>&nbsp;</h3>
+				<div>
+					<div id="PropMain">
+					</div>
+					<div id="PropEnt">
+						<p>
+							Начислять зарплату мастерам и начальнику производства при отгрузке двери:
+						</p>
+					</div>
+					<!--Отчет налоговой-->
+					<div id="PropNalog">
+						<div style="padding:4px" class="ui-widget-header ui-corner-all">
+							Выберите тип двери:
+							<select id="PropNalogTypeDoor"></select>
+							<script>
+								var PropNalogBtnSaveClick=false;
+								var PropNalogOldSelectValue="";
+								var PropNalogContentChange=false;
+								$(document).ready(function(){
+									$("#PropNalogTypeDoor").append("<option></option>");
+									for(var i in OrderGlobalTypesDoor )
+									{
+										$("#PropNalogTypeDoor").append("<option>"+OrderGlobalTypesDoor[i]+"</option>");
+									};
+									
+									$("#PropNalogTypeDoor").change(function(){
+										if($("#PropNalogTableValues").find("tr").length==0)
+										{
+											PropNalogLoadStart();
+											PropNalogOldSelectValue=$("#PropNalogTypeDoor").val();
+											PropNalogBtnSaveClick=false;
+											PropNalogContentChange=false;
+										}
+										else
+											if($("#PropNalogTableValues").find("tr").length==1 & $("#PropNalogTableValues tr:eq(0) td input").val()=="")
+											{
+												PropNalogLoadStart();
+												PropNalogOldSelectValue=$("#PropNalogTypeDoor").val();
+												PropNalogBtnSaveClick=false;
+												PropNalogContentChange=false;
+											}
+											else
+												if(PropNalogBtnSaveClick || !PropNalogContentChange /*& $("#PropNalogBugs").text()==""*/)
+												{
+													PropNalogLoadStart();
+													PropNalogOldSelectValue=$("#PropNalogTypeDoor").val();
+													PropNalogBtnSaveClick=false;
+													PropNalogContentChange=false;
+												}
+												else
+													if(confirm("Не сохранять изменения?"))
+													{
+														PropNalogLoadStart();
+														PropNalogOldSelectValue=$("#PropNalogTypeDoor").val();
+														PropNalogBtnSaveClick=false;
+														PropNalogContentChange=false;
+													}
+													else
+														$("#PropNalogTypeDoor").val(PropNalogOldSelectValue);
+									});
+								});
+								function PropNalogLoadStart()
+								{
+									$("#PropNalogTableValues").find("tr").remove();
+									$.post(
+										"propertes/prop.php",
+										{"Method":"PropNalogLoad","DoorType":$("#PropNalogTypeDoor").val()},
+										function(data){
+											var o =jQuery.parseJSON(data); var i=0;
+											while(o[i]!=null)
+											{
+												$("#PropNalogTableValues").append(
+													"<tr>"+
+														"<td><input onkeyup='PropNalogAddRow(this)' value='"+o[i].Material+"'></td>"+
+														"<td><input onkeyup='PropNalogAddRow(this)' value='"+o[i].Unit+"'></td>"+
+														"<td><select><option "+(o[i].CalcType==0?"selected":"")+">от кол-ва</option><option "+(o[i].CalcType==1?"selected":"")+">на ед. площади</option></select></td>"+
+														"<td><input onkeyup='PropNalogAddRow(this)' value='"+o[i].Count+"'></td>"+
+														"<td><input onkeyup='PropNalogAddRow(this)' value='"+o[i].Price+"'></td>"+
+														"<td><img onclick='PropNalogDelRow(this)' src='images/delete.png' width=15></td>"+
+													"</tr>"
+												);
+												i++;
+											};
+											$("#PropNalogTableValues").append(
+												"<tr>"+
+													"<td><input onkeyup='PropNalogAddRow(this)'></td>"+
+													"<td><input onkeyup='PropNalogAddRow(this)'></td>"+
+													"<td><select><option>от кол-ва</option><option>на ед. площади</option></select></td>"+
+													"<td><input onkeyup='PropNalogAddRow(this)'></td>"+
+													"<td><input onkeyup='PropNalogAddRow(this)'></td>"+
+													"<td><img onclick='PropNalogDelRow(this)' src='images/delete.png' width=15></td>"+
+												"</tr>"
+											);
+										}
+									);
+									
+										
+								}
+								function PropNalogAddRow(el)
+								{
+									if($(el).val()!="" & $(el).parent().parent().next().length==0)
+									{
+										$("#PropNalogTableValues").append(
+											"<tr>"+
+												"<td><input onkeyup='PropNalogAddRow(this)'></td>"+
+												"<td><input onkeyup='PropNalogAddRow(this)'></td>"+
+												"<td><select><option>от кол-ва</option><option>на ед. площади</option></select></td>"+
+												"<td><input onkeyup='PropNalogAddRow(this)'></td>"+
+												"<td><input onkeyup='PropNalogAddRow(this)'></td>"+
+												"<td><img onclick='PropNalogDelRow(this)' src='images/delete.png' width=15></td>"+
+											"</tr>"
+										);
+									};
+									PropNalogContentChange=true;
+								}
+								function PropNalogDelRow(el)
+								{
+									$(el).parent().parent().remove();
+									PropNalogContentChange=true;
+								}
+							</script>
+						</div>
+						<table class="Tables">
+							<thead>
+								<tr>
+									<td>Материал</td>
+									<td>Ед. измерения</td>
+									<td>Тип расчета</td>
+									<td>Кол-во на ед.</td>
+									<td>Цена на ед.</td>
+									<td></td>
+								</tr>
+							</thead>
+							<tbody id="PropNalogTableValues"></tbody>
+						</table><br>
+						<button id="PropNalogBtnSave" onclick="PropNalogTableSave(); PropNalogBtnSaveClick=true;">Сохранить</button>
+						<script>$("#PropNalogBtnSave").button();</script>
+						<p id="PropNalogBugs" style="color:red"></p>
+					</div>
+					<!--Зарплата-->
+					<div id="PropPrlDiv">
+						<div style="padding:4px" class="ui-widget-header ui-corner-all">
+							<a id="PropPrlSaveXML" href="Propertes/Payrolls/SaveXML.php">Сохранить настройки</a>
+							<label id="PropPrlLoadXML" for="PropPrlLoadXML_btn" class="uploadButton">Загрузить настройки</label>
+							<input style="opacity: 0; z-index: -1;" type="file" name="upload" id="PropPrlLoadXML_btn">
+							<br><br>
+							Выберите тип двери:
+							<select id="PropPrlTypeDoor" onchange="PropPrl.Load()"></select>
+							<button id="PropPrlCopy_showbtn">Копировать</button>
+							<span id="PropPrlCopy_span" style="display: none;">
+								в
+								<select id="PropPrlCopy_TypeDoor"></select>
+								<button id="PropPrlCopy_copybtn">Копировать</button>
+							</span>
+							<br>
+							Выберите стадию выполнения:
+							<select id="PropPrlStep" onchange="PropPrl.Load()">
+								<option></option>
+								<option>Лазер</option>
+								<option>Сгибка</option>
+								<option>Сварка</option>
+								<option>Рамка</option>
+								<option>МДФ</option>
+								<option>Сборка</option>
+								<option>Сборка МДФ</option>
+								<option>Покраска</option>
+								<option>Упаковка</option>
+								<option>Отгрузка</option>
+							</select>
+						</div>
+						<p>
+							<h3>Зависимость от размеров двери</h3>
+							<table class="Tables">
+								<thead>
+									<tr>
+										<td colspan="2">Высота</td>
+										<td colspan="2">Ширина</td>
+										<td>Раб. ств.</td>
+										<td>Фрамуга</td>
+										<td>Стоимость</td>
+										<td></td>
+									</tr>
+								</thead>
+								<tbody id="PropPrlDoorsTable"></tbody>
+							</table>
+							<button id="PropPrlBtn_addSize">Добавить</button>
+							<script type="text/javascript">
+
+								/*
+								var PropPrlStatusSave=true;
+								var PropPrlTypeDoorOldSelect="";
+								var PropPrlStepOldSelect="";
+								$(document).ready(function(){
+									$("#PropPrlTypeDoor").change(function(){
+										if(!PropPrlStatusSave)
+											if(!confirm("Продолжить без сохранения"))
+											{
+												$("#PropPrlTypeDoor").val(PropPrlTypeDoorOldSelect);
+												return false;
+											};
+										
+										$("#PropPrlStep").val("");
+										$("#PropPrlDoorsTable").find("tr").remove();
+										$("#PropPrlConstTable").find("tr").remove();
+										PropPrlTypeDoorOldSelect=$("#PropPrlTypeDoor").val();
+										PropPrlStatusSave=true;
+										$("#PropPrlBtnSave").hide();
+									})
+									$("#PropPrlStep").change(function(){
+										//Проверка на сохранение предыдущих изменений
+										if(!PropPrlStatusSave)
+											if(!confirm("Продолжить без сохранения"))
+											{
+												$("#PropPrlStep").val(PropPrlStepOldSelect);
+												return false;
+											};
+										PropPrlStepOldSelect=$("#PropPrlStep").val();
+										PropPrlStatusSave=true;
+										
+										if($("#PropPrlStep").val()!="")
+										{
+											$("#PropPrlBtnSave").show();
+
+											$("#PropPrlDoorsTable").find("tr").remove();
+											$("#PropPrlConstTable").find("tr").remove();
+											var Opens="<option></option>"; for(var i in OrderGlobalOpenDoor) Opens=Opens+"<option>"+OrderGlobalOpenDoor[i]+"</option>";
+											$.post(
+												"propertes/prop.php",
+												{"Method":"PropPrlLoad","DoorType":$("#PropPrlTypeDoor").val(), "Step":$("#PropPrlStep").val()},
+												function(data){
+													var o =jQuery.parseJSON(data); var i=0;
+													while(o.Size[i]!=null)
+													{
+														var HSign="n/a";
+														switch(o.Size[i].HSign)
+														{
+															case "0":HSign="n/a"; break;
+															case "1":HSign="<"; break;
+															case "2":HSign=">"; break;
+															case "3":HSign="="; break;
+														};
+														var WSign="n/a";
+														switch(o.Size[i].WSign)
+														{
+															case "0":WSign="n/a"; break;
+															case "1":WSign="<"; break;
+															case "2":WSign=">"; break;
+															case "3":WSign="="; break;
+														};
+														var S="";
+														switch(parseInt(o.Size[i].S))
+														{
+															case 1:S="Одностворчатая"; break;
+															case 2:S="Двухстворчатая"; break;
+														};
+														var SSign="n/a";
+														switch(o.Size[i].SSign)
+														{
+															case "0":SSign="n/a"; break;
+															case "1":SSign="<"; break;
+															case "2":SSign=">"; break;
+															case "3":SSign="="; break;
+														};
+														console.log("<button onclick='PropPrlBtnChange(this)'>"+SSign+"</button><input style='width:50px' onkeyup='PropPrlAddRow(this)' "+(SSign=="n/a"?"disabled='disabled'":"")+" value='"+o.Size[i].SVal+"'>");
+														$("#PropPrlDoorsTable").append(
+															"<tr>"+
+																"<td><button onclick='PropPrlBtnChange(this)'>"+HSign+"</button><input style='width:50px' onkeyup='PropPrlAddRow(this)' "+(HSign=="n/a"?"disabled='disabled'":"")+" value='"+o.Size[i].HVal+"'></td>"+
+																"<td><button onclick='PropPrlBtnChange(this)'>"+WSign+"</button><input style='width:50px' onkeyup='PropPrlAddRow(this)' "+(WSign=="n/a"?"disabled='disabled'":"")+" value='"+o.Size[i].WVal+"'></td>"+
+																"<td>"+
+																	"<select><option></option><option>Одностворчатая</option><option>Двухстворчатая</option></select>"+
+																	"<button onclick='PropPrlBtnChange(this)'>"+SSign+"</button><input style='width:50px' onkeyup='PropPrlAddRow(this)' "+(SSign=="n/a"?"disabled='disabled'":"")+" value='"+o.Size[i].SVal+"'>"+
+																"</td>"+
+																"<td><select>"+Opens+"</select></td>"+
+																"<td><input type=checkbox "+(o.Size[i].Framug==1?"checked":"")+"></td>"+
+																"<td><input onkeyup='PropPrlAddRow(this)' style='width:50px' value='"+o.Size[i].Sum+"'></td>"+ 
+																"<td><img onclick='PropPrlDelRow(this)' src='images/delete.png' width=15></td>"+
+															"</tr>"
+														);
+														$("#PropPrlDoorsTable tr:eq("+i+") td:eq(3) select").val(o.Size[i].Open);
+														$("#PropPrlDoorsTable tr:eq("+i+") td:eq(2) select").val(S);
+														i++;
+													};
+													i=0;
+													while(o.Const[i]!=null){
+														$("#PropPrlConstTable").append(
+															"<tr>"+
+																"<td><input style='width:90%; float:left;' onkeyup='PropPrlAddRow(this)' value='"+o.Const[i].Name+"'></td>"+
+																"<td><input style='width:50px' onkeyup='PropPrlAddRow(this)' value='"+o.Const[i].Sum+"'></td>"+
+																"<td><img onclick='PropPrlDelRow(this)' src='images/delete.png' width=15></td>"+
+															"</tr>"
+														);
+														i++;
+													};
+
+													//Конструкция двери
+													if(o.Constructor!=null)
+													{
+														//Рамка
+														if(o.Constructor.Frame==1)
+															{$("#PropPrlConstruct tr:eq(0) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(0) td:eq(0) input").removeAttr("checked");
+														if(o.Constructor.FrameCount==1)
+															{$("#PropPrlConstruct tr:eq(0) td:eq(1) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(0) td:eq(1) input").removeAttr("checked");
+														$("#PropPrlConstruct tr:eq(0) td:eq(3) input").val(o.Constructor.FrameSum);
+														//Доводчик
+														if(o.Constructor.Dovod==1)
+															{$("#PropPrlConstruct tr:eq(1) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(1) td:eq(0) input").removeAttr("checked");
+														if(o.Constructor.DovodPreparation==1)
+															{$("#PropPrlConstruct tr:eq(1) td:eq(1) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(1) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(1) td:eq(3) input").val(o.Constructor.DovodSum);
+														//Наличник
+														if(o.Constructor.Nalichnik==1)
+															{$("#PropPrlConstruct tr:eq(2) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(2) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(2) td:eq(3) input").val(o.Constructor.NalichnikSum);
+														//Окно
+														if(o.Constructor.Window==1)
+															{$("#PropPrlConstruct tr:eq(3) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(3) td:eq(0) input").prop("checked",false);
+														if(o.Constructor.WindowCount==1)
+															{$("#PropPrlConstruct tr:eq(3) td:eq(1) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(3) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(3) td:eq(2) input").val(o.Constructor.WindowMore);
+														$("#PropPrlConstruct tr:eq(3) td:eq(3) input").val(o.Constructor.WindowSum);
+														//Фрамуга
+														if(o.Constructor.Framuga==1)
+															{$("#PropPrlConstruct tr:eq(4) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(4) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(4) td:eq(3) input").val(o.Constructor.FramugaSum);
+														//Навесы
+														if(o.Constructor.Petlya==1)
+															{$("#PropPrlConstruct tr:eq(5) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(5) td:eq(0) input").prop("checked",false);
+														if(o.Constructor.PetlyaCount==1)
+															{$("#PropPrlConstruct tr:eq(5) td:eq(1) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(5) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(5) td:eq(2) input").val(o.Constructor.PetlyaMore);
+														$("#PropPrlConstruct tr:eq(5) td:eq(3) input").val(o.Constructor.PetlyaSum);
+														//Навесы рабочая створка
+														if(o.Constructor.PetlyaWork==1)
+															{$("#PropPrlConstruct tr:eq(6) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(6) td:eq(0) input").prop("checked",false);
+														if(o.Constructor.PetlyaWorkCount==1)
+															{$("#PropPrlConstruct tr:eq(6) td:eq(1) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(6) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(6) td:eq(2) input").val(o.Constructor.PetlyaWorkMore);
+														$("#PropPrlConstruct tr:eq(6) td:eq(3) input").val(o.Constructor.PetlyaWorkSum);
+														//Навесы вторая створка
+														if(o.Constructor.PetlyaStvorka==1)
+															{$("#PropPrlConstruct tr:eq(7) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(7) td:eq(0) input").prop("checked",false);
+														if(o.Constructor.PetlyaStvorkaCount==1)
+															{$("#PropPrlConstruct tr:eq(7) td:eq(1) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(7) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(7) td:eq(2) input").val(o.Constructor.PetlyaStvorkaMore);
+														$("#PropPrlConstruct tr:eq(7) td:eq(3) input").val(o.Constructor.PetlyaStvorkaSum);
+														//Ребра жесткости
+														if(o.Constructor.Stiffener==1)
+															{$("#PropPrlConstruct tr:eq(8) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(8) td:eq(0) input").prop("checked",false);
+														if(o.Constructor.StiffenerW==1)
+															{$("#PropPrlConstruct tr:eq(8) td:eq(1) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(8) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(8) td:eq(3) input").val(o.Constructor.StiffenerSum);
+														//Площадь двери
+														if(o.Constructor.M2==1)
+															{$("#PropPrlConstruct tr:eq(9) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(9) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(9) td:eq(3) input").val(o.Constructor.M2Sum);
+														//Антипаника
+														if(o.Constructor.Antipanik==1)
+															{$("#PropPrlConstruct tr:eq(10) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(10) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(10) td:eq(3) input").val(o.Constructor.AntipanikSum);
+														//Отбойник
+														if(o.Constructor.Otboynik==1)
+															{$("#PropPrlConstruct tr:eq(11) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(11) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(11) td:eq(3) input").val(o.Constructor.OtboynikSum);
+														//Калитка
+														if(o.Constructor.Wicket==1)
+															{$("#PropPrlConstruct tr:eq(12) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(12) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(12) td:eq(3) input").val(o.Constructor.WicketSum);
+														//Врезка замка
+														if(o.Constructor.BoxLock==1)
+															{$("#PropPrlConstruct tr:eq(13) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(13) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(13) td:eq(3) input").val(o.Constructor.BoxLockSum);
+														//Ответка
+														if(o.Constructor.Otvetka==1)
+															{$("#PropPrlConstruct tr:eq(14) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(14) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(14) td:eq(3) input").val(o.Constructor.OtvetkaSum);
+														//Утепление
+														if(o.Constructor.Isolation==1)
+															{$("#PropPrlConstruct tr:eq(15) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(15) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(15) td:eq(3) input").val(o.Constructor.IsolationSum);
+														//Вент. решетка
+														if(o.Constructor.Grid==1)
+															{$("#PropPrlConstruct tr:eq(16) td:eq(0) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(16) td:eq(0) input").removeAttr("checked");
+														if(o.Constructor.GridCount==1)
+															{$("#PropPrlConstruct tr:eq(16) td:eq(1) input").prop("checked",true);}
+														else
+															$("#PropPrlConstruct tr:eq(16) td:eq(1) input").removeAttr("checked");
+														$("#PropPrlConstruct tr:eq(16) td:eq(3) input").val(o.Constructor.GridSum);
+													}
+													else//очищаем поля
+													{
+														$("#PropPrlConstruct tr:eq(0) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(0) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(0) td:eq(3) input").val("");
+
+														$("#PropPrlConstruct tr:eq(1) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(1) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(1) td:eq(3) input").val("");
+
+														$("#PropPrlConstruct tr:eq(2) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(2) td:eq(3) input").val("");
+
+														$("#PropPrlConstruct tr:eq(3) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(3) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(3) td:eq(2) input").val("");
+														$("#PropPrlConstruct tr:eq(3) td:eq(3) input").val("");
+
+														$("#PropPrlConstruct tr:eq(4) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(4) td:eq(3) input").val("");
+														//Навесы
+														$("#PropPrlConstruct tr:eq(5) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(5) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(5) td:eq(2) input").val("");
+														$("#PropPrlConstruct tr:eq(5) td:eq(3) input").val("");
+														//Навесы рабочая створка
+														$("#PropPrlConstruct tr:eq(6) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(6) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(6) td:eq(2) input").val("");
+														$("#PropPrlConstruct tr:eq(6) td:eq(3) input").val("");
+														//Навесы 2ая створка
+														$("#PropPrlConstruct tr:eq(7) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(7) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(7) td:eq(2) input").val("");
+														$("#PropPrlConstruct tr:eq(7) td:eq(3) input").val("");
+														//Ребра жесткости
+														$("#PropPrlConstruct tr:eq(8) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(8) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(8) td:eq(3) input").val("");
+														//Площадь двери
+														$("#PropPrlConstruct tr:eq(9) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(9) td:eq(3) input").val("");
+														//Антипаника
+														$("#PropPrlConstruct tr:eq(10) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(10) td:eq(3) input").val("");
+														//Отбойник
+														$("#PropPrlConstruct tr:eq(11) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(11) td:eq(3) input").val("");
+														//Калитка
+														$("#PropPrlConstruct tr:eq(12) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(12) td:eq(3) input").val("");
+														//Врезка замка
+														$("#PropPrlConstruct tr:eq(13) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(13) td:eq(3) input").val("");
+														//Отвветка
+														$("#PropPrlConstruct tr:eq(14) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(14) td:eq(3) input").val("");
+														//Утепление
+														$("#PropPrlConstruct tr:eq(15) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(15) td:eq(3) input").val("");
+														//Вент. решетка
+														$("#PropPrlConstruct tr:eq(16) td:eq(0) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(16) td:eq(1) input").prop("checked",false);
+														$("#PropPrlConstruct tr:eq(16) td:eq(3) input").val("");
+													};
+													//if(o[0]==null)
+													$("#PropPrlDoorsTable").append(
+														"<tr>"+
+															"<td><button onclick='PropPrlBtnChange(this)'>n/a</button><input style='width:50px' onkeyup='PropPrlAddRow(this)' disabled='disabled'></td>"+
+															"<td><button onclick='PropPrlBtnChange(this)'>n/a</button><input style='width:50px' onkeyup='PropPrlAddRow(this)'  disabled='disabled'></td>"+
+															"<td>"+
+																"<select><option></option><option>Одностворчатая</option><option>Двухстворчатая</option></select>"+
+																"<button onclick='PropPrlBtnChange(this)'>n/a</button><input style='width:50px' onkeyup='PropPrlAddRow(this)'  disabled='disabled'>"+
+															"</td>"+
+															"<td><select>"+Opens+"</select></td>"+
+															"<td><input type=checkbox></td>"+
+															"<td><input onkeyup='PropPrlAddRow(this)' style='width:50px'></td>"+
+															"<td><img onclick='PropPrlDelRow(this)' src='images/delete.png' width=15></td>"+
+														"</tr>"
+													);
+													//Добавим новую строку для таблицы постоянных значенией
+													$("#PropPrlConstTable").append(
+														"<tr>"+
+															"<td><input style='width:90%; float:left;' onkeyup='PropPrlAddRow(this)'></td>"+
+															"<td><input style='width:50px' onkeyup='PropPrlAddRow(this)'></td>"+
+															"<td><img onclick='PropPrlDelRow(this)' src='images/delete.png' width=15></td>"+
+														"</tr>"
+													);
+												}
+											);
+										};
+									})
+								})
+								*/
+							</script>
+						</p>
+						<p>
+							<h3>Постоянные значения</h3>
+							<table class="Tables">
+								<thead>
+								<tr>
+									<td>Наименование</td>
+									<td style="width:50px">Стоимость</td>
+									<td></td>
+								</tr>
+								</thead>
+								<tbody id="PropPrlConstTable"></tbody>
+							</table>
+							<button id="PropPrlBtn_addConst">Добавить</button>
+						</p>
+						<p>
+
+							<h3>Конструкция двери</h3>
+							<table>
+								<thead>
+									<tr style="border-bottom:solid 1px black;">
+										<td colspan="3">Описание</td>
+										<td>Стоимость</td>
+									</tr>
+								</thead>
+								<tbody id="PropPrlConstruct">
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Рамка <input type="checkbox" style="float:right"></td>
+										<td>зависит от кол-ва <input type="checkbox"></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Доводчик <input type="checkbox" style="float:right"></td>
+										<td>подготовка <input type="checkbox"></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Наличник <input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Окно <input type="checkbox" style="float:right"></td>
+										<td>зависит от кол-ва <input type="checkbox"></td>
+										<td>учитывать больше <input type="text" style="width:30px;"></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Фрамуга<input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Навесы <input type="checkbox" style="float:right"></td>
+										<td>зависит от кол-ва <input type="checkbox"></td>
+										<td>учитывать больше <input type="text" style="width:30px;"></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Навесы раб. ств. <input type="checkbox" style="float:right"></td>
+										<td>зависит от кол-ва <input type="checkbox"></td>
+										<td>учитывать больше <input type="text" style="width:30px;"></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Навесы 2ая ств. <input type="checkbox" style="float:right"></td>
+										<td>зависит от кол-ва <input type="checkbox"></td>
+										<td>учитывать больше <input type="text" style="width:30px;"></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Ребра жесткости <input type="checkbox" style="float:right"></td>
+										<td>расчет за м<sup>2</sup><input type="checkbox"></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Площадь двери м<sup>2</sup><input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Антипаника><input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Отбойник><input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Калитка><input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Врезка замка><input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Ответка><input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Утепление><input type="checkbox" style="float:right"></td>
+										<td></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+									<tr style="border-bottom:solid 1px gray;">
+										<td style="background-color:#A4E4FC">Вент. решетка <input type="checkbox" style="float:right"></td>
+										<td>зависит от кол-ва <input type="checkbox"></td>
+										<td></td>
+										<td> + <input type="text"></td>
+									</tr>
+								</tbody>
+							</table>
+						</p>
+						<div id="PropPrlDebug" style="color:red;"></div>
+						<p>
+							<button id="PropPrlBtnSave" onclick="PropPrl.Save();">Сохранить</button>
+						</p>
+						<script>
+                            $(document).ready(function () {
+                                $("#PropPrlSaveXML").button();
+                                $("#PropPrlLoadXML").button();
+                                $("#PropPrlLoadXML_btn").change(function () {
+									PropPrl.LoadXML();
+                                });
+
+                                $("#PropPrlCopy_showbtn").button();
+                                $("#PropPrlCopy_showbtn").click(function () {
+                                   switch ($("#PropPrlCopy_span").is(":visible")){
+									   case true:
+									       $("#PropPrlCopy_showbtn").show();
+									       $("#PropPrlCopy_span").hide();
+									       break;
+									   case false:
+									       $("#PropPrlCopy_showbtn").hide();
+									       $("#PropPrlCopy_span").show();
+									       break;
+								   }
+                                });
+                                $("#PropPrlCopy_copybtn").button();
+                                $("#PropPrlCopy_copybtn").click(function () {
+                                    PropPrl.CopyProp();
+                                });
+
+
+                                $("#PropPrlTypeDoor").append("<option></option>");
+                                $("#PropPrlCopy_TypeDoor").append("<option></option>");
+                                OrderGlobalTypesDoor.forEach(function(door){
+                                    $("#PropPrlTypeDoor").append(
+                                        "<option>"+door+"</option>"
+                                    );
+                                    $("#PropPrlCopy_TypeDoor").append(
+                                        "<option>"+door+"</option>"
+                                    );
+                                });
+                                $("#PropPrlBtn_addSize").button({
+                                    icon:"ui-icon-plus"
+                                });
+                                $("#PropPrlBtn_addSize").click(function () {
+                                    PropPrl.AddPropSize();
+                                });
+
+                                $("#PropPrlBtn_addConst").button();
+                                $("#PropPrlBtn_addConst").click(function () {
+									PropPrl.AddPropStatic();
+                                });
+
+                                $("#PropPrlBtnSave").button();
+                            })
+						</script>
+					</div>
+					<!--Зарплата ИТР-->
+					<div id="PropPrlTasksDiv">
+						<p style="border: solid 1px gray"><i>Данные настройки позволяют назначать сотрудникам з/п в заданный период</i></p>
+						<button id="PropPrlTasksAddBtn" onclick="PropPrlTasksAdd()">Добавить задание</button>
+						<script type="text/javascript">
+							$("#PropPrlTasksAddBtn").button();
+						</script>
+						<h3>Задания</h3>
+						<div id="PropPrlTasksTable"></div>
+						<!--Диалог добавления задания-->
+						<div id="PropPrlTasksAddDialog" title="Задание">
+							<p>
+								<input type="hidden" id="PropPrlTasksAddDialogIdTask">
+								<input type="checkbox" id="PropPrlTasksAddDialogCh1"> каждое <input style="width:30px;" id="PropPrlTasksAddDialogCh1Inp"> число месяца<br>
+								<input type="checkbox" id="PropPrlTasksAddDialogCh2"> каждый последний день месяца<br>
+								<input type="checkbox" id="PropPrlTasksAddDialogCh3"> каждый день<br>
+								<input type="checkbox" id="PropPrlTasksAddDialogCh4"> дата <input id="PropPrlTasksAddDialogCh4Inp"><br>
+								<hr>
+								Описание: <input style="width:400px;" id="PropPrlTasksAddDialogNote">
+								<hr>
+								<h3>Выберите сотрудников:</h3>
+								<table class="Tables">
+									<thead>
+										<tr>
+											<td></td>
+											<td>Должность</td>
+											<td>Сумма</td>
+										</tr>
+									</thead>
+									<tbody id="PropPrlTasksAddDialogTable"></tbody>
+								</table>
+							</p>
+						</div>
+						<script type="text/javascript">
+							$('#PropPrlTasksAddDialogCh4Inp').datepicker({dateFormat:'dd.mm.yy'});
+							$( "#PropPrlTasksAddDialog" ).dialog({
+								autoOpen: false,
+								modal:true,
+								width: 600,
+								buttons: [
+									{
+										text: "Добавить",
+										click: function() {
+											PropPrlTasksSave();
+										}
+									},
+									{
+										text: "Отмена",
+										click: function() {
+											$( this ).dialog( "close" );
+										}
+									}
+								]
+							});
+						</script>
+					</div>
+					<!--Справоник должности-->
+					<div id="PropManDolgnostDiv">
+						<input id="PropManDolgnostAddInp" style="width:200px;" placeholder="Наименование новой должности">
+						<button id="PropManDolgnostAddBtn" onclick="PropManDolgnostAdd()">Добавить</button>
+						<table class="Tables">
+							<thead>
+								<tr>
+									<td colspan="3">Должность</td>
+								</tr>
+							</thead>
+							<tbody id="PropManDolgnostTable"></tbody>
+						</table>
+						<!--Диалог-->
+						<div id="PropManDolgnostDialog" title="Должность">
+							<p>
+								<input type="hidden" id="PropManDolgnostDialogID">
+								<input type="text" id="PropManDolgnostDialogName" style="width:200px;">
+							</p>
+						</div>
+						<script type="text/javascript">
+							$("#PropManDolgnostAddBtn").button();
+							$( "#PropManDolgnostDialog" ).dialog({
+								autoOpen: false,
+								modal:true,
+								width: 250,
+								buttons: [
+									{
+										text: "Сохранить",
+										click: function() {
+											PropManDolgnostEditSave();
+										}
+									},
+									{
+										text: "Отмена",
+										click: function() {
+											$( this ).dialog( "close" );
+										}
+									}
+								]
+							});
+							
+							$("#PropManDolgnostAddInp").keypress(function(e) {
+							    if(e.which == 13) {
+							        PropManDolgnostAdd();
+							    }
+							});
+						</script>
+					</div>
+					<!--Склад спецификация-->
+					<div id="PropSpeDiv">
+						<div>
+							<select id="PropSpeTypeDoors" onchange="PropSpeLoad()">
+								<option></option>
+							</select>
+						</div>
+						<br>
+						<button id="PropSpeBtnSave" onclick="PropSpeSave()">Сохранить</button>
+						<button id="PropSpeBtnAddGroup">Добавить группу</button>
+						<div>
+							<table id="PropSpeTable"></table>
+						</div>
+						<!--Диалог выбора группы-->
+						<div id="PropSpeGroupDialog" title="Группа">
+							<p>
+								<table id="PropSpeGroupTable" class="Tables"></table>
+							</p>
+						</div>
+						<script>
+							$(document).ready(function(){
+							    $("#PropSpeBtnSave").button();
+                                $("#PropSpeBtnSave").hide();
+							    $("#PropSpeBtnAddGroup").button();
+                                $("#PropSpeBtnAddGroup").click(function(){
+                                    PropSpeAddGroup();
+								})
+                                $( "#PropSpeGroupDialog" ).dialog({
+                                    autoOpen: false,
+                                    modal:true,
+                                    width: 200,
+                                    buttons: [
+                                        {
+                                            text: "Выбрать",
+                                            click: function() {
+                                                PropSpeAddGroupSelected();
+                                            }
+                                        },
+                                        {
+                                            text: "Отмена",
+                                            click: function() {
+                                                $( this ).dialog( "close" );
+                                            }
+                                        }
+                                    ]
+                                });
+							})
+						</script>
+					</div>
+					<!---Cпецификация-->
+					<div id="PropSp18">
+						<h3>Спецификация:</h3>
+						<div class="PropSp18Content">
+							<h3>Группы</h3>
+							<div>
+								<input id="PropSp18ManualGroupsInpAdd" placeholder="Новая группа">
+								<i onclick="PropSp18ManualGroups.Add()" class="fas fa-btn fa-lg fa-plus"></i>
+							</div>
+							<div id="PropSp18ManualGroups">
+							</div>
+						</div>
+						<!--Конструктор-->
+						<div class="PropSp18Content">
+							<h3>Конструктор</h3>
+							<h4>
+								Выберите тип двери:
+								<select id="PropSp18ConstructDoorList" onchange="PropSp18Construct.Select()"></select>
+							</h4>
+							<table class="PropSp18ConstructTable">
+								<thead>
+								<tr>
+									<th>Группа</th>
+									<th>Расчет</th>
+									<th>Кол-во на дверь</th>
+									<th>Сохранять выбор</th>
+								</tr>
+								</thead>
+								<tbody id="PropSp18ConstructTable">
+								</tbody>
+							</table>
+							<div>
+								<button id="PropSp18ConstructBtnAdd" onclick="PropSp18Construct.AddRow()">Добавить позицию</button>
+								<button id="PropSp18ConstructBtnSave" onclick="PropSp18Construct.Save()">Сохранить</button>
+							</div>
+						</div>
+						<!--Диалог выбора группы 1с-->
+						<div id="PropSp18Dialog1c" title="Выберите группу 1с">
+							<p>
+							<ul id="PropSp18Group1cList" class="PropSp18Group1c">
+							</ul>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+<script>
+    $(document).ready(function(){
+        PropSp18ManualGroups.Select();
+        PropSp18ManualGroups.Groups1c.Select();
+        //Заполним список дверей
+        $("#PropSp18ConstructDoorList").append("<option></option>");
+        OrderGlobalTypesDoor.forEach(function(d){
+            $("#PropSp18ConstructDoorList").append("<option>"+d+"</option>");
+        });
+        $("#PropSp18ConstructBtnAdd").button();
+        $("#PropSp18ConstructBtnSave").button();
+    })
+	$("#PropAccordionMain").accordion({heightStyle: "content"});
+	$("#PropAccordionManual").accordion({heightStyle: "content"});
+	$( "#PropAccordion" ).accordion({heightStyle: "content"});
+	$( "#PropAccordionContent" ).accordion({heightStyle: "content"});
+	//Скрываем страницы
+	function PropShowHideCategores(CategoryName){
+        $("#PropEnt").hide();
+		$("#PropMain").hide();
+		$("#PropNalog").hide();
+		$("#PropPrlDiv").hide();
+		$("#PropManDolgnostDiv").hide();
+		$("#PropPrlTasksDiv").hide();
+        $("#PropSp18").hide();
+		$("#PropSpeDiv").hide();
+		$("#"+CategoryName).show();
+		switch(CategoryName)
+		{
+			case "PropPrlTasksDiv":PropPrlTasksSelect(); break;
+			case "PropManDolgnostDiv":PropManDolgnostSelect(); break;
+		};
+	}
+	PropShowHideCategores("PropMain");
+    $("#PropSp18Dialog1c").dialog({
+        autoOpen: false,
+        height: 500,
+        width: 400,
+        modal:true,
+        buttons: [
+            {
+                text: "Выбрать",
+                click: function() {
+
+                    $( this ).dialog( "close" );
+                }
+            },
+            {
+                text: "Отмена",
+                click: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        ]
+    })
+</script>

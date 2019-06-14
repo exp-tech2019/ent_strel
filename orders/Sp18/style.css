@@ -1,0 +1,28 @@
+.Sp18Table{
+    width:100%;
+}
+.Sp18Table td:nth-child(1){
+    width: 80px;
+}
+.Sp18Table td:nth-child(2){
+    width: 250px;
+}
+.Sp18Table td:nth-child(3){
+    width: 70px;
+}
+.Sp18Table input{
+    width: 60px;
+}
+.Sp18Table td[Type=Material]:hover{
+    background-color: #88bfe9;
+    cursor: pointer;
+}
+
+/* Таблица материалов */
+.Sp18MaterialTable{
+    width: 100%;
+}
+.Sp18MaterialTable tr:hover{
+    background-color: #88bfe9;
+    cursor: pointer;
+}

@@ -1,0 +1,45 @@
+CREATE TABLE `ent`.`temporders` (
+  `id` INT NOT NULL,
+  `DateCreate` DATETIME NULL,
+  `Shet` VARCHAR(45) NULL,
+  `ShetDate` DATE NULL,
+  `idCustomer` INT NULL,
+  `Note` TEXT NULL,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `ent`.`temporders` 
+CHANGE COLUMN `DateCreate` `DateCreate` DATETIME NOT NULL ,
+CHANGE COLUMN `idCustomer` `idCustomer` INT(11) NOT NULL ;
+
+CREATE TABLE `ent`.`temporderdoors` (
+  `id` INT NOT NULL,
+  `idOrder` VARCHAR(45) NOT NULL,
+  `NumPP` INT(4) NOT NULL,
+  `TypeDoor` VARCHAR(45) NOT NULL,
+  `Count` INT NULL,
+  `H` INT NOT NULL,
+  `W` INT NOT NULL,
+  `S` INT NULL,
+  `SEqual` BIT(1) NULL,
+  `Open` VARCHAR(45) NULL,
+  `Nalichnik` VARCHAR(45) NULL,
+  `Dovod` VARCHAR(45) NULL,
+  `Ral` VARCHAR(45) NULL,
+  `Note` VARCHAR(45) NULL,
+  `Markirovka` VARCHAR(45) NULL,
+  `NavesWork` INT NULL,
+  `NavesStvorka` INT NULL,
+  `WindowWork` INT NULL,
+  `WindowStvorka` INT NULL,
+  `GridWork` INT NULL,
+  `GridStvorka` INT NULL,
+  `Framug` BIT(1) NULL,
+  `FramugH` INT NULL,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `ent`.`temporderdoors` 
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ;
+
+
+ALTER TABLE `ent`.`temporders` 
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ;

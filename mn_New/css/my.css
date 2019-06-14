@@ -1,0 +1,33 @@
+/* Спцеификация - спсиок нар*/
+.Spe_OrderOne{
+    list-style-type: none;
+}
+.Spe_OrderOne li div[Text]{
+    width:200px;
+    white-space: nowrap;
+    display: inline-block;
+}
+.Spe_OrderOne select{
+    white-space: nowrap;
+    display: inline-block;
+    width:200px;
+    margin-left: 20px;
+}
+.Spe_OrderOne input{
+    white-space: nowrap;
+    display: inline-block;
+    width:100px;
+    margin-left: 20px;
+}
+.Spe_OrderOne span{
+    cursor: pointer;
+    margin-right: 15px;
+}
+.Spe_OrderOne li ul{
+    list-style-type: none;
+    margin-top: 10px;
+}
+.Spe_OrderOne li ul span{
+    cursor: pointer;
+    margin-right: 15px;
+}

@@ -1,0 +1,241 @@
+﻿<script> var WorkDialogAddEditStatus='Add'; var WorkDialogID=0; WorkerSelectOnline()</script>
+<div>
+		<div class="Menu">
+			<div class="Menu" id="workersmenu">
+			<h3>Действия</h3>
+				<div>
+					<p class='LeftMenu' onclick="$('#WorkerDialogInpNum').prop('disabled', false ); $('#WorkerDialogInpFIO').prop( 'disabled', false ); WorkDialogID=0; WorkDialogAddEditStatus='Add'; WorkerDialogLoad()">Добавить сотрудника</p>
+					<!--<p class='LeftMenu' onclick="WorkerFiredDialogStart()">Уволить сотрудника</p>-->
+				</div>
+			</div>
+			
+	<!---------- Сотрудники ОНЛАЙН -------------->
+	
+			<div class="Menu" id="workersmenuENT">
+				<h3>На производстве</h3>
+				<div id=WorkerOnlineList></div>
+			</div>
+		</div>
+	<!-- Штат   -->
+		
+	<div class="MenuRight" id="workersеtables">
+		<h3>Штат</h3>
+			<div>
+				<toolbar>
+					<input id=WorkerFind title=Поиск> <button onclick="WorkerFindFunct()">Найти</button>
+					<checkbox><input type=checkbox id=WorkerToolBarFiredCh>Отображать уволенных</checkbox>
+				</toolbar>
+				<table class="Tables TablesMenu">
+					<thead class="BorderTablesThead">
+						<tr>
+							<td>№</td>
+							<td>ФИО</td>
+							<td>Должность</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody class="BorderTablesTbody" id=WorkerTable>
+					</tbody>
+				</table>
+				<script>
+						WorkerSelect();
+				</script>
+			</div>
+	</div>
+		<script>
+			$( "#workersmenu" ).accordion({heightStyle: "content"});
+			$( "#workersmenuENT" ).accordion({heightStyle: "content"});
+			$( "#workersеtables" ).accordion({heightStyle: "content"});
+		</script>
+</div>
+<!--Диалог-->
+<div id=WorkerDialog title="Карточка сотрудника">
+	<p>
+		<span id=WorkerDialogFiredStatus><span>
+		<script> $('#WorkerDialogBtnRemove').button();</script>
+		<p id=WorkerDialogOnlineBtn onClick="WorkerDialogOnlineUpdate($('#WorkerDialogInpID').val())" style="cursor:pointer; float:right; background-color:lightgray; padding:20px; font-size:14pt">Отсутствует</p>
+		<input id=WorkerDialogInpID type=hidden>
+		<table>
+			<tr>
+				<td>Идентификационный номер</td>
+				<td><input id=WorkerDialogInpNum></td>
+			</tr>
+			<tr>
+				<td>ФИО</td>
+				<td><input style="width:250px;" id=WorkerDialogInpFIO></td>
+			</tr>
+			<tr>
+				<td>Должность</td>
+				<td><select id=WorkerDialogInpDolgonst></select></td>
+			</tr>
+			<tr>
+				<td>Дат принятия на работу</td>
+				<td><input id=WorkerDialogInpPlacement></td>
+				<script>
+					$('#WorkerDialogInpPlacement').mask('99.99.9999');
+				</script>
+			</tr>
+			<tr>
+				<td>Телефон</td>
+				<td><input id=WorkerDialogInpPhone></td>
+				<script>
+					$('#WorkerDialogInpPhone').mask('+7 (999) 999-99-99');
+				</script>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input id=WorkerDialogInpPhone1></td>
+				<script>
+					//$('#WorkerDialogInpPhone1').mask('+7 (999) 999-99-99');
+				</script>
+			</tr>
+			<tr>
+				<td>Адрес</td>
+				<td><input maxlength=100 style='width:400px' id=WorkerDialogInpAdress></td>
+			</tr>
+			<tr>
+				<td>Примечание</td>
+				<td><textarea id=WorkerDialogInpNote style='width:100%;; height:100px;'></textarea></td>
+			</tr>
+			<tr>
+				<td>Пароль пульта</td>
+				<td><input id=WorkerDialogInpAuthPass></td>
+			</tr>
+			<tr>
+				<td>№ rfid карты</td>
+				<td><div id="inputWorkerDialogInpRfidInfo" onclick="WorkerRfidEditStart()" style="border:solid 1px black; width:150px; height:16px; vertical-align: middle; text-align: center; cursor: pointer;">345435</div></td>
+			</tr>
+		</table>
+		<span id=WorkerDialogBugs1 style="color:red">11</span>
+	</p>
+</div>
+
+<script>
+$( "#WorkerDialog" ).dialog({
+	autoOpen: false,
+	modal:true,
+	width: 800,
+	buttons: [
+		{
+			text: "Уволить / Восстановить",
+			click: function() {
+				WorkerFiredEdit();
+			}
+		},
+		{
+			text: "Удалить",
+			click: function() {
+				var flagErr=false; var flagErrS="";
+				if(WorkDialogAddEditStatus!="Edit") {flagErr=true; flagErrS=flagErrS+"Невозможно удалить сотрудника в статусе НОВЫЙ<br>"; };
+				if($('#WorkerDialogInpFIO').prop("disabled")) {flagErr=true; flagErrS=flagErrS+"Невозможно удалить сотрадника, если он связан с производством<br>"; };
+				if(flagErr!=true)
+				{
+					if(confirm('Произвести удаление сотрудника?'))
+						$.post(
+							'workers/worker.php',
+							{
+								'Method':'Remove',
+								'id':$("#WorkerDialogInpID").val()
+							},
+							function (data)	
+							{ 
+								if(data=='ok') 
+								{ 	$('#WorkerTableTR'+$("#WorkerDialogInpID").val()).remove(); $('#WorkerDialog').dialog('close'); } 
+								else $("#WorkerDialogBugs1").html("<hr>"+data);
+							}
+						);
+				}
+				else $("#WorkerDialogBugs1").html("<hr>"+flagErrS);
+			}
+		},
+		{
+			text: "Сохранить",
+			click: function() {
+				$.post(
+					'workers/worker.php',
+					{
+						'Method':'AddEdit',
+						'WorkDialogAddEditStatus':WorkDialogAddEditStatus,
+						'id':$("#WorkerDialogInpID").val(),
+						'Num':$('#WorkerDialogInpNum').val(),
+						'FIO':$('#WorkerDialogInpFIO').val(),
+						'Dolgnost':$('#WorkerDialogInpDolgonst').val(),
+						'Placement':$('#WorkerDialogInpPlacement').val(),
+						'Phone':$('#WorkerDialogInpPhone').val(),
+						'Phone1':$('#WorkerDialogInpPhone1').val(),
+						'Adress':$('#WorkerDialogInpAdress').val(),
+						'Note':$('#WorkerDialogInpNote').val(),
+						"AuthPass":$('#WorkerDialogInpAuthPass').val(),
+						"SmartCartNum":$('#inputWorkerDialogInpRfidInfo').text()
+					},
+					function(data) {
+						WorkerSelect();
+						$('#WorkerDialog').dialog( "close" );
+					}
+				)
+				.fail(
+					function() {alert('Ошибка сохранения.');}
+				)
+			}
+		},
+		{
+			text: "Отмена",
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	]
+});
+</script>
+
+<!--------------------Уволнение сотрудников---------------->
+<div title="Уволить сотрудника" id=WorkerFireDialog>
+	<p>
+		<table>
+			<thead>
+				<tr>
+					<td>№</td>
+					<td>ФИО</td>
+					<td>Должность</td>
+				</tr>
+			</thead>
+			<tbody id=WorkerFireDialogTable></tbody>
+		</table>
+	</p>
+</div>
+<script>
+	$( "#WorkerFireDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 400
+	});
+</script>
+
+<!--        Диалог назначения rfid карты     -->
+<div title="Поднесите карту" id="WorkerDialogRfid">
+	<p>
+		<input id="WorkerDialogRfidInp"></input><br>
+		<span id="WorkerDialogRfidErr" style="color:red"></span>
+	</p>
+</div>
+<script type="text/javascript">
+	$( "#WorkerDialogRfid" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 200,
+		buttons: [
+			{
+				text: "Назначить",
+				click: function() {
+					WorkerRfidEditSave();
+				}
+			},
+			{
+				text: "Отмена",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		]
+	});
+</script>

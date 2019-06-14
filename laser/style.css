@@ -1,0 +1,20 @@
+.OrderTable tr td table tr th{
+	background-color:red;
+}
+.OrderTable .row{
+	background-color:green;
+	border:1px solid black;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+.OrderTable .head{
+	background-color:yellow;
+}
+.OrderTable{
+	border-collapse: collapse; 
+	border-spacing: 0px; 
+}
+.OrderTable tr:hover td {
+	background-color:pink;
+}

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Params>
+	<ConnectDB>
+		<Host>localhost</Host>
+		<User>root</User>
+		<Pass>Rfhkcjy:bd2010</Pass>
+		<DB>ent</DB>
+	</ConnectDB>
+	<Global>
+		<ViewNumOrder title="Отображение номера заказа [Blank | Shet]">Shet</ViewNumOrder>
+		<!--Название хоста (localhost | e.a1120.ru)-->
+		<HostName>e.a1120.ru</HostName>
+	</Global>
+	<Orders>
+		<!--При импорте по умолчанию ставить значение БЕЗ РАМКИ-->
+		<NoFrameFromImport>1</NoFrameFromImport>
+		<!--Настройка печати маркировки-->
+		<Markirovka>
+			<!--Тип принтера: StandartA4, Special-->
+			<TypePrint>Special</TypePrint>
+			<SizeW>60</SizeW>
+			<SizeH>80</SizeH>
+		</Markirovka>
+		<!--Разрешить указывать стоимость отгрузки =0-->
+		<ShptAllowZero>1</ShptAllowZero>
+	</Orders>
+	<Enterprise>
+		<!--Выводит при печати заказчика и счет-->
+		<ViewCommercieWhenPrint>true</ViewCommercieWhenPrint>
+		<!--Начилсение зарплаты мастерам-->
+		<PayrollMasters>
+			<Power>0</Power> <!-- 1-ВКЛ 0-ОТКЛ-->
+			<SummMainMaster>50</SummMainMaster> <!--Сумма ст. мастеру-->
+			<SumMaster>10</SumMaster><!--Сумма мастеру-->
+		</PayrollMasters>
+		<!--Назначение сварщика 1-ПРОПУСТИТЬ 0-ОБЯЗАТЕЛЬНОЕ НАЗНАЧЕНИЕ -->
+		<SkipPurposeWelder>1</SkipPurposeWelder>
+		<!--Расположение подписей на изображении двери Left | Right-->
+		<LocationLabelOnImg>Left</LocationLabelOnImg>
+		<!--Статус тарминалов: Enable - работают Disable - заблокированны-->
+		<TerminalsStatus>Disable</TerminalsStatus>
+	</Enterprise>
+	<Payments>
+		<!--Разрешить | Запретить выплаты при отрицательном балансе 1 - РАЗРЕШИТЬ 0 - ЗАПРЕТИТЬ -->
+		<AllowChangeNegativeBalance>1</AllowChangeNegativeBalance>
+	</Payments>
+	<!--Отображение элементов-->
+	<Views>
+		<NalogView>true</NalogView>
+	</Views>
+</Params>

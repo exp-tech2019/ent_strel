@@ -1,0 +1,7 @@
+CREATE TABLE `ent`.`temporderdoorcalc` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idDoor` INT NOT NULL,
+  `Type` VARCHAR(45) NOT NULL,
+  `Name` VARCHAR(45) NULL,
+  `Sum` DECIMAL(9,2) NOT NULL,
+  PRIMARY KEY (`id`));

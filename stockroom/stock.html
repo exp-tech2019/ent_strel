@@ -1,0 +1,218 @@
+﻿<script src="stockroom/stock.js"></script>
+<div class="Menu">
+	<div id=StocktMainMenu>
+		<h3>&nbsp;</h3>
+		<div>
+			<p class="LeftMenu" onclick="StockRecieptAdd()">Поступление</p>
+			<p class="LeftMenu" >Списание</p>
+		</div>
+	</div>
+	<script>$( "#StocktMainMenu" ).accordion({heightStyle: "content"});</script>
+</div>
+<div>
+
+<div class="MenuRight">
+	<div id=StockMenuTable>
+		<ul>
+			<li onclick="StockListSelect('');"><a href="#StockMenuTableTab1">Номеклатура</a></li>
+			<li onclick="StockTradeSelect()"><a href="#StockMenuTableTab2">Движение</a></li>
+		</ul>
+		<div id=StockMenuTableTab1>
+			<table class=CatTable>
+				<thead>
+					<tr>
+						<td>Номенклатура</td>
+						<td>ед. изм</td>
+						<td>Остаток на н. периода</td>
+						<td>Поступление</td>
+						<td>Списание</td>
+						<td>Остаток на к. периода</td>
+						<td colspan=3><img width=20 src='http://ent.a1120.ru/images/addButton.png' onclick="StockGroupAdd()"></td>
+					</tr>
+				</thead>
+				<tbody id=StockMaterialList></tbody>
+			</table>
+		</div>
+		<div id=StockMenuTableTab2>
+			с <input id=StockMenuTableInpDateWith> по<input id=StockMenuTableInpDateBy><img src="images/update.png" onclick="StockTradeSelect()" title="Обновить"><br>
+			<script>$("#StockMenuTableInpDateWith").datepicker({dateFormat:'dd.mm.yy'}); $("#StockMenuTableInpDateBy").datepicker({dateFormat:'dd.mm.yy'})</script>
+			<table class=CatTable>
+				<thead>
+					<tr>
+						<td>Материал</td>
+						<td>Ед. изм</td>
+						<td>Цена</td>
+						<td>Кол-во</td>
+						<td>Остаток</td>
+						<td>Сумма</td>
+					</tr>
+				</thead>
+				<tbody id=StockTradeList></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script>
+	$( "#StockMenuTable" ).tabs();
+	var dt=new Date();
+	$("#StockMenuTableInpDateWith").val(dt.format("01.mm.yyyy"));
+	$("#StockMenuTableInpDateBy").val(dt.format(dt.daysInMonth()+ ".mm.yyyy"));
+	StockListSelect('');
+	StockTradeSelect();
+ </script>
+ 
+ <!----Карточка материала------------->
+ <div id=StockMaterialDialog title="Материал">
+	<p>
+		<input type=hidden id=StockMaterialDialogID>
+		<table>
+			<tr>
+				<td>Наименование</td>
+				<td><input id=StockMaterialDialogName></td>
+			</tr>
+			<tr>
+				<td>Ед. измерения</td>
+				<td><input id=StockMaterialDialogUnit></td>
+			</tr>
+			<tr>
+				<td>Кол-во</td>
+				<td><input id=StockMaterialDialogCount></td>
+			</tr>
+			<tr>
+				<td>Установить контроль</td>
+				<td><input type=checkbox id=StockMaterialDialogAttn></td>
+			</tr>
+		</table>
+	</p>
+ </div>
+ <script>
+	$( "#StockMaterialDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 600,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {
+					StockMaterialSave();
+				}
+			},
+			{
+				text: "Отмена",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		]
+	});
+ </script>
+ 
+<!---------------------Оприходнвание диалог------------->
+<div title="Оприходование материалов" id=StockRecieptDialog>
+	<p>
+		<input id=StockRecieptDialogID type=hidden>
+		<table>
+			<tr><td>Номер </td><td><input id=StockRecieptDialogNum> от </td><td><input id=StockRecieptDialogDate></td></tr>
+			<tr><td>Организация </td><td><input id=StockRecieptDialogSuplier><img onclick="StockManualSupliersSelect()" src="images/open.png" width=20><input type=hidden id=StockRecieptDialogSuplierID></td></tr>
+		</table>
+		<div id=StockRecieptDialogGoodsAccordion style="width:100%">
+			<h3>Материал</h3>
+			<div>
+				<img onclick="StockMaterialTableAddRow()" src="images/addButton.png" width=20 title="Доьавить материал">
+				<table class=Tables>
+					<thead>
+						<tr>
+							<td>Наименование</td>
+							<td></td>
+							<td>Ед. измер</td>
+							<td>Кол-во</td>
+							<td>Цена за ед.</td>
+							<td>Сумма</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody id=StockRecieptDialogGoodsTable><tr></tr></tbody>
+				</table>
+			</div>
+		</div>
+		<textarea id=StockRecieptDialogNote style="width:100%; height:100px"></textarea>
+		<p id=StockRecieptDialogBugs style="color:red"></p>
+	</p>
+</div>
+ <script>
+	$("#StockRecieptDialogDate").datepicker({dateFormat:'dd.mm.yy'})
+	$("#StockRecieptDialogGoodsAccordion").accordion({heightStyle: "content"});
+	$( "#StockRecieptDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 600,
+		buttons: [
+			{
+				text: "Сохранить",
+				click: function() {
+					StockRecieptSave();
+				}
+			},
+			{
+				text: "Отмена",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		]
+	});
+ </script>
+
+<!---------Диалог списка контрагентов-------->
+<div id=StockManualSupliers>
+	<p>
+		<input style="width:100%" id=StockManualSupliersFindBtn onkeyup="StockManualSupliersFind()">
+		<table class=Tables>
+			<thead>
+				<tr><td>Организация</td></tr>
+			</thead>
+			<tbody id=StockManualSupliersTable></tbody>
+		</table>
+	</p>
+</div>
+ <script>
+	$( "#StockManualSupliers" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 250,
+		buttons: [
+			{
+				text: "ok",
+				click: function() {
+					StockManualSupliersSelected();
+				}
+			}
+		]
+	});
+ </script>
+ 
+ <!--------------------Окно выбора материала------------------------->
+ <div id=StockManualMaterialsDialog>
+	<p>
+		<input type=hidden id=StockManualMaterialsGuid>
+		<table class=CatTable>
+			<thead><tr><td>Наименование</td><td>ед. измер.</td></tr></thead>
+			<tbody id=StockManualMaterialsTable></tbody>
+		</table>
+	</p>
+</div>
+ <script>
+	$( "#StockManualMaterialsDialog" ).dialog({
+		autoOpen: false,
+		modal:true,
+		width: 250,
+		buttons: [
+			{
+				text: "ok",
+				click: function() {
+					StockManualMaterialsOK();
+				}
+			}
+		]
+	});
+ </script>

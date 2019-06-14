@@ -1,0 +1,456 @@
+body {padding:0px;margin:0px;}
+div.fon-top{/*
+	position: absolute;*/
+	position: absolute;
+	z-index: 1;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background-color:transparent;
+	background-image:url(../images/fon-top2.png) , url(../images/fon-foot3.png);
+	background-position:top left , bottom right;
+	background-repeat:no-repeat;
+	margin:0px;
+	padding:0px;
+	top:0px;
+	left:0px;
+}
+div.block{
+	position: absolute;
+	z-index: 3;
+	top:0px;
+	left:0px;
+	margin-left: 60px;
+	margin-top:60px;
+}
+div.blockAutorize{
+	position: absolute;
+	z-index: 3;
+	top:0px;
+	left:0px;
+	margin-left: 70px;
+	margin-top:10px;
+	text-align:right;
+	padding:5px;
+	font-size:10pt;
+	background-color: #f0ffff;
+	border: 2px solid #34d1d1;
+	-webkit-border-radius: 9px 9px 9px 9px;
+	border-radius: 9px 9px 9px 9px;
+}
+div.Menu {
+	float:left;
+	width:250px;
+	margin-right:20px;
+	margin-bottom:20px;
+	font-weight: bold;
+	display:inline;
+}
+div.MenuTop{
+	float:left;
+	width:250px;
+	margin-right:20px;
+	margin-bottom:20px;
+	margin-top:20px;
+	font-weight: bold;
+}
+div.MenuRight{
+	width:70%;
+	float:left;
+	margin-right:20px;
+	margin-bottom:20px;
+	font-weight: bold;
+}
+
+.LeftMenu:hover{
+	background-color:#8dc1e9;
+	cursor:pointer;
+}
+Table {
+	border-collapse:collapse;
+}
+
+.Tables {
+	width:100%;
+	text-align:center;
+}
+.TablesZakaz{
+	border:solid 1px black;
+	
+}
+.BorderTablesThead tr td{
+	font-size:15px;
+	text-align:center;
+	text-shadow: 1px 1px 0 #fff;
+	border-bottom: 1px solid black;
+	background: #99ccff; /* Для старых браузров */
+	background: linear-gradient(to top, #99ccff, #ffffff);
+	padding: 6px;
+}
+.BorderTablesTbody tr td{
+	border-bottom: 1px solid black;
+	font-size:15px;
+	text-align:left;
+	padding: 2px;
+}
+
+#OrderTable tr td, #OrderTableHeader tr td{
+	text-align: center;
+}
+#OrderTableHeader tr td:nth-child(1){
+	width: 15px;
+}
+#OrderTable tr td:nth-child(2), #OrderTableHeader tr td:nth-child(2){
+	width: 50px;
+}
+#OrderTable tr td:nth-child(3), #OrderTableHeader tr td:nth-child(3){
+	width: 80px;
+}
+#OrderTable tr td:nth-child(4), #OrderTableHeader tr td:nth-child(4){
+	width: 50px;
+}
+#OrderTable tr td:nth-child(5), #OrderTableHeader tr td:nth-child(5){
+	width: 80px;
+}
+#OrderTable tr td:nth-child(6), #OrderTableHeader tr td:nth-child(6){
+	width: 40px;
+}
+#OrderTable tr td:nth-child(7), #OrderTableHeader tr td:nth-child(7){
+	width: 50px;
+}
+#OrderTable tr td:nth-child(8), #OrderTableHeader tr td:nth-child(8){
+	width: 150px;
+	text-align: left;
+}
+#OrderTable tr td:nth-child(9), #OrderTableHeader tr td:nth-child(9){
+	width: 150px;
+	text-align: left;
+}
+
+#EntNaryadTable tr td:nth-child(1), #EntNaryadTableHeader tr td:nth-child(1){
+	width: 90px;
+}
+#EntNaryadTable tr td:nth-child(2), #EntNaryadTableHeader tr td:nth-child(2){
+	width: 100px;
+}
+#EntNaryadTable tr td:nth-child(3), #EntNaryadTableHeader tr td:nth-child(3){
+	width: 170px;
+}
+#EntNaryadTable tr td:nth-child(4), #EntNaryadTableHeader tr td:nth-child(4){
+	width: 120px;
+}
+#EntNaryadTable tr td:nth-child(5), #EntNaryadTableHeader tr td:nth-child(5){
+	width: 100px;
+}
+#EntNaryadTable tr td:nth-child(6), #EntNaryadTableHeader tr td:nth-child(6){
+	width: 50px;
+}
+
+.TablesHeight{
+	text-align:center;
+	width: 100%;
+    font-weight: bold;	
+}
+
+.Tables thead tr td{
+	/*font-size:15px;*/
+	text-align:center;
+	text-shadow: 1px 1px 0 #fff;
+	border-bottom: 1px solid black;
+	background: #99ccff; /* Для старых браузров */
+	background: linear-gradient(to top, #99ccff, #ffffff);
+	/*padding: 6px;*/
+}
+.Tables tbody tr{
+	cursor:pointer;
+}
+.Tables tbody tr:hover{
+	border-left:4px solid blue;
+	border-top:1px solid blue;
+	border-bottom:1px solid blue;
+	border-right:1px solid blue;
+}
+.Tables .NoneHover:hover{
+	border:none;
+}
+/*Строка таблицы новая*/
+.Tables tbody .Start{
+	border-bottom: 1px solid black;
+	background: #ccffff;
+	background: linear-gradient(to top, #ccffff, #33ccff);
+	padding: 20px;
+
+}
+.Tables tbody .Cancel{
+	border-bottom: 1px solid black;
+	background: #ffffcc;
+	background: linear-gradient(to top, #ebebeb, #b8b8b8);
+	padding: 20px;
+
+}
+/*Строка таблицы в работе*/
+.Tables tbody .Work{
+	border-bottom: 1px solid black;
+	background: #ffffcc;
+	background: linear-gradient(to top, #ccffcc, #ffff33);
+	padding: 20px;
+
+}
+/*Строка таблицы выполненная*/
+.Tables tbody .Complite{
+	border-bottom: 1px solid black;
+	background: #ccffcc;
+	background: linear-gradient(to top, #ccffcc, #33ff33);
+	padding: 20px;
+}
+.Tables tbody .Alert{
+	border-bottom: 1px solid black;
+	background: #ccffcc;
+	background: linear-gradient(to top, #FF7373, #FF4040);
+}
+.h2 {
+    background: #8dc1e9;
+    color: black;
+    padding: 2px;
+}
+/*.td {
+	border: 0px;
+	padding: 0px;
+}*/
+.TablesWorkes{
+
+}
+.WorkerList{
+	display:inline-block; vertical-align:top; overflow:hidden;
+}
+
+.WorkerList select{
+	padding:10px; margin:-5px -20px -5px -5px; 
+}
+
+.WorkerList select option{
+	border:solid 1px gray;
+	padding:4px;
+}
+
+/*Статусные состояния заказа: В работе, Выполненн*/
+.StatusGreen{
+	padding:5px;
+	background-color:lightgreen;
+}
+.StatusBlue{
+	padding:5px;
+	background-color:blue;
+}
+/*Таблица скалада*/
+.CatTable{
+    width:100%;
+    border:1px solid black;
+}
+.CatTable tbody tr[cat]{
+    color:black;
+    background: #e4f5fc;
+    background: -webkit-linear-gradient(#e4f5fc 0%, #bfe8f9 50%, #9fd8ef 51%, #2ab0ed 100%);
+    background: -moz-linear-gradient(#e4f5fc 0%, #bfe8f9 50%, #9fd8ef 51%, #2ab0ed 100%);
+    background: -o-linear-gradient(#e4f5fc 0%, #bfe8f9 50%, #9fd8ef 51%, #2ab0ed 100%);
+    background: linear-gradient(#e4f5fc 0%, #bfe8f9 50%, #9fd8ef 51%, #2ab0ed 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4f5fc', endColorstr='#2ab0ed',GradientType=0 );
+    text-align:center;
+    vertical-align:middle;
+}
+.CatTable tbody tr[cat] td[button]{
+	width:25px;
+}
+.CatTable tbody tr td img{
+    width:20px;
+    float:right;
+    padding:2px;
+}
+
+/*Фукнционал импорта*/
+#OrderImportTable{
+}
+#OrderImportTable thead{
+	background-color:#CDC9C9;
+	padding:2px;
+	margin-top:10px;
+}
+#OrderImportTable thead td{
+	padding-bottom:10px;
+}
+#OrderImportTable thead td, #OrderImportTable tbody td{
+	border:solid 1px black;
+}
+/*------- Диалоговое окно НАРЯДЫ----------*/
+.NaryadDialog .NaryadStep{
+	border:dotted 1px black;
+}
+.NaryadDialog .NaryadStep .Title{
+	position: relative; top:-22px;
+	margin-bottom: -22px;
+	-moz-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	 border-top-left-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	-webkit-border-top-right-radius: 5px;
+	border-top-right-radius: 5px;
+	background: #ebf1f6; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ebf1f6 0%, #abd3ee 50%, #89c3eb 51%, #d5ebfb 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebf1f6', endColorstr='#d5ebfb',GradientType=0 ); /* IE6-9 */
+	padding: 3px;
+	cursor: pointer;
+}
+.NaryadDialog .NaryadStep div{
+	font-size: 12pt;
+}
+.NaryadDialog .NaryadStep div .Sum{
+	display: block;
+	float:left;
+	margin-right: 20px;
+	margin-left: 10px;
+	font-weight: 700;
+	background-color: #FCF2A3;
+	border-radius: 5px;
+	border: solid 2px #F6C812;
+	padding: 3px;
+}
+.NaryadDialog .NaryadStep div table{
+	background-color: #ECE9E9;
+	border-radius: 3px;
+	border: solid 2px #939393;
+}
+.NaryadDialog .NaryadStep div table thead{
+	font-weight: 700;
+	text-align: center;
+}
+/* Поля с атрибутом Cursor имеют возможность вызова справочника */
+.NaryadDialog .NaryadStep div table tbody tr td[Cursor]{
+	cursor: pointer;
+	}
+.NaryadDialog .NaryadStep div table tbody tr td[Cursor]:hover{
+	border: solid 2px black;
+}
+/* Цвет строки в зависимости от статуса: Выполнен/В работе */
+.NaryadDialog .NaryadStep div table tbody tr[Process=Complite]{
+	background-color: #1FF41F;
+}
+.NaryadDialog .NaryadStep div table tbody tr[Process=Work]{
+	background-color: #FCF2A3;
+}
+
+.NaryadDialog .ShtpAllow{
+	margin:10px;
+}
+
+.EntNaryadDialogStep{
+	font-size: 8pt;
+}
+
+/*-------- Окно справочника ----------*/
+.FindDialogTable{
+	font-size:10pt;
+}
+.FindDialogTable div{
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+	border: solid 2px #70A9D3;
+	background-color: #86B6D9;
+}
+.FindDialogTable div span{
+	position: relative;
+	left:-12px;
+	cursor: pointer;
+}
+.FindDialogTable table{
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+	border: solid 2px #70A9D3;
+}
+.FindDialogTable table thead{
+	background-color: #86B6D9;
+	color:white;
+	font-size: 12pt;
+}
+.FindDialogTable table thead tr td{
+	text-align:center;
+}
+.FindDialogTable table tbody tr:hover{
+	background-color: #70FF77;
+	cursor: pointer;
+}
+.FindDialogTable table tbody tr[Selected]{
+	background-color: #0CD315;
+}
+
+/* Раскрывающиеся списки для Настройки-Зарплата ИТР*/
+.PrlTaskDiv{
+	border: solid 1px gray;
+	margin-bottom: 5px;
+	width:100%;
+	background-color: #F2F2F2;
+}
+.PrlTaskDiv div{
+	background-color: #58ACFA;
+	width: 100%;
+	padding-left: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: -4px;
+	cursor: pointer;
+}
+.PrlTaskDiv div img{
+	float:right;
+	width:16px;
+	padding-right: 5px;
+}
+
+/*----------- Стили компонента multiselect ------------------*/
+.mlts_multiselect {
+	width: 200px;
+}
+
+.mlts_selectBox {
+	position: relative;
+}
+
+.mlts_selectBox select {
+	width: 100%;
+	font-weight: bold;
+}
+
+.mlts_overSelect {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.mlts_checkboxes {
+	font-size: 10pt;
+	position: absolute;
+	width: 200px;
+	display: none;
+	background-color: white;
+	border: 1px #dadada solid;
+}
+
+.mlts_checkboxes label span{
+	display: block;
+	float:right;
+	height: 100%;
+	width: 180px;
+}
+
+.mlts_checkboxes label {
+	display: block;
+}
+
+.mlts_checkboxes label:hover {
+	background-color: #1e90ff;
+}
