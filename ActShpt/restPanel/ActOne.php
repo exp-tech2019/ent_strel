@@ -28,11 +28,12 @@ $r=$d->fetch_assoc();
     );
 $d->close();
 
-$d=$m->query("SELECT d.id, CONCAT(n.Num,n.NumPP) AS NaryadNum, n.NumInOrder FROM Naryad n, actshptdoor d WHERE n.id=d.idNaryad AND d.idAct=$idAct") or die($m->error);
+$d=$m->query("SELECT d.id, n.id AS idNaryad, CONCAT(n.Num,n.NumPP) AS NaryadNum, n.NumInOrder FROM Naryad n, actshptdoor d WHERE n.id=d.idNaryad AND d.idAct=$idAct") or die($m->error);
 if($d->num_rows>0)
     while (($r=$d->fetch_assoc()))
         $arr["Doors"][]=array(
-            "id"=>$r["id"],
+            "idDoorInAct"=>$r["id"],
+            "idNaryad"=>$r["idNaryad"],
             "NaryadNum"=>$r["NaryadNum"],
             "NumInOrder"=>$r["NumInOrder"]
         );

@@ -15,7 +15,7 @@ session_start();
 
 $XMLParams=simplexml_load_file("../../params.xml");
 $m=new mysqli($XMLParams->ConnectDB->Host,$XMLParams->ConnectDB->User,$XMLParams->ConnectDB->Pass,$XMLParams->ConnectDB->DB);
-$d=$m->query("SELECT * FROM ActShptList ORDER BY ShptDate");
+$d=$m->query("SELECT * FROM ActShptList WHERE Status=1 ORDER BY ShptDate");
 $arr=array();
 while($r=$d->fetch_assoc())
     $arr[]=array(

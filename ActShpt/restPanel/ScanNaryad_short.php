@@ -16,11 +16,16 @@ $m=new mysqli($XMLParams->ConnectDB->Host,$XMLParams->ConnectDB->User,$XMLParams
 
 $BarCode=$_POST["BarCode"];
 $Step=(int)$_POST["Step"];
-$idNaryad=str_replace("E","", str_replace("N","",$BarCode));
+$idNaryad=str_replace(" ","",
+    str_replace("E","",
+        str_replace("N","",$BarCode)
+    )
+);
 $CompliteFlag=$Step==7 ? "UpakCompliteFlag" : "ShptCompliteFlag";
-$d=$m->query("SELECT id, CONCAT(Num, NumPP) AS NaryadNum, NumInOrder FROM Naryad WHERE $CompliteFlag=0 AND id=$idNaryad");
+$d=$m->query("SELECT o.Shet, n.id, CONCAT(n.Num, n.NumPP) AS NaryadNum, n.NumInOrder FROM oreders o, orderdoors od, Naryad n WHERE o.id=od.idOrder AND od.id=n.idDoors AND n.$CompliteFlag=0 AND n.id=$idNaryad") or die($m->error);
 $r=$d->fetch_assoc();
 echo json_encode(array(
+    "Shet"=>$r["Shet"],
     "idNaryad"=>$r["id"],
     "NaryadNum"=>$r["NaryadNum"],
     "NumInOrder"=>$r["NumInOrder"]

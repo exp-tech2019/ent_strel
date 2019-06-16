@@ -43,17 +43,17 @@
       <file leaf-file-name="SmartCheck.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/SmartCheck.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="733">
+            <state relative-caret-position="595">
               <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ActList.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ActList.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActList.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="15" selection-start-line="15" selection-end-line="16" selection-end-column="125" />
+            <state relative-caret-position="484">
+              <caret line="27" column="6" lean-forward="true" selection-start-line="27" selection-start-column="6" selection-end-line="27" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -61,30 +61,8 @@
       <file leaf-file-name="ActOpen_pre.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActOpen_pre.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
+            <state relative-caret-position="312">
               <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="order.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/orders/order.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-416">
-              <caret line="1959" column="132" selection-start-line="1959" selection-start-column="132" selection-end-line="1959" selection-end-column="132" />
-              <folding>
-                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#td#0;n#tr#0;n#table#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h3#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#tr#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#tr#1;n#!!top" expanded="true" />
-                <element signature="e#0#6#0" expanded="true" />
-                <element signature="e#6#12#0" expanded="true" />
-                <element signature="e#21#27#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -92,8 +70,17 @@
       <file leaf-file-name="ScanNaryad_short.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ScanNaryad_short.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="20" column="100" selection-start-line="20" selection-start-column="100" selection-end-line="20" selection-end-column="100" />
+            <state relative-caret-position="477">
+              <caret line="18" selection-start-line="18" selection-end-line="22" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Upak_save.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/Upak_save.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="475">
+              <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -101,8 +88,26 @@
       <file leaf-file-name="ActOne.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActOne.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" selection-start-line="7" selection-end-line="14" selection-end-column="125" />
+            <state relative-caret-position="557">
+              <caret line="34" column="36" lean-forward="true" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NaryadInfo.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/NaryadInfo.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="169">
+              <caret line="7" selection-start-line="7" selection-end-line="8" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Exit.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/Exit.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="264">
+              <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -164,10 +169,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Pay/PaymentsFrame/index.php" />
-        <option value="$PROJECT_DIR$/Pay/actions/DeletePayment.php" />
-        <option value="$PROJECT_DIR$/Pay/actions/SelectOnePayments.php" />
-        <option value="$PROJECT_DIR$/Pay/actions/SelectList.php" />
         <option value="$PROJECT_DIR$/Pay/frame/sample-api.php" />
         <option value="$PROJECT_DIR$/propertes/Payrolls/SelectDolgnost.php" />
         <option value="$PROJECT_DIR$/propertes_old/prop.js" />
@@ -205,16 +206,20 @@
         <option value="$PROJECT_DIR$/Pay/actions/NaryadPrint.php" />
         <option value="$PROJECT_DIR$/ActShpt/restPanel/Authorize.php" />
         <option value="$PROJECT_DIR$/ActShpt/restPanel/ok.php" />
-        <option value="$PROJECT_DIR$/ActShpt/restPanel/ActList.php" />
         <option value="$PROJECT_DIR$/ActShpt/restPanel/ActOpen_pre.php" />
-        <option value="$PROJECT_DIR$/ActShpt/restPanel/ActOne.php" />
         <option value="$PROJECT_DIR$/ActShpt/restPanel/ScanNaryad.php" />
         <option value="$PROJECT_DIR$/orders/order.php" />
         <option value="$PROJECT_DIR$/ActShpt/restPanel/Params.php" />
         <option value="$PROJECT_DIR$/ActShpt/restPanel/SmartCheck.php" />
-        <option value="$PROJECT_DIR$/ActShpt/restPanel/ScanNaryad_short.php" />
         <option value="$PROJECT_DIR$/orders/qrCode.php" />
         <option value="$PROJECT_DIR$/enterprise/printNaryadForm.html" />
+        <option value="$PROJECT_DIR$/ActShpt/restPanel/ActOne.php" />
+        <option value="$PROJECT_DIR$/ActShpt/restPanel/AcrOne_save.php" />
+        <option value="$PROJECT_DIR$/ActShpt/restPanel/ScanNaryad_short.php" />
+        <option value="$PROJECT_DIR$/ActShpt/restPanel/Upak_save.php" />
+        <option value="$PROJECT_DIR$/ActShpt/restPanel/NaryadInfo.php" />
+        <option value="$PROJECT_DIR$/ActShpt/restPanel/Exit.php" />
+        <option value="$PROJECT_DIR$/ActShpt/restPanel/ActList.php" />
       </list>
     </option>
   </component>
@@ -529,13 +534,14 @@
       <workItem from="1560081397803" duration="3378000" />
       <workItem from="1560239447625" duration="10803000" />
       <workItem from="1560528521512" duration="6565000" />
+      <workItem from="1560581567800" duration="11471000" />
     </task>
     <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
     <option name="enabled" value="true" />
-    <option name="totallyTimeSpent" value="962399000" />
+    <option name="totallyTimeSpent" value="973870000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -593,28 +599,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/propertes/prop.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7123">
-          <caret line="655" column="40" selection-start-line="655" selection-start-column="34" selection-end-line="655" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/propertes_old/prop.js" />
-    <entry file="file://$PROJECT_DIR$/propertes/prop.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9724">
-          <caret line="572" column="53" selection-start-line="572" selection-start-column="53" selection-end-line="572" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/propertes/Payrolls/SaveDolgnost.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/propertes/Payrolls/Calc.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
@@ -861,13 +845,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActOne.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" selection-start-line="7" selection-end-line="14" selection-end-column="125" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/params.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
@@ -875,31 +852,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActList.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="15" selection-start-line="15" selection-end-line="16" selection-end-column="125" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/Params.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
           <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/SmartCheck.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="733">
-          <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActOpen_pre.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -913,40 +869,80 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ScanNaryad_short.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="20" column="100" selection-start-line="20" selection-start-column="100" selection-end-line="20" selection-end-column="100" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/enterprise/printNaryadForm.html">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="76" selection-start-column="76" selection-end-column="76" />
-          <folding>
-            <element signature="n#style#0;n#img#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/orders/order.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-416">
+        <state relative-caret-position="17">
           <caret line="1959" column="132" selection-start-line="1959" selection-start-column="132" selection-end-line="1959" selection-end-column="132" />
-          <folding>
-            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#td#0;n#tr#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#1;n#!!top" expanded="true" />
-            <element signature="e#0#6#0" expanded="true" />
-            <element signature="e#6#12#0" expanded="true" />
-            <element signature="e#21#27#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActOpen_pre.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/SmartCheck.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActOne_save.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActOne.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="557">
+          <caret line="34" column="36" lean-forward="true" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/Upak_save.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ScanNaryad_short.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="477">
+          <caret line="18" selection-start-line="18" selection-end-line="22" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/NaryadInfo.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="7" selection-start-line="7" selection-end-line="8" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/Exit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ActShpt/restPanel/ActList.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="27" column="6" lean-forward="true" selection-start-line="27" selection-start-column="6" selection-end-line="27" selection-end-column="6" />
         </state>
       </provider>
     </entry>
