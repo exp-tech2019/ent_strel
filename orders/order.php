@@ -1013,73 +1013,193 @@
 		
 		//Печать маркировки
 		case 'OrdersPrintMarkirovka':
-			include("../mpdf53/mpdf.php");		
-			$SizePage=$XMLParams->Orders->Markirovka->TypePrint=="StandartA4" ? "A4" : array($XMLParams->Orders->Markirovka->SizeW, $XMLParams->Orders->Markirovka->SizeH);
-			$mpdf = new mPDF('utf-8', $SizePage, '8', '', 5, 5, 5, 2, 5, 5); /*задаем формат, отступы и.т.д.*/
-			$mpdf->charset_in = 'UTF8';
-			$mpdf->list_indent_first_level = 0; 
+		    /*
+            switch (explode('.',PHP_VERSION)[0])
+            {
+                case "5":
+                    include("../mpdf53/mpdf.php");
+                    $SizePage=$XMLParams->Orders->Markirovka->TypePrint=="StandartA4" ? "A4" : array($XMLParams->Orders->Markirovka->SizeW, $XMLParams->Orders->Markirovka->SizeH);
+                    $mpdf = new mPDF('utf-8', $SizePage, '8', '', 5, 5, 5, 2, 5, 5);
+                    $mpdf->charset_in = 'UTF8';
+                    $mpdf->list_indent_first_level = 0;
+                    break;
+                case "7":
+                    require '../vendor/autoload.php';
+                    $mpdf = new \Mpdf\Mpdf([
+                        'mode' => 'utf-8',
+                        'format' => [$XMLParams->Orders->Markirovka->SizeH, $XMLParams->Orders->Markirovka->SizeW],
+                        'orientation' => 'L',
+                        "default_font_size"=>8,
+                        "margin_left"=>5,
+                        "margin_right"=>5,
+                        "margin_top"=>5,
+                        "margin_bottom"=>2,
+                        "margin_header"=>5,
+                        "margin_footer"=>5
+                    ]);
+                    break;
+            };
+	*/
+            $idDoors=$_POST["idDoors"];
+            $aDoorPos=$_POST["aDoorPos"];
+            $aName=$_POST["aName"];
+            $aH=$_POST["aH"];
+            $aW=$_POST["aW"];
+            $aS=$_POST["aS"];
+            $aOpen=$_POST["aOpen"];
+            $aMarkirovka=$_POST["aMarkirovka"];
+            $aRAL=$_POST["aRAL"];
+            $aShtild=$_POST["aShtild"];
+            $aCount=$_POST["aCount"];
+            $status="ok";
+            $idDoorsArr="-1";
+            foreach ($idDoors as $id)
+                $idDoorsArr.=", ".$id;
+            $d=$m->query("SELECT COUNT(*) AS NaryadCount FROM Naryad WHERE idDoors IN ($idDoorsArr)") or die($m->error);
+            $r=$d->fetch_assoc();
+            $naryadCount=(int)$r["NaryadCount"];
+            $d->close();
+            $doorCount=0;
+            foreach ($aCount as $dc)
+                $doorCount+=$dc;
+            switch ($doorCount==$naryadCount)
+            {
+                case false:
+                    echo "Не все позиции отправлены в производство";
+                    break;
+                case true:
+                    $d=$m->query("SELECT n.id AS idNaryad, o.Shet, DATE_FORMAT(o.ShetDate, '%d.%m.%Y') AS ShetDate, o.Zakaz, CONCAT(n.Num, n.NumPP) AS NaryadNum, n.NumInOrder, od.Open, CONCAT(od.H,' x ',od.W, IF(od.SEqual=1, ' x равн', IF(od.S IS NOT NULL, CONCAT(' x ', od.S), ''))) AS Size, od.RAL, od.Shtild, od.Markirovka FROM Oreders o, OrderDoors od, Naryad n WHERE o.id=od.idOrder AND od.id=n.idDoors AND od.id IN ($idDoorsArr)") or die($m->error);
 
-			$aDoorPos=$_POST["aDoorPos"];
-			$aName=$_POST["aName"];
-			$aH=$_POST["aH"];
-			$aW=$_POST["aW"];
-			$aS=$_POST["aS"];
-			$aOpen=$_POST["aOpen"];
-			$aMarkirovka=$_POST["aMarkirovka"];
-			$aRAL=$_POST["aRAL"];
-			$aShtild=$_POST["aShtild"];
-			$aCount=$_POST["aCount"];
+                    switch (explode('.',PHP_VERSION)[0])
+                    {
+                        case "5":
+                            include("../mpdf53/mpdf.php");
+                            $SizePage=$XMLParams->Orders->Markirovka->TypePrint=="StandartA4" ? "A4" : array($XMLParams->Orders->Markirovka->SizeW, $XMLParams->Orders->Markirovka->SizeH);
+                            $mpdf = new mPDF('utf-8', $SizePage, '8', '', 5, 5, 5, 2, 5, 5);
+                            $mpdf->charset_in = 'UTF8';
+                            $mpdf->list_indent_first_level = 0;
+                            break;
+                        case "7":
+                            require '../vendor/autoload.php';
+                            $mpdf = new \Mpdf\Mpdf([
+                                'mode' => 'utf-8',
+                                'format' => [$XMLParams->Orders->Markirovka->SizeH, $XMLParams->Orders->Markirovka->SizeW],
+                                'orientation' => 'L',
+                                "default_font_size"=>8,
+                                "margin_left"=>5,
+                                "margin_right"=>5,
+                                "margin_top"=>5,
+                                "margin_bottom"=>2,
+                                "margin_header"=>5,
+                                "margin_footer"=>5
+                            ]);
+                            break;
+                    };
+                    while($r=$d->fetch_assoc())
+                    {
+                        $id=$r["idNaryad"];
+                        $Zakaz=$r["Zakaz"];
+                        $Shet=$r["Shet"];
+                        $ShetDate=$r["ShetDate"];
+                        $NaryadNum=$r["NaryadNum"];
+                        $NumInOrder=$r["NumInOrder"];
+                        $Open=$r["Open"];
+                        $Size=$r["Size"];
+                        $RAL=$r["RAL"];
+                        $Shtild=$r["Shtild"];
+                        $Shtild=$Shtild=="" ? "" : "<br>Шильда: $Shtild";
+                        $Markirovka=$r["Markirovka"];
+                        $mpdf->AddPage();
+                        $Pg="
+                                <img src='../barcode.php?text=$id' style='text-align: center; height: 200px'>
+                                <p style='font-size:11pt; font-weight:bold'>
+                                $Zakaz
+                                <br>Счет $Shet от $ShetDate
+                                <br>Наряд: $NaryadNum № $NumInOrder
+                                <br>Откр.: $Open
+                                <br>Разм.: $Size
+                                <br>Цвет: $RAL
+                                $Shtild
+                                <br>Марк.: $Markirovka
+                                </p>";
+                        $mpdf->WriteHTML($Pg, 2);
+                    };
+                    $mpdf->Output('Markirovka.pdf' , 'F');
+                    echo "ok";
+                    break;
+            };
 
-			$i=0; $html=""; $p=1; $NumInOrder=1;
-			while(isset($aName[$i]))
-			{
-				for($NumPP=1;$NumPP<=$aCount[$i];$NumPP++)
-				{
-					$Shtild=$aShtild[$i];
-					if(is_numeric($Shtild))
-					{
-						$ShtildS=strval((int)$Shtild+$NumPP-1);
-						//Теперь добавим знак 0 в начале строки если не хватает
-						while(strlen($ShtildS)<strlen(strval($aShtild[$i])))
-							$ShtildS="0".$ShtildS;
-					};
-					$Num=$_POST["OrderShet"]."/".$aDoorPos[$i]."/";
-					switch($XMLParams->Orders->Markirovka->TypePrint)
-					{
-						case "Special":
-							$mpdf->AddPage();
-							$Pg="<p style='font-size:11.5pt; font-weight:bold'>Поставка от ".$_POST["OrderZakaz"].
-								"<br>Наряд: ".$Num.$NumPP." № ".(string)($NumInOrder++)."<br>"."<br>Счет ".$_POST["OrderShet"]." от ".$_POST["OrderShetDate"].
-								//"<br>Марка: ".$aName[$i].";".
-								"<br>Открывание: ".$aOpen[$i].
-								"<br>Размеры: ".$aH[$i]." x ".$aW[$i].( ($aS[$i]!="") ? " x ".$aS[$i] : "").
-								"<br>Цвет: ".$aRAL[$i].
-								($aShtild[$i]!=""?"Шильда: ".$ShtildS."<br>" : "").
-								"<br>Марк.: ".$aMarkirovka[$i]."</p>";
-							$mpdf->WriteHTML($Pg, 2);
-						break;
-						case 'StandartA4':
-							$Pg="<table style='border:solid 2px black; width:100%; margin:20px; font-size:24pt;'><tr><td>".
-								"Тип: ".$aName[$i]."<br>".
-								"Размер: ".$aH[$i]." x ".$aW[$i].( ($aS[$i]!="") ? " x ".$aS[$i] : "")."<br>".
-								"Открывание: ".$aOpen[$i]."<br>".
-								"<span style='font-size:28pt;'> Марк.: ".$aMarkirovka[$i]."</span>".
-								"</td><td style='border:solid 1px black'><b>".$_POST["OrderBlank"]."<br>".$aDoorPos[$i]."</b></td></tr></table>";
-							$mpdf->WriteHTML($Pg, 2);
-							$p++;
-							if($p>5 )
-							{
-								$mpdf->AddPage();
-								$html="";
-								$p=1;
-							};
-							break;
-					};
-				};
-				$i++;
-			};
-			$mpdf->Output('Markirovka.pdf' , 'F');
-			echo "ok";
+
+            /*
+            $idNaryads=array();
+            foreach ($idDoors as $id)
+            {
+                $d=$m->query("SELECT id, idDoors FROM Naryad WHERE idDoors=$id");
+                while ($r=$d->fetch_assoc())
+                    $idNaryads[]=array("idDoor"=>$r["idDoors"], "idNaryad"=>$r["id"], "flag"=>0);
+            };
+
+            $i=0; $html=""; $p=1; $NumInOrder=1;
+            while(isset($aName[$i]))
+            {
+                for($NumPP=1;$NumPP<=$aCount[$i];$NumPP++)
+                {
+                    $id=$idDoors[$i];
+                    foreach ($idNaryads as &$n)
+                        if($n["idDoor"]==$idDoors[$i] & $n["flag"]==0)
+                        {
+                            $id=$n["idNaryad"];
+                            $n["flag"]=1;
+                        };
+                    $Shtild=$aShtild[$i];
+                    if(is_numeric($Shtild))
+                    {
+                        $ShtildS=strval((int)$Shtild+$NumPP-1);
+                        //Теперь добавим знак 0 в начале строки если не хватает
+                        while(strlen($ShtildS)<strlen(strval($aShtild[$i])))
+                            $ShtildS="0".$ShtildS;
+                    };
+                    $Num=$_POST["OrderShet"]."/".$aDoorPos[$i]."/";
+                    $id="N".$id."E";
+                    switch($XMLParams->Orders->Markirovka->TypePrint)
+                    {
+                        case "Special":
+                            $mpdf->AddPage();
+                            $Pg="
+                                <img src='../barcode.php?text=$id' style='text-align: center; height: 200px'>
+                                <p style='font-size:11pt; font-weight:bold'>".$_POST["OrderZakaz"].
+                                "<br>Наряд: ".$Num.$NumPP." № ".(string)($NumInOrder++)."<br>"."Счет ".$_POST["OrderShet"]." от ".$_POST["OrderShetDate"].
+                                //"<br>Марка: ".$aName[$i].";".
+                                "<br>Откр.: ".$aOpen[$i].
+                                "<br>Разм.: ".$aH[$i]."x".$aW[$i].( ($aS[$i]!="") ? "x".$aS[$i] : "").
+                                "<br>Цвет: ".$aRAL[$i].
+                                ($aShtild[$i]!=""?"<br>Шильда: ".$ShtildS."<br>" : "").
+                                "<br>Марк.: ".$aMarkirovka[$i]."</p>";
+                            $mpdf->WriteHTML($Pg, 2);
+                            break;
+                        case 'StandartA4':
+                            $Pg="<table style='border:solid 2px black; width:100%; margin:20px; font-size:24pt;'><tr><td>".
+                                "Тип: ".$aName[$i]."<br>".
+                                "Размер: ".$aH[$i]." x ".$aW[$i].( ($aS[$i]!="") ? " x ".$aS[$i] : "")."<br>".
+                                "Открывание: ".$aOpen[$i]."<br>".
+                                "<span style='font-size:28pt;'> Марк.: ".$aMarkirovka[$i]."</span>".
+                                "</td><td style='border:solid 1px black'><b>".$_POST["OrderBlank"]."<br>".$aDoorPos[$i]."</b></td></tr></table>";
+                            $mpdf->WriteHTML($Pg, 2);
+                            $p++;
+                            if($p>5 )
+                            {
+                                $mpdf->AddPage();
+                                $html="";
+                                $p=1;
+                            };
+                            break;
+                    };
+                };
+                $i++;
+            };
+            $mpdf->Output('Markirovka.pdf' , 'F');
+            echo "ok";
+            */
 		break;
 		
 		case "SetNoSetStatusCancel":

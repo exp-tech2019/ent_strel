@@ -638,6 +638,7 @@ function OrderDialogPrint()
 //Печать Маркировки
 function OrderDialogPrintMarkirovka()
 {
+	var idDoors=new Array();
 	var aDoorPos=new Array();
 	var aName=new Array();
 	var aH=new Array();
@@ -650,6 +651,7 @@ function OrderDialogPrintMarkirovka()
 	var aCount=new Array();
 	for(var i=0;i<$("#OrderDialogTable tr").length;i++)
 	{
+        idDoors[i]=$("#OrderDialogTable tr:eq("+i.toString()+")").attr("idDoor");
 		aDoorPos[i]=$("#OrderDialogTable tr:eq("+i.toString()+") td[type=Num]").text();
 		aName[i]=$("#OrderDialogTable tr:eq("+i.toString()+") td[type=Name]").text();
 		aH[i]=$("#OrderDialogTable tr:eq("+i.toString()+") td[type=H]").text();
@@ -668,6 +670,7 @@ function OrderDialogPrintMarkirovka()
 			"OrderBlank":$("#orderDialogInputBlank").val(),
 			"OrderShet":$("#orderDialogInputShet").val(),
 			"OrderShetDate":$("#orderDialogInputShetDate").val(),
+            idDoors:idDoors,
 			"aDoorPos":aDoorPos,
 			"aName[]":aName,
 			"aH[]":aH,
@@ -682,7 +685,14 @@ function OrderDialogPrintMarkirovka()
 		},
 		function (data)
 		{
-			if(data=="ok") window.open('orders/Markirovka.pdf','_blank');
+		    switch (data){
+				case "ok":
+                    window.open('orders/Markirovka.pdf','_blank');
+					break;
+				default:
+					alert(data);
+					break;
+			};
 		}
 	);
 }
